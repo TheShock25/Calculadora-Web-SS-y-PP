@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  
+  <title>Informacion de Parametros Corporales</title>
+  <link rel="stylesheet" href="css/infoparametros.css?v=2">
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <h1>REFERENCIA DE PARAMETROS CORPORALES</h1>
+      <p>Valores de referencia segun estandares internacionales</p>
+    </div>
+  </header>
+
+  <!-- Boton Regresar -->
+  <div class="nav-bar">
+    <button id="btnRegresar" class="btn-regresar">← Regresar</button>
+  </div>
+
+  <!-- Contenido Principal -->
+  <main class="content">
+
+    <!-- Tabla 1: Parametros Basicos -->
+    <section class="tabla-seccion">
+      <h2 class="seccion-titulo">Parametros Basicos</h2>
+      <div class="table-responsive">
+        <table class="tabla-parametros">
+          <thead>
+            <tr>
+              <th>Parametro</th>
+              <th>Hombres</th>
+              <th>Mujeres</th>
+              <th>Interpretacion</th>
+            </tr>
+          </thead>
+          <tbody id="tablaBasicos"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Tabla 2: Parametros Avanzados -->
+    <section class="tabla-seccion">
+      <h2 class="seccion-titulo">Parametros Avanzados</h2>
+      <div class="table-responsive">
+        <table class="tabla-parametros">
+          <thead>
+            <tr>
+              <th>Parametro</th>
+              <th>Hombres</th>
+              <th>Mujeres</th>
+              <th>Interpretacion</th>
+            </tr>
+          </thead>
+          <tbody id="tablaAvanzados"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Panel de Notas -->
+    <section class="notas-panel">
+      <h3 class="notas-titulo">NOTAS IMPORTANTES:</h3>
+      <div class="notas-contenido">
+        <p>Los valores presentados son referencias generales segun estandares de la OMS y organizaciones medicas internacionales.</p>
+        <p>Las interpretaciones pueden variar segun edad, condicion fisica especifica y factores individuales.</p>
+        <p>El IMC es util para cribado poblacional pero no distingue entre masa muscular y grasa.</p>
+        <p>Los porcentajes de grasa corporal optimos pueden variar segun el nivel de actividad fisica.</p>
+        <p>Consulte siempre con un profesional de la salud para una evaluacion personalizada.</p>
+        <p>La masa osea se expresa generalmente como porcentaje del peso corporal total.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>Tabla de referencia - Actualizacion 2024</p>
+  </footer>
+
+</div>
+
+<!-- Notificacion -->
+<div id="notification" class="notification"></div>
+
+<script src="js/infoparametros.js?v=2"></script>
+</body>
+</html>

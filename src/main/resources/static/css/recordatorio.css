@@ -1,0 +1,460 @@
+/* ========== PALETA DE COLORES (igual que equivalentes y plan) ========== */
+:root {
+  --verde-oscuro: #1B5E20;
+  --verde: #2E7D32;
+  --verde-claro: #4CAF50;
+  --verde-fondo: #E8F5E9;
+  --naranja: #FF6F00;
+  --naranja-claro: #FF9800;
+  --rojo: #C62828;
+  --azul: #1976D2;
+  --gris: #616161;
+  --sombra: rgba(27, 94, 32, 0.15);
+}
+
+* {
+  box-sizing: border-box;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  color: #212529;
+}
+
+.container {
+  max-width: 1600px;
+  width: 100%;
+}
+
+/* ===== HEADER ===== */
+.header {
+  background: linear-gradient(135deg, var(--verde-oscuro) 0%, var(--verde-claro) 100%);
+  color: white;
+  padding: 35px 30px;
+  border-radius: 20px 20px 0 0;
+  text-align: center;
+  box-shadow: 0 10px 40px var(--sombra);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, var(--verde-claro), var(--naranja));
+}
+
+.header-content h1 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  letter-spacing: -0.5px;
+}
+
+.header-content p {
+  font-size: 1rem;
+  opacity: 0.95;
+  font-weight: 500;
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #66BB6A, var(--verde-claro));
+  color: white;
+  border: none;
+  padding: 14px 32px;
+  border-radius: 50px;
+  font-weight: 800;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  border-bottom: 4px solid var(--verde);
+  transition: all 0.3s ease;
+}
+
+.btn-success:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(76, 175, 80, 0.3);
+}
+
+/* ===== BOTÓN REGRESAR ===== */
+.nav-bar {
+  background: white;
+  padding: 20px 25px;
+  border-bottom: 3px solid #E8F5E9;
+  display: flex;
+  justify-content: flex-start;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.btn-regresar {
+  background: linear-gradient(135deg, var(--gris), #424242);
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+  text-transform: uppercase;
+}
+
+.btn-regresar:hover {
+  background: linear-gradient(135deg, #616161, var(--gris));
+  transform: translateX(-5px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+}
+
+/* ===== LOADING PANEL ===== */
+.loading-panel {
+  background: white;
+  padding: 60px 30px;
+  text-align: center;
+  border-radius: 0 0 20px 20px;
+  box-shadow: 0 8px 30px var(--sombra);
+  display: none;
+}
+
+.spinner {
+  border: 5px solid #E8F5E9;
+  border-top: 5px solid var(--verde-claro);
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 25px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-panel p {
+  font-size: 1.1rem;
+  color: var(--verde-oscuro);
+  font-weight: 600;
+}
+
+/* ===== MAIN CONTENT ===== */
+.main-content {
+  background: white;
+  padding: 30px;
+  border-radius: 0 0 20px 20px;
+  box-shadow: 0 8px 30px var(--sombra);
+  border: 3px solid #A5D6A7;
+  border-top: none;
+}
+
+/* ===== PLATILLOS GRID ===== */
+.platillos-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+  margin-bottom: 35px;
+}
+
+.platillo-card {
+  background: white;
+  border: 3px solid;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+}
+
+.platillo-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+}
+
+.platillo-card.desayuno { border-color: #64B5F6; }
+.platillo-card.comida    { border-color: #FFB74D; }
+.platillo-card.cena      { border-color: #BA68C8; }
+
+.platillo-card h3 {
+  text-align: center;
+  color: var(--verde-oscuro);
+  font-weight: 800;
+  margin-bottom: 18px;
+  text-transform: uppercase;
+}
+
+.platillos-container {
+  max-height: 220px;
+  overflow-y: auto;
+  margin-bottom: 15px;
+}
+
+.platillo-item {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 10px;
+  padding: 8px;
+  background: #F8F9FA;
+  border-radius: 10px;
+}
+
+.platillo-item select, .platillo-item input {
+  padding: 10px;
+  border: 2px solid #E0E0E0;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+.platillo-item input {
+  width: 70px;
+  text-align: center;
+}
+
+.btn-ver-todos {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, var(--verde-claro), var(--verde));
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.btn-ver-todos:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(46, 125, 50, 0.3);
+}
+
+/* ===== TABLAS DE COMIDAS ===== */
+.comidas-tables {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  margin-bottom: 35px;
+}
+
+.tabla-container {
+  border: 3px solid;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 6px 25px rgba(0,0,0,0.1);
+}
+
+.tabla-container.desayuno { border-color: #64B5F6; }
+.tabla-container.comida    { border-color: #FFB74D; }
+.tabla-container.cena      { border-color: #BA68C8; }
+
+.tabla-header {
+  color: white;
+  padding: 16px 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 700;
+}
+
+.tabla-container.desayuno .tabla-header { background: linear-gradient(135deg, #1976D2, #1565C0); }
+.tabla-container.comida    .tabla-header { background: linear-gradient(135deg, #FF9800, #F57C00); }
+.tabla-container.cena      .tabla-header { background: linear-gradient(135deg, #8E24AA, #6A1B9A); }
+
+.tabla-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.scroll-hint {
+  font-size: 0.9rem;
+  opacity: 0.9;
+  font-style: italic;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: 320px;
+  background: white;
+}
+
+.data-table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 1800px;
+}
+
+.data-table th {
+  background: #263238;
+  color: white;
+  padding: 14px 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  border-bottom: 3px solid #455A64;
+}
+
+.data-table td {
+  padding: 10px 8px;
+  border: 1px solid #E0E0E0;
+  text-align: center;
+  min-width: 180px;
+}
+
+.data-table tr:nth-child(even) {
+  background: #F8F9FA;
+}
+
+.data-table tr:hover {
+  background: #E8F5E9;
+}
+
+/* Editor en celdas */
+.cell-editor {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.cell-editor select {
+  flex: 1;
+  padding: 10px;
+  border: 2px solid #90CAF9;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  min-width: 140px;
+}
+
+.cell-editor input {
+  width: 70px;
+  padding: 10px;
+  border: 2px solid #90CAF9;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* ===== NUTRIENTES PANELS ===== */
+.nutrientes-panels {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+}
+
+.nutriente-card {
+  border: 3px solid;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 6px 25px rgba(0,0,0,0.1);
+}
+
+.nutriente-card h3 {
+  color: white;
+  padding: 18px;
+  margin: 0;
+  text-align: center;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.nutrientes-actuales h3 { background: linear-gradient(135deg, var(--azul), #1565C0); }
+.porcentaje-nutrientes h3 { background: linear-gradient(135deg, var(--verde), var(--verde-oscuro)); }
+
+.nutrientes-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.nutrientes-table td {
+  padding: 14px 20px;
+  border-bottom: 1px solid #E8F5E9;
+}
+
+.nutrientes-table td:first-child {
+  font-weight: 600;
+  background: #F8F9FA;
+}
+
+.nutrientes-table td:last-child {
+  text-align: center;
+  font-weight: bold;
+}
+
+/* ===== MODAL ===== */
+.modal {
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: none;
+}
+
+.modal-content {
+  background: white;
+  margin: 60px auto;
+  padding: 30px;
+  width: 90%;
+  max-width: 650px;
+  max-height: 85vh;
+  overflow-y: auto;
+  border-radius: 20px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+  position: relative;
+}
+
+.close {
+  position: absolute;
+  right: 25px;
+  top: 20px;
+  font-size: 32px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #666;
+}
+
+.close:hover {
+  color: var(--rojo);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1200px) {
+  .platillos-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .platillos-grid {
+    grid-template-columns: 1fr;
+  }
+  .nutrientes-panels {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .header {
+    padding: 25px 20px;
+  }
+  .tabla-header {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+}

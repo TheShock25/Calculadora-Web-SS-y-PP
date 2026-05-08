@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  
+  <title>Menú Principal - Sistema Antropométrico</title>
+  <link rel="stylesheet" href="css/menu.css?v=2">
+</head>
+<body>
+    
+<div class="container">
+
+  <header class="header">
+    <h1>Sistema Antropométrico Completo</h1>
+    <p>Análisis de Composición Corporal y Somatotipo</p>
+  </header>
+    
+  <!-- Botón Regresar -->
+  <div class="nav-bar">
+    <button id="btnRegresar" class="btn-regresar">← REGRESAR A CALCULADORA</button>
+  </div>
+
+  <section class="datos-card">
+    <h2>Datos Básicos del Usuario</h2>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="sexo">Sexo</label>
+        <select id="sexo">
+          <option value="Hombre">Hombre</option>
+          <option value="Mujer">Mujer</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="edad">Edad (años)</label>
+        <input 
+          type="text" 
+          id="edad" 
+          placeholder="Ej: 25" 
+          maxlength="3"
+          autocomplete="off"
+        >
+        <span class="error-message" id="edad-error">Solo números (18-120)</span>
+      </div>
+
+      <div class="form-group">
+        <label for="peso">Peso (kg)</label>
+        <input 
+          type="text" 
+          id="peso" 
+          placeholder="Ej: 70.5" 
+          maxlength="6"
+          autocomplete="off"
+        >
+        <span class="error-message" id="peso-error">Solo números (20-300)</span>
+      </div>
+
+      <div class="form-group">
+        <label for="altura">Altura (cm)</label>
+        <input 
+          type="text" 
+          id="altura" 
+          placeholder="Ej: 175" 
+          maxlength="3"
+          autocomplete="off"
+        >
+        <span class="error-message" id="altura-error">Solo números (50-250)</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="cards">
+
+    <div class="card somato">
+      <div class="card-icon">S</div>
+      <h3>Calculadora de Somatotipo</h3>
+      <p>Análisis Heath-Carter completo</p>
+      <ul>
+        <li>Tipo corporal</li>
+        <li>Somatocarta</li>
+        <li>Recomendaciones</li>
+      </ul>
+      <button onclick="abrirSomatotipo()" class="btn-card-somato">Abrir Calculadora</button>
+    </div>
+
+    <div class="card imc">
+      <div class="card-icon">I</div>
+      <h3>IMC y Composición Corporal</h3>
+      <p>Análisis antropométrico</p>
+      <ul>
+        <li>IMC</li>
+        <li>Grasa corporal</li>
+        <li>Indices</li>
+      </ul>
+      <button onclick="abrirIMC()" class="btn-card-imc">Abrir Calculadora</button>
+    </div>
+
+  </section>
+
+</div>
+
+<div id="notification" class="notification"></div>
+
+<script src="js/menu.js?v=2"></script>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  
+  <title>Sistema de Equivalentes</title>
+  <link rel="stylesheet" href="css/equivalentes.css?v=2">
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <h1>Sistema de Equivalentes Nutricionales</h1>
+      <p>Distribucion por equivalentes - Las columnas de nutrientes muestran valores totales por porciones</p>
+    </div>
+  </header>
+
+  <!-- Boton Regresar -->
+  <div class="nav-bar">
+    <button id="btnRegresar" class="btn-regresar">← Regresar a Calculadora</button>
+  </div>
+
+  <!-- Panel superior con valores -->
+  <div class="top-panel">
+    <div class="info-card" id="kcalDiaCard">
+      <span class="info-label">Kcal al dia</span>
+      <strong id="kcalDiaValor" class="info-value">2000</strong>
+    </div>
+    <div class="info-card" id="sumaKcalCard">
+      <span class="info-label">Suma Kcal</span>
+      <strong id="sumaKcalValor" class="info-value">0</strong>
+    </div>
+    <div class="input-group">
+      <label for="kcalInput">Kcal/dia:</label>
+      <input type="number" id="kcalInput" value="2000" step="10" min="500" max="5000">
+      <button id="actualizarBtn" class="btn-small">Actualizar</button>
+    </div>
+  </div>
+
+  <!-- Contenido principal -->
+  <div class="main-content">
+    
+    <!-- Tabla principal de equivalentes -->
+    <div class="table-container principal">
+      <h3 class="section-title">Distribucion por Equivalentes</h3>
+      <div class="table-responsive">
+        <table id="tablaEquivalentes" class="data-table">
+          <thead>
+            <tr>
+              <th>Grupo de alimento</th>
+              <th>Subgrupo</th>
+              <th>Porciones</th>
+              <th>Energia</th>
+              <th>Proteinas</th>
+              <th>Lipidos</th>
+              <th>HC</th>
+            </tr>
+          </thead>
+          <tbody id="tablaEquivalentesBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Panel derecho con 3 tablas -->
+    <div class="right-panel">
+
+      <!-- Tabla de distribucion de macronutrientes -->
+      <div class="mini-table-container distribucion">
+        <h4 class="mini-title">Distribucion de Macronutrientes</h4>
+        <table id="tablaDistribucion" class="mini-table">
+          <thead>
+            <tr>
+              <th>Macro</th>
+              <th>%</th>
+              <th>Kcal</th>
+              <th>g</th>
+            </tr>
+          </thead>
+          <tbody id="tablaDistribucionBody"></tbody>
+        </table>
+      </div>
+
+      <!-- Tabla de nutrientes calculados -->
+      <div class="mini-table-container nutrientes">
+        <h4 class="mini-title">Nutrientes Calculados</h4>
+        <table id="tablaNutrientes" class="mini-table">
+          <thead>
+            <tr>
+              <th>Nutriente</th>
+              <th>Total Kcal</th>
+              <th>Total gramos</th>
+              <th>% adecuacion</th>
+            </tr>
+          </thead>
+          <tbody id="tablaNutrientesBody"></tbody>
+        </table>
+      </div>
+
+      <!-- Tabla de porcentajes (editable) -->
+      <div class="mini-table-container porcentajes">
+        <h4 class="mini-title">Porcentajes (Editable)</h4>
+        <table id="tablaPorcentajes" class="mini-table">
+          <thead>
+            <tr>
+              <th>Nutriente</th>
+              <th>Porcentaje</th>
+            </tr>
+          </thead>
+          <tbody id="tablaPorcentajesBody"></tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Botones inferiores -->
+  <div class="bottom-buttons">
+    <button id="reiniciarBtn" class="btn-danger">Reiniciar</button>
+    <button id="exportarBtn" class="btn-success">Exportar</button>
+    <button id="planBtn" class="btn-primary">Plan Alimenticio</button>
+    <button id="r24hBtn" class="btn-primary">R24H</button>
+  </div>
+
+</div>
+
+<!-- Notificacion -->
+<div id="notification" class="notification"></div>
+
+<script src="js/equivalentes.js?v=2"></script>
+</body>
+</html>

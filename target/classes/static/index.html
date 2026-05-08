@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NutriEnergía Pro - Calculadora de Gasto Energético</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <h1>🔥 CALCULADORA DE GASTO ENERGÉTICO</h1>
+    <p id="modelo">Ecuación: Harris-Benedict</p>
+  </header>
+
+  <div class="card">
+    <div class="row">
+      <div class="form-group">
+        <label for="ecuacion">Ecuación</label>
+        <select id="ecuacion">
+          <option value="Harris-Benedict">Harris-Benedict</option>
+          <option value="Mifflin-St Jeor">Mifflin-St Jeor</option>
+          <option value="Valencia">Valencia</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="sexo">Sexo</label>
+        <select id="sexo">
+          <option value="Hombre">Hombre</option>
+          <option value="Mujer">Mujer</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group">
+        <label for="peso">Peso (kg)</label>
+        <input 
+          type="text" 
+          inputmode="decimal" 
+          pattern="[0-9]*[.]?[0-9]*"
+          id="peso" 
+          placeholder="Ej: 70.5" 
+          maxlength="6"
+          autocomplete="off"
+          onkeypress="return soloNumerosYPunto(event)"
+        >
+        <span class="error-message" id="peso-error">Solo números y punto decimal</span>
+      </div>
+
+      <div class="form-group">
+        <label for="altura">Altura (cm)</label>
+        <input 
+          type="text" 
+          inputmode="numeric" 
+          pattern="[0-9]*"
+          id="altura" 
+          placeholder="Ej: 175" 
+          maxlength="3"
+          autocomplete="off"
+          onkeypress="return soloNumeros(event)"
+        >
+        <span class="error-message" id="altura-error">Solo números enteros (50-250)</span>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group">
+        <label for="edad">Edad (años)</label>
+        <input 
+          type="text" 
+          inputmode="numeric" 
+          pattern="[0-9]*"
+          id="edad" 
+          placeholder="Ej: 25" 
+          maxlength="3"
+          autocomplete="off"
+          onkeypress="return soloNumeros(event)"
+        >
+        <span class="error-message" id="edad-error">Solo números enteros (18-120)</span>
+      </div>
+
+      <div class="form-group">
+        <label for="actividad">Nivel de Actividad</label>
+        <select id="actividad"></select>
+      </div>
+    </div>
+  </div>
+
+  <div class="results">
+    <div class="result-card">
+      <div class="result-label">Gasto Energético Basal</div>
+      <div class="result-value" id="geb">-- kcal/día</div>
+    </div>
+    <div class="result-card">
+      <div class="result-label">Efecto Térmico Alimentos</div>
+      <div class="result-value" id="eta">-- kcal/día</div>
+    </div>
+    <div class="result-card">
+      <div class="result-label">Gasto Energético Total</div>
+      <div class="result-value" id="get">-- kcal/día</div>
+    </div>
+  </div>
+
+  <div class="bar-container">
+    <div class="bar-labels">
+      <span>Bajo (1000)</span>
+      <span>Moderado (2500)</span>
+      <span>Alto (4000+)</span>
+    </div>
+    <div class="bar">
+      <div id="barFill"></div>
+    </div>
+  </div>
+
+  <!-- BOTONES -->
+  <div class="buttons">
+    <button id="calcular" class="btn-primary">⚡ Calcular Gasto Energético</button>
+    <button id="equivalentes" class="btn-secondary">🍎 Sistema de Equivalentes</button>
+    <button id="menu" class="btn-success">🏠 Menú Principal</button>
+  </div>
+
+</div>
+
+<!-- Notificación toast -->
+<div id="notification" class="notification"></div>
+
+<script>
+// Funciones inline para bloqueo inmediato
+function soloNumeros(e) {
+  const char = String.fromCharCode(e.which || e.keyCode);
+  if (!/[0-9]/.test(char)) {
+    e.preventDefault();
+    return false;
+  }
+  return true;
+}
+
+function soloNumerosYPunto(e) {
+  const char = String.fromCharCode(e.which || e.keyCode);
+  const input = e.target;
+  
+  // Solo permitir números y un punto
+  if (!/[0-9.]/.test(char)) {
+    e.preventDefault();
+    return false;
+  }
+  
+  // Si ya hay un punto, no permitir otro
+  if (char === '.' && input.value.includes('.')) {
+    e.preventDefault();
+    return false;
+  }
+  
+  return true;
+}
+</script>
+<script src="app.js"></script>
+</body>
+</html>

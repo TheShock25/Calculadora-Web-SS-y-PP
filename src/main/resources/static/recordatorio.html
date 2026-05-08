@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recordatorio Alimenticio - Todos los Grupos</title>
+    <link rel="stylesheet" href="css/recordatorio.css">
+</head>
+<body>
+<div class="container">
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <h1>RECORDATORIO ALIMENTICIO - TODOS LOS GRUPOS</h1>
+            <p>Registro completo de todos los grupos alimenticios disponibles</p>
+        </div>
+        <button id="btnExportar" class="btn-success">Exportar a TXT</button>
+    </header>
+
+    <!-- Botón Regresar -->
+    <div class="nav-bar">
+        <button id="btnRegresar" class="btn-regresar">← REGRESAR A EQUIVALENTES</button>
+    </div>
+
+    <!-- Panel de Carga -->
+    <div id="loadingPanel" class="loading-panel">
+        <div class="spinner"></div>
+        <p>Cargando recordatorio alimenticio...</p>
+    </div>
+
+    <!-- Contenido Principal -->
+    <div id="mainContent" class="main-content">
+       
+        <!-- Panel de Platillos Específicos -->
+        <div class="platillos-grid">
+            <div class="platillo-card desayuno">
+                <h3>DESAYUNO</h3>
+                <div id="platillosDesayuno" class="platillos-container"></div>
+                <button class="btn-ver-todos" onclick="verTodosPlatillos('DESAYUNO')">Ver todos</button>
+            </div>
+           
+            <div class="platillo-card comida">
+                <h3>COMIDA</h3>
+                <div id="platillosComida" class="platillos-container"></div>
+                <button class="btn-ver-todos" onclick="verTodosPlatillos('COMIDA')">Ver todos</button>
+            </div>
+           
+            <div class="platillo-card cena">
+                <h3>CENA</h3>
+                <div id="platillosCena" class="platillos-container"></div>
+                <button class="btn-ver-todos" onclick="verTodosPlatillos('CENA')">Ver todos</button>
+            </div>
+        </div>
+
+        <!-- Tablas de Comidas -->
+        <div class="comidas-tables">
+            <!-- DESAYUNO -->
+            <div class="tabla-container desayuno">
+                <div class="tabla-header">
+                    <h3>DESAYUNO</h3>
+                    <span class="scroll-hint">← Desplaza → para ver todos los grupos</span>
+                </div>
+                <div class="table-wrapper">
+                    <table id="tablaDesayuno" class="data-table"></table>
+                </div>
+            </div>
+            
+            <!-- COMIDA -->
+            <div class="tabla-container comida">
+                <div class="tabla-header">
+                    <h3>COMIDA</h3>
+                    <span class="scroll-hint">← Desplaza → para ver todos los grupos</span>
+                </div>
+                <div class="table-wrapper">
+                    <table id="tablaComida" class="data-table"></table>
+                </div>
+            </div>
+            
+            <!-- CENA -->
+            <div class="tabla-container cena">
+                <div class="tabla-header">
+                    <h3>CENA</h3>
+                    <span class="scroll-hint">← Desplaza → para ver todos los grupos</span>
+                </div>
+                <div class="table-wrapper">
+                    <table id="tablaCena" class="data-table"></table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Paneles de Nutrientes -->
+        <div class="nutrientes-panels">
+            <div class="nutriente-card nutrientes-actuales">
+                <h3>NUTRIENTES ACTUALES (g)</h3>
+                <table id="tablaNutrientes" class="nutrientes-table">
+                    <tr><td>Hidratos de Carbono</td><td id="totalHc">0.0</td></tr>
+                    <tr><td>Lípidos</td><td id="totalLipidos">0.0</td></tr>
+                    <tr><td>Proteínas</td><td id="totalProteinas">0.0</td></tr>
+                </table>
+            </div>
+            <div class="nutriente-card porcentaje-nutrientes">
+                <h3>PORCENTAJE DE NUTRIENTES (%)</h3>
+                <table id="tablaPorcentajes" class="nutrientes-table">
+                    <tr><td>Hidratos de Carbono</td><td id="pctHc">0.0%</td></tr>
+                    <tr><td>Lípidos</td><td id="pctLipidos">0.0%</td></tr>
+                    <tr><td>Proteínas</td><td id="pctProteinas">0.0%</td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Platillos -->
+<div id="modalPlatillos" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="cerrarModal()">&times;</span>
+        <h3 id="modalTitulo">Platillos Disponibles</h3>
+        <div id="modalLista" class="modal-lista"></div>
+    </div>
+</div>
+
+<script src="js/recordatorio.js"></script>
+</body>
+</html>

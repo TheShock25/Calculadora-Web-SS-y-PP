@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plan Alimenticio Personalizado</title>
+    <link rel="stylesheet" href="css/plan-alimenticio.css">
+</head>
+<body>
+<div class="container">
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <h1>PLAN ALIMENTICIO PERSONALIZADO</h1>
+            <p>Diseña tu alimentación ideal con precisión nutricional - Grupos específicos</p>
+        </div>
+        <button id="btnExportar" class="btn-success">Exportar a TXT</button>
+    </header>
+
+    <!-- Botón Regresar -->
+    <div class="nav-bar">
+        <button id="btnRegresar" class="btn-regresar">← REGRESAR A EQUIVALENTES</button>
+    </div>
+
+    <!-- Panel de Carga -->
+    <div id="loadingPanel" class="loading-panel">
+        <div class="spinner"></div>
+        <p>Cargando plan alimenticio...</p>
+    </div>
+
+    <!-- Panel de Objetivos -->
+    <div id="objetivosPanel" class="objetivos-panel">
+        <div class="objetivo-card hc-card">
+            <span>HC Objetivo</span>
+            <strong id="hcObjetivo">0</strong>
+            <small>g</small>
+        </div>
+        <div class="objetivo-card lipidos-card">
+            <span>Lípidos Objetivo</span>
+            <strong id="lipidosObjetivo">0</strong>
+            <small>g</small>
+        </div>
+        <div class="objetivo-card proteinas-card">
+            <span>Proteínas Objetivo</span>
+            <strong id="proteinasObjetivo">0</strong>
+            <small>g</small>
+        </div>
+    </div>
+    
+     <div id="diasNav" class="dias-nav">
+        <div class="dias-nav-title">Selecciona el día de la semana</div>
+        <div id="diasTabs" class="dias-tabs">
+            <!-- Los botones se generarán dinámicamente -->
+        </div>
+        <div id="diaIndicador" class="dia-indicador">Editando: Lunes</div>
+    </div>
+
+    <!-- Contenido Principal -->
+    <div id="mainContent" class="main-content">
+       
+        <!-- Panel de Platillos Específicos -->
+        <div class="platillos-grid">
+            <div class="platillo-card desayuno">
+                <h3>DESAYUNO</h3>
+                <div id="platillosDesayuno" class="platillos-container"></div>
+                <button class="btn-ver-todos" onclick="verTodosPlatillos('DESAYUNO')">Ver todos</button>
+            </div>
+           
+            <div class="platillo-card comida">
+                <h3>COMIDA</h3>
+                <div id="platillosComida" class="platillos-container"></div>
+                <button class="btn-ver-todos" onclick="verTodosPlatillos('COMIDA')">Ver todos</button>
+            </div>
+           
+            <div class="platillo-card cena">
+                <h3>CENA</h3>
+                <div id="platillosCena" class="platillos-container"></div>
+                <button class="btn-ver-todos" onclick="verTodosPlatillos('CENA')">Ver todos</button>
+            </div>
+        </div>
+
+        <!-- Información de Grupos -->
+        <div id="gruposInfo" class="grupos-info"></div>
+
+        <!-- Tablas de Comidas -->
+        <div id="comidasContainer" class="comidas-container"></div>
+
+        <!-- Paneles de Nutrientes -->
+        <div class="nutrientes-panels">
+            <div class="nutriente-card nutrientes-actuales">
+                <h3>NUTRIENTES ACTUALES (g)</h3>
+                <table class="nutrientes-table">
+                    <tr><td>Hidratos de Carbono</td><td id="totalHc">0.0</td></tr>
+                    <tr><td>Lípidos</td><td id="totalLipidos">0.0</td></tr>
+                    <tr><td>Proteínas</td><td id="totalProteinas">0.0</td></tr>
+                </table>
+            </div>
+            <div class="nutriente-card porcentaje-nutrientes">
+                <h3>PORCENTAJE DE NUTRIENTES (%)</h3>
+                <table class="nutrientes-table">
+                    <tr><td>Hidratos de Carbono</td><td id="pctHc">0.0%</td></tr>
+                    <tr><td>Lípidos</td><td id="pctLipidos">0.0%</td></tr>
+                    <tr><td>Proteínas</td><td id="pctProteinas">0.0%</td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Platillos -->
+<div id="modalPlatillos" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="cerrarModal()">&times;</span>
+        <h3 id="modalTitulo">Platillos Disponibles</h3>
+        <div id="modalLista" class="modal-lista"></div>
+    </div>
+</div>
+
+<script src="js/plan-alimenticio.js"></script>
+</body>
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  
+  <title>IMC y Composicion Corporal</title>
+  <link rel="stylesheet" href="css/imc.css?v=2">
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <h1>IMC Y DENSIDAD CORPORAL</h1>
+      <p>Modelo: Antropometria basica</p>
+    </div>
+    <div class="header-buttons">
+      <button id="reloadDescriptions" class="btn-info">Recargar descripciones</button>
+      <button id="applyDefaults" class="btn-warning">Restaurar predeterminados</button>
+      <button id="infoParams" class="btn-primary">Info Parametros</button>
+    </div>
+  </header>
+  
+  <!-- Boton Regresar -->
+  <div class="nav-bar">
+      <button id="btnRegresar" class="btn-regresar">← Regresar a Menu</button>
+  </div>
+
+  <div class="main-content">
+
+    <!-- Panel Izquierdo - Resultados Principales -->
+    <aside class="panel-izquierdo">
+      <div class="result-card">
+        <div class="result-item">
+          <span class="result-label" data-key="IMC">IMC:</span>
+          <span id="imcValor" class="result-value">- kg/m²</span>
+        </div>
+        <div class="result-item">
+          <span class="result-label" data-key="Peso Ideal">Peso Ideal:</span>
+          <span id="pesoIdealValor" class="result-value">- kg</span>
+        </div>
+        <div class="result-item">
+          <span class="result-label" data-key="% Grasa Corporal">% Grasa Corporal:</span>
+          <span id="grasaValor" class="result-value">- %</span>
+        </div>
+        <div class="result-item">
+          <span class="result-label" data-key="Masa Corporal Magra">Masa Corporal Magra:</span>
+          <span id="lbmValor" class="result-value">- kg</span>
+        </div>
+        <div class="result-item">
+          <span class="result-label" data-key="ICC">ICC (Cintura/Cadera):</span>
+          <span id="iccValor" class="result-value">-</span>
+        </div>
+        <div class="result-item">
+          <span class="result-label" data-key="ICT">ICT (Cintura/Talla):</span>
+          <span id="ictValor" class="result-value">-</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Panel Central - Formularios -->
+    <main class="panel-central">
+      
+      <!-- SECCION 1: DATOS BASICOS (Precargados del index/menu) -->
+      <section class="seccion">
+        <h3 class="seccion-titulo">Datos Basicos (Precargados)</h3>
+        <div class="campo-grid">
+          <div class="campo">
+            <label data-key="Edad">Edad:</label>
+            <input type="text" id="edad" maxlength="3" autocomplete="off" placeholder="Ej: 25">
+            <span class="error-message" id="edad-error">Solo numeros (18-120)</span>
+          </div>
+          <div class="campo">
+            <label data-key="Altura">Altura (cm):</label>
+            <input type="text" id="altura" maxlength="3" autocomplete="off" placeholder="Ej: 175">
+            <span class="error-message" id="altura-error">Solo numeros (50-250)</span>
+          </div>
+          <div class="campo">
+            <label data-key="Peso">Peso:</label>
+            <span id="pesoActual" class="peso-valor">0.00 kg</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECCION 2: MEDIDAS ANTROPOMETRICAS -->
+      <section class="seccion">
+        <h3 class="seccion-titulo">Medidas Antropometricas</h3>
+        <div class="campo-grid">
+          <div class="campo">
+            <label data-key="Circunferencia Brazo (cm)">Circunferencia Brazo (cm):</label>
+            <input type="text" id="brazo" maxlength="5" autocomplete="off" placeholder="Ej: 30">
+            <span class="error-message" id="brazo-error">Solo numeros</span>
+          </div>
+          <div class="campo">
+            <label data-key="Pliegue Tricipital (mm)">Pliegue Tricipital (mm):</label>
+            <input type="text" id="tricipital" maxlength="5" autocomplete="off" placeholder="Ej: 12">
+            <span class="error-message" id="tricipital-error">Solo numeros</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECCION 3: AREAS CORPORALES -->
+      <section class="seccion">
+        <h3 class="seccion-titulo">Areas Corporales (Auto-calculado)</h3>
+        <div class="resultados-grid">
+          <div class="resultado-item" data-key="AB">
+            <span id="abValor">AB: Pendiente</span>
+          </div>
+          <div class="resultado-item" data-key="AGB">
+            <span id="agbValor">AGB: Pendiente</span>
+          </div>
+          <div class="resultado-item" data-key="AMB">
+            <span id="ambValor">AMB: Pendiente</span>
+          </div>
+          <div class="resultado-item" data-key="AMB corregido">
+            <span id="ambCorrValor">AMB corregido: Pendiente</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECCION 4: MASA OSEA -->
+      <section class="seccion">
+        <h3 class="seccion-titulo">Masa Osea</h3>
+        <div class="campo-grid">
+          <div class="campo">
+            <label data-key="DM">DM (cm):</label>
+            <input type="text" id="dm" maxlength="5" autocomplete="off" placeholder="cm">
+            <span class="error-message" id="dm-error">Solo numeros</span>
+          </div>
+          <div class="campo">
+            <label data-key="DR">DR (cm):</label>
+            <input type="text" id="dr" maxlength="5" autocomplete="off" placeholder="cm">
+            <span class="error-message" id="dr-error">Solo numeros</span>
+          </div>
+          <div class="campo">
+            <label data-key="DF">DF (cm):</label>
+            <input type="text" id="df" maxlength="5" autocomplete="off" placeholder="cm">
+            <span class="error-message" id="df-error">Solo numeros</span>
+          </div>
+        </div>
+        <div class="resultados-grid" style="margin-top: 15px;">
+          <div class="resultado-item" data-key="Masa Osea">
+            <span id="masaOseaValor">Masa Osea: pendiente</span>
+          </div>
+          <div class="resultado-item" data-key="Masa Residual">
+            <span id="masaResidualValor">Masa Residual: pendiente</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECCION 5: PLIEGUES CUTANEOS -->
+      <section class="seccion">
+        <h3 class="seccion-titulo">Pliegues Cutaneos (mm)</h3>
+        <div class="pliegues-grid">
+          <div class="campo">
+            <label data-key="Pectoral">Pectoral:</label>
+            <input type="text" id="pectoral" maxlength="5" autocomplete="off" placeholder="mm">
+          </div>
+          <div class="campo">
+            <label data-key="Axilar">Axilar:</label>
+            <input type="text" id="axilar" maxlength="5" autocomplete="off" placeholder="mm">
+          </div>
+          <div class="campo">
+            <label data-key="Triceps">Triceps:</label>
+            <input type="text" id="tricep" maxlength="5" autocomplete="off" placeholder="mm">
+          </div>
+          <div class="campo">
+            <label data-key="Subescapular">Subescapular:</label>
+            <input type="text" id="subescapular" maxlength="5" autocomplete="off" placeholder="mm">
+          </div>
+          <div class="campo">
+            <label data-key="Abdominal">Abdominal:</label>
+            <input type="text" id="abdominal" maxlength="5" autocomplete="off" placeholder="mm">
+          </div>
+          <div class="campo">
+            <label data-key="Suprailiaco">Suprailiaco:</label>
+            <input type="text" id="suprailiaco" maxlength="5" autocomplete="off" placeholder="mm">
+          </div>
+          <div class="campo">
+            <label data-key="Muslo">Muslo:</label>
+            <input type="text" id="muslo" maxlength="5" autocomplete="off" placeholder="mm">
+          </div>
+        </div>
+      </section>
+
+      <!-- SECCION 6: CIRCUNFERENCIAS CORPORALES -->
+      <section class="seccion">
+        <h3 class="seccion-titulo">Circunferencias Corporales</h3>
+        <div class="campo-grid">
+          <div class="campo">
+            <label data-key="Cintura (cm)">Cintura (cm):</label>
+            <input type="text" id="cintura" maxlength="5" autocomplete="off" placeholder="cm">
+          </div>
+          <div class="campo">
+            <label data-key="Cadera (cm)">Cadera (cm):</label>
+            <input type="text" id="cadera" maxlength="5" autocomplete="off" placeholder="cm">
+          </div>
+        </div>
+      </section>
+
+      <!-- SECCION 7: COMPOSICION CORPORAL -->
+      <section class="seccion">
+        <h3 class="seccion-titulo">Composicion Corporal</h3>
+        <div class="resultado-item destacado" data-key="Densidad Corporal">
+          <span id="densidadValor">Densidad Corporal: pendiente</span>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Boton Calcular -->
+  <div class="bottom-panel">
+    <button id="calcularBtn" class="btn-calcular">Calcular Areas y Composicion</button>
+  </div>
+
+</div>
+
+<!-- Popup hover para informacion de parametros -->
+<div id="hoverPopup" class="hover-popup">
+  <div class="popup-content">
+    <h4 id="popupTitle"></h4>
+    <p id="popupDescription"></p>
+  </div>
+</div>
+
+<!-- Notificacion -->
+<div id="notification" class="notification"></div>
+
+<script src="js/imc.js?v=2"></script>
+</body>
+</html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  
+  <title>Calculadora de Somatotipo Heath-Carter</title>
+  <link rel="stylesheet" href="css/somatotipo.css?v=2">
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <h1>Calculadora de Somatotipo Heath-Carter</h1>
+      <p>Analisis Antropometrico Completo</p>
+    </div>
+  </header>
+
+  <!-- Boton Regresar -->
+  <div class="nav-bar">
+    <button id="btnRegresar" class="btn-regresar">← Regresar a Menu</button>
+  </div>
+
+  <!-- Pestañas de navegacion -->
+  <div class="tab-container">
+    <button class="tab-button active" data-tab="input">Datos Antropometricos</button>
+    <button class="tab-button" data-tab="results">Resultados</button>
+    <button class="tab-button" data-tab="graphics">Visualizacion</button>
+  </div>
+
+  <!-- PANEL 1: DATOS ANTROPOMETRICOS -->
+  <div id="tab-input" class="tab-panel active">
+
+    <!-- Datos Basicos (Precargados) -->
+    <section class="data-section basicos">
+      <h3 class="section-title">Datos Basicos (Precargados)</h3>
+      <div class="form-grid">
+        <div class="campo">
+          <label for="altura">Altura (cm):</label>
+          <input type="text" id="altura" maxlength="3" autocomplete="off" placeholder="Ej: 175">
+          <span class="error-message" id="altura-error">Solo numeros (50-250)</span>
+        </div>
+        <div class="campo">
+          <label for="peso">Peso (kg):</label>
+          <input type="text" id="peso" maxlength="6" autocomplete="off" placeholder="Ej: 70.5">
+          <span class="error-message" id="peso-error">Solo numeros (20-300)</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pliegues Cutaneos -->
+    <section class="data-section pliegues">
+      <h3 class="section-title">Pliegues Cutaneos (mm)</h3>
+      <div class="form-grid">
+        <div class="campo">
+          <label for="tricipital">Tricipital:</label>
+          <input type="text" id="tricipital" maxlength="5" autocomplete="off" placeholder="Ej: 12">
+          <span class="error-message" id="tricipital-error">Solo numeros</span>
+        </div>
+        <div class="campo">
+          <label for="subescapular">Subescapular:</label>
+          <input type="text" id="subescapular" maxlength="5" autocomplete="off" placeholder="Ej: 15">
+          <span class="error-message" id="subescapular-error">Solo numeros</span>
+        </div>
+        <div class="campo">
+          <label for="supraespinal">Supraespinal:</label>
+          <input type="text" id="supraespinal" maxlength="5" autocomplete="off" placeholder="Ej: 10">
+          <span class="error-message" id="supraespinal-error">Solo numeros</span>
+        </div>
+        <div class="campo">
+          <label for="pantorrillaPliegue">Pantorrilla (pliegue):</label>
+          <input type="text" id="pantorrillaPliegue" maxlength="5" autocomplete="off" placeholder="Ej: 8">
+          <span class="error-message" id="pantorrillaPliegue-error">Solo numeros</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Diametros Oseos -->
+    <section class="data-section diametros">
+      <h3 class="section-title">Diametros Oseos (cm)</h3>
+      <div class="form-grid">
+        <div class="campo">
+          <label for="diametroHumero">Humero (biepicondileo):</label>
+          <input type="text" id="diametroHumero" maxlength="5" autocomplete="off" placeholder="Ej: 6.5">
+          <span class="error-message" id="diametroHumero-error">Solo numeros</span>
+        </div>
+        <div class="campo">
+          <label for="diametroFemur">Femur (biepicondileo):</label>
+          <input type="text" id="diametroFemur" maxlength="5" autocomplete="off" placeholder="Ej: 9.5">
+          <span class="error-message" id="diametroFemur-error">Solo numeros</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Perimetros -->
+    <section class="data-section perimetros">
+      <h3 class="section-title">Perimetros (cm)</h3>
+      <div class="form-grid">
+        <div class="campo">
+          <label for="perimetroBrazo">Brazo flexionado:</label>
+          <input type="text" id="perimetroBrazo" maxlength="5" autocomplete="off" placeholder="Ej: 35">
+          <span class="error-message" id="perimetroBrazo-error">Solo numeros</span>
+        </div>
+        <div class="campo">
+          <label for="perimetroPantorrilla">Pantorrilla (max):</label>
+          <input type="text" id="perimetroPantorrilla" maxlength="5" autocomplete="off" placeholder="Ej: 36">
+          <span class="error-message" id="perimetroPantorrilla-error">Solo numeros</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Boton Calcular -->
+    <div class="button-container">
+      <button id="calcularBtn" class="btn-calcular">Calcular Somatotipo</button>
+    </div>
+
+  </div>
+
+  <!-- PANEL 2: RESULTADOS -->
+  <div id="tab-results" class="tab-panel">
+
+    <div class="results-grid">
+
+      <!-- Tarjetas de resultados -->
+      <div class="result-card endomorfo">
+        <div class="result-icon">E</div>
+        <h3>Endomorfia</h3>
+        <div class="result-value" id="endoValor">-</div>
+        <div class="result-bar">
+          <div id="endoBar" class="bar-fill"></div>
+        </div>
+        <div class="result-label">Gordura relativa</div>
+      </div>
+
+      <div class="result-card mesomorfo">
+        <div class="result-icon">M</div>
+        <h3>Mesomorfia</h3>
+        <div class="result-value" id="mesoValor">-</div>
+        <div class="result-bar">
+          <div id="mesoBar" class="bar-fill"></div>
+        </div>
+        <div class="result-label">Muscularidad</div>
+      </div>
+
+      <div class="result-card ectomorfo">
+        <div class="result-icon">X</div>
+        <h3>Ectomorfia</h3>
+        <div class="result-value" id="ectoValor">-</div>
+        <div class="result-bar">
+          <div id="ectoBar" class="bar-fill"></div>
+        </div>
+        <div class="result-label">Linealidad / Delgadez</div>
+      </div>
+
+    </div>
+
+    <!-- Tipo dominante -->
+    <div class="tipo-card" id="tipoCard">
+      <h2 id="tipoLabel">Tipo dominante: -</h2>
+    </div>
+
+    <!-- Descripcion y recomendaciones -->
+    <div class="descripcion-card">
+      <h3>Descripcion y Recomendaciones</h3>
+      <div id="descripcionArea" class="descripcion-area">
+        <p>Ingresa los datos y calcula para ver la descripcion.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- PANEL 3: VISUALIZACION -->
+  <div id="tab-graphics" class="tab-panel">
+
+    <div class="graphics-container">
+      <!-- Somatocarta -->
+      <div class="graph-card">
+        <h3>Somatocarta</h3>
+        <div class="somatocarta-container">
+          <canvas id="somatocartaCanvas" width="400" height="400"></canvas>
+        </div>
+        <div class="leyenda-grafico">
+          <span class="leyenda-item endo">Endomorfia</span>
+          <span class="leyenda-item meso">Mesomorfia</span>
+          <span class="leyenda-item ecto">Ectomorfia</span>
+        </div>
+      </div>
+
+      <!-- Representacion corporal -->
+      <div class="graph-card">
+        <h3>Representacion Corporal</h3>
+        <div class="body-type-container">
+          <canvas id="bodyTypeCanvas" width="350" height="400"></canvas>
+        </div>
+        <div class="leyenda-grafico">
+          <span class="leyenda-item">Vista frontal segun tipo</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Notificacion -->
+<div id="notification" class="notification"></div>
+
+<script src="js/somatotipo.js?v=2"></script>
+</body>
+</html>
