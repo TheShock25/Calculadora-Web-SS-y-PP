@@ -1,14 +1,22 @@
 package com.miapp.calculadoraweb.service;
 
-import com.miapp.calculadoraweb.model.Platillo;
-import com.miapp.calculadoraweb.model.PlanAlimenticioData;
-import com.miapp.calculadoraweb.model.SolicitudPlan;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.nio.charset.StandardCharsets;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import com.miapp.calculadoraweb.model.PlanAlimenticioData;
+import com.miapp.calculadoraweb.model.Platillo;
+import com.miapp.calculadoraweb.model.SolicitudPlan;
 
 @Service
 public class PlanAlimenticioService {
@@ -50,7 +58,7 @@ public class PlanAlimenticioService {
         String clave = generarClaveUnica(solicitud);
         if (cachePorSesion.containsKey(clave)) return cachePorSesion.get(clave);
 
-        excelReaderService.recargarYVerificar(solicitud.getGrupos());
+        excelReaderService.verificarYAñadirGrupos(solicitud.getGrupos());
 
         PlanAlimenticioData data = new PlanAlimenticioData();
         Map<String, List<String>> todosLosGrupos = excelReaderService.getAlimentosPorGrupo();

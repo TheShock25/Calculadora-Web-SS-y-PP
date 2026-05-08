@@ -1,13 +1,21 @@
 package com.miapp.calculadoraweb.service;
 
-import com.miapp.calculadoraweb.model.Alimento;
-import org.apache.poi.ss.usermodel.*;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
-import java.io.InputStream;
-import java.util.*;
+import com.miapp.calculadoraweb.model.Alimento;
 
 @Service
 public class ExcelReaderService {
@@ -37,34 +45,25 @@ public class ExcelReaderService {
     private Map<String, List<Alimento>> alimentosPorGrupoCache = null;
     
     // Método para recargar y verificar qué grupos faltan
-    public synchronized void recargarYVerificar(List<String> gruposRequeridos) {
-        System.out.println("=== RECARGANDO EXCEL CON VERIFICACIÓN ===");
-        System.out.println("Grupos requeridos: " + gruposRequeridos);
-        
-        // Limpiar caché para forzar recarga
-        todosLosAlimentosCache = null;
-        alimentosPorGrupoCache = null;
-        
-        // Cargar normalmente
-        leerTodosLosAlimentos();
-        
-        // Verificar qué grupos faltan
-        List<String> gruposFaltantes = new ArrayList<>();
-        for (String grupo : gruposRequeridos) {
-            if (!alimentosPorGrupoCache.containsKey(grupo)) {
-                gruposFaltantes.add(grupo);
-                System.err.println("✗ GRUPO FALTANTE: " + grupo);
-            } else {
-                System.out.println("✓ Grupo OK: " + grupo + " (" + alimentosPorGrupoCache.get(grupo).size() + " alimentos)");
-            }
-        }
-        
-        if (!gruposFaltantes.isEmpty()) {
-            System.err.println("GRUPOS NO ENCONTRADOS EN EXCEL: " + gruposFaltantes);
-            // Intentar carga manual de grupos faltantes
-            cargarGruposFaltantesManualmente(gruposFaltantes);
+    public synchronized void verificarYAñadirGrupos(List<String> gruposRequeridos) {
+    if (alimentosPorGrupoCache == null) {
+        leerTodosLosAlimentos(); // primera carga
+    }
+    
+    List<String> gruposFaltantes = new ArrayList<>();
+    for (String grupo : gruposRequeridos) {
+        if (!alimentosPorGrupoCache.containsKey(grupo)) {
+            gruposFaltantes.add(grupo);
+            System.err.println("✗ GRUPO FALTANTE: " + grupo);
         }
     }
+    
+    if (!gruposFaltantes.isEmpty()) {
+        System.err.println("GRUPOS NO ENCONTRADOS EN EXCEL: " + gruposFaltantes);
+        // Intentar carga manual solo de los grupos faltantes
+        cargarGruposFaltantesManualmente(gruposFaltantes);
+    }
+}
     
     private void cargarGruposFaltantesManualmente(List<String> gruposFaltantes) {
         System.out.println("=== INTENTANDO CARGA MANUAL DE GRUPOS FALTANTES ===");
