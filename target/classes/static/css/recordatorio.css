@@ -202,24 +202,34 @@ body {
   margin-bottom: 15px;
 }
 
+/* Cada fila de platillo: flexible, en escritorio horizontal, en móvil se apila */
 .platillo-item {
   display: flex;
-  gap: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
   margin-bottom: 10px;
   padding: 8px;
   background: #F8F9FA;
   border-radius: 10px;
+  width: 100%;
 }
 
-.platillo-item select, .platillo-item input {
+.platillo-item select {
+  flex: 1 1 60%;
+  min-width: 120px;
   padding: 10px;
+  font-size: 0.9rem;
   border: 2px solid #E0E0E0;
   border-radius: 8px;
-  font-size: 0.95rem;
 }
 
 .platillo-item input {
-  width: 70px;
+  width: 80px;
+  flex: 0 0 auto;
+  padding: 10px;
+  border: 2px solid #E0E0E0;
+  border-radius: 8px;
   text-align: center;
 }
 
@@ -346,6 +356,21 @@ body {
   font-weight: 600;
 }
 
+/* Estilo para el contador de porciones en encabezados de grupo (lo usará JS) */
+.grupo-header-con-contador {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+.contador-porciones-grupo {
+  font-size: 0.7rem;
+  background: rgba(0,0,0,0.3);
+  padding: 2px 6px;
+  border-radius: 20px;
+  font-weight: normal;
+}
+
 /* ===== NUTRIENTES PANELS ===== */
 .nutrientes-panels {
   display: grid;
@@ -432,7 +457,7 @@ body {
   color: var(--rojo);
 }
 
-/* ===== RESPONSIVE ===== */
+/* ===== RESPONSIVE UNIFICADO ===== */
 @media (max-width: 1200px) {
   .platillos-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -446,15 +471,53 @@ body {
   .nutrientes-panels {
     grid-template-columns: 1fr;
   }
+  /* Apilar los elementos de cada fila de alimento en móvil */
+  .cell-editor {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+  }
+  .cell-editor select,
+  .cell-editor input {
+    width: 100%;
+  }
+  /* Ajustar ancho mínimo de celdas de tabla */
+  .data-table td {
+    min-width: auto;
+  }
+  .data-table {
+    min-width: auto;
+  }
 }
 
 @media (max-width: 600px) {
   .header {
     padding: 25px 20px;
   }
+  .header-content h1 {
+    font-size: 1.4rem;
+  }
   .tabla-header {
     flex-direction: column;
     gap: 8px;
     text-align: center;
+  }
+  .main-content {
+    padding: 20px 15px;
+  }
+}
+
+/* Móvil muy pequeño: apilar select y input de platillos verticalmente */
+@media (max-width: 550px) {
+  .platillo-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .platillo-item select,
+  .platillo-item input {
+    width: 100%;
+  }
+  .platillo-item input {
+    margin-top: 4px;
   }
 }

@@ -37,6 +37,9 @@ let idealHc = 309;
 let idealLipidos = 34;
 let idealProteinas = 124;
 
+// Límite máximo de porciones por grupo en cada comida
+const LIMITE_POR_GRUPO = 10;
+
 // ========== FUNCIÓN PARA OBTENER VALORES IDEALES DE LA URL ==========
 function obtenerValoresIdeales() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -103,13 +106,11 @@ async function cargarDatos() {
         if (result.success) {
             datosRecordatorio = result.data;
             
-            // Procesar datos
             grupos = datosRecordatorio.grupos || [];
             alimentosPorGrupo = datosRecordatorio.alimentosPorGrupo || {};
             nutrientesAlimentos = datosRecordatorio.nutrientesAlimentos || {};
             platillos = datosRecordatorio.platillos || [];
             
-            // Crear mapa de platillos por nombre
             platillos.forEach(p => {
                 platillosPorNombre[p.nombre] = p;
             });
@@ -120,7 +121,6 @@ async function cargarDatos() {
                 platillos: platillos.length
             });
             
-            // Inicializar la interfaz
             inicializarInterfaz();
             
         } else {
@@ -136,61 +136,65 @@ async function cargarDatos() {
 
 // ========== INICIALIZAR INTERFAZ ==========
 function inicializarInterfaz() {
-    // Crear tablas
-    crearTabla('tablaDesayuno', grupos);
-    crearTabla('tablaComida', grupos);
-    crearTabla('tablaCena', grupos);
-    
-    // Crear selectores de platillos
+    crearTablas();
     crearSelectoresPlatillos('desayuno');
     crearSelectoresPlatillos('comida');
     crearSelectoresPlatillos('cena');
-    
-    // Inicializar estado
     inicializarEstado();
-    
-    // Mostrar valores ideales
     mostrarValoresIdeales();
-    
     console.log('Interfaz inicializada');
 }
 
-// ========== CREAR TABLA ==========
-function crearTabla(elementId, columnas) {
-    const tabla = document.getElementById(elementId);
-    if (!tabla) return;
-    
-    let html = '<thead><tr>';
-    columnas.forEach(col => {
-        html += `<th>${col}</th>`;
-    });
-    html += '</tr></thead><tbody>';
-    
-    for (let i = 0; i < 6; i++) {
-        html += '<tr>';
-        for (let j = 0; j < columnas.length; j++) {
-            const grupo = columnas[j];
-            const alimentos = alimentosPorGrupo[grupo] || [];
-            
-            html += `<td data-row="${i}" data-col="${j}" data-grupo="${grupo}">`;
-            html += `<div class="cell-editor">`;
-            html += `<select class="alimento-select" onchange="cambiarAlimento('${elementId}', ${i}, ${j}, this.value)">`;
-            html += `<option value="">-- Seleccionar --</option>`;
-            
-            alimentos.forEach(alimento => {
-                html += `<option value="${alimento}">${alimento}</option>`;
-            });
-            
-            html += `</select>`;
-            html += `<input type="number" min="0" max="10" value="1" class="porcion-input" onchange="cambiarPorcion('${elementId}', ${i}, ${j}, this.value)">`;
-            html += `</div>`;
-            html += `</td>`;
+// ========== CREAR TABLAS (con contadores en th) ==========
+function crearTablas() {
+    const comidas = ['desayuno', 'comida', 'cena'];
+    comidas.forEach(comida => {
+        const tablaId = `tabla${capitalize(comida)}`;
+        const tabla = document.getElementById(tablaId);
+        if (!tabla) return;
+        
+        let html = '<thead><tr>';
+        grupos.forEach((grupo, idx) => {
+            html += `<th><div class="grupo-header-con-contador">${grupo}<span class="contador-porciones-grupo" id="contador_${comida}_${idx}">0/${LIMITE_POR_GRUPO}</span></div></th>`;
+        });
+        html += '</tr></thead><tbody>';
+        
+        for (let i = 0; i < 6; i++) {
+            html += '<tr>';
+            for (let j = 0; j < grupos.length; j++) {
+                const grupo = grupos[j];
+                const alimentos = alimentosPorGrupo[grupo] || [];
+                html += `<td data-row="${i}" data-col="${j}" data-grupo="${grupo}" data-comida="${comida}">`;
+                html += `<div class="cell-editor">`;
+                html += `<select class="alimento-select" data-comida="${comida}" data-row="${i}" data-col="${j}">`;
+                html += `<option value="">-- Seleccionar --</option>`;
+                alimentos.forEach(alimento => {
+                    html += `<option value="${alimento}">${alimento}</option>`;
+                });
+                html += `</select>`;
+                html += `<input type="number" min="0" max="${LIMITE_POR_GRUPO}" value="1" class="porcion-input" data-comida="${comida}" data-row="${i}" data-col="${j}">`;
+                html += `</div>`;
+                html += `</td>`;
+            }
+            html += '</tr>';
         }
-        html += '</tr>';
-    }
+        html += '</tbody>';
+        tabla.innerHTML = html;
+    });
     
-    html += '</tbody>';
-    tabla.innerHTML = html;
+    // Asignar eventos después de crear el DOM
+    document.querySelectorAll('.alimento-select, .porcion-input').forEach(el => {
+        el.addEventListener('change', (e) => {
+            const comida = el.dataset.comida;
+            const row = parseInt(el.dataset.row);
+            const col = parseInt(el.dataset.col);
+            const select = document.querySelector(`.alimento-select[data-comida="${comida}"][data-row="${row}"][data-col="${col}"]`);
+            const input = document.querySelector(`.porcion-input[data-comida="${comida}"][data-row="${row}"][data-col="${col}"]`);
+            if (select && input) {
+                cambiarAlimento(comida, row, col, select.value, parseInt(input.value) || 1);
+            }
+        });
+    });
 }
 
 // ========== CREAR SELECTORES DE PLATILLOS ==========
@@ -238,9 +242,15 @@ function crearSelectoresPlatillos(comida) {
 function inicializarEstado() {
     for (let i = 0; i < 6; i++) {
         for (let j = 0; j < grupos.length; j++) {
-            estado.desayuno.alimentos.push({ row: i, col: j, grupo: grupos[j], alimento: '', porcion: 1 });
-            estado.comida.alimentos.push({ row: i, col: j, grupo: grupos[j], alimento: '', porcion: 1 });
-            estado.cena.alimentos.push({ row: i, col: j, grupo: grupos[j], alimento: '', porcion: 1 });
+            if (!estado.desayuno.alimentos.find(a => a.row === i && a.col === j)) {
+                estado.desayuno.alimentos.push({ row: i, col: j, grupo: grupos[j], alimento: '', porcion: 1 });
+            }
+            if (!estado.comida.alimentos.find(a => a.row === i && a.col === j)) {
+                estado.comida.alimentos.push({ row: i, col: j, grupo: grupos[j], alimento: '', porcion: 1 });
+            }
+            if (!estado.cena.alimentos.find(a => a.row === i && a.col === j)) {
+                estado.cena.alimentos.push({ row: i, col: j, grupo: grupos[j], alimento: '', porcion: 1 });
+            }
         }
     }
 }
@@ -250,10 +260,159 @@ function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-function obtenerComidaDesdeTabla(tablaId) {
-    if (tablaId === 'tablaDesayuno') return 'desayuno';
-    if (tablaId === 'tablaComida') return 'comida';
-    return 'cena';
+// ========== ACTUALIZAR CONTADOR Y DESHABILITAR FILAS POR GRUPO ==========
+function actualizarContadorYFilas(comida, colIndex) {
+    const objetivo = LIMITE_POR_GRUPO;
+    let suma = 0;
+    
+    // Sumar porciones de este grupo en esta comida
+    estado[comida].alimentos.forEach(a => {
+        if (a.col === colIndex && a.alimento) {
+            suma += (a.porcion || 0);
+        }
+    });
+    
+    // Actualizar contador en el th
+    const contadorSpan = document.getElementById(`contador_${comida}_${colIndex}`);
+    if (contadorSpan) contadorSpan.textContent = `${suma}/${objetivo}`;
+    
+    // Recorrer las filas de la tabla para esta comida y columna
+    const tablaId = `tabla${capitalize(comida)}`;
+    const tabla = document.getElementById(tablaId);
+    if (!tabla) return;
+    
+    const tbody = tabla.querySelector('tbody');
+    const rows = tbody.querySelectorAll('tr');
+    
+    let sumaParcial = 0;
+    for (let i = 0; i < rows.length; i++) {
+        const row = rows[i];
+        const cell = row.cells[colIndex];
+        if (!cell) continue;
+        
+        const select = cell.querySelector('.alimento-select');
+        const input = cell.querySelector('.porcion-input');
+        if (!select || !input) continue;
+        
+        const valorActual = parseFloat(input.value) || 0;
+        const tieneSeleccion = select.value && valorActual > 0;
+        
+        if (tieneSeleccion) {
+            sumaParcial += valorActual;
+        }
+        
+        // Deshabilitar si ya se alcanzó el objetivo y esta fila no tiene selección activa
+        let deshabilitar = false;
+        if (sumaParcial >= objetivo && !tieneSeleccion) {
+            deshabilitar = true;
+        } else if (!tieneSeleccion && sumaParcial >= objetivo) {
+            deshabilitar = true;
+        }
+        
+        select.disabled = deshabilitar;
+        input.disabled = deshabilitar;
+        
+        // Si está habilitada, ajustar max dinámicamente
+        if (!deshabilitar) {
+            const restante = objetivo - (sumaParcial - (tieneSeleccion ? valorActual : 0));
+            const maxPermitido = Math.max(0, restante);
+            input.max = maxPermitido;
+            if (valorActual > maxPermitido && maxPermitido >= 0) {
+                input.value = maxPermitido;
+                // Disparar cambio para actualizar estado
+                const event = new Event('change', { bubbles: true });
+                input.dispatchEvent(event);
+            }
+        }
+    }
+}
+
+// ========== MANEJADORES DE CAMBIO ==========
+function cambiarAlimento(comida, row, col, alimento, porcion) {
+    const objetivo = LIMITE_POR_GRUPO;
+    
+    // Calcular suma actual sin contar esta fila
+    let sumaSinEsta = 0;
+    estado[comida].alimentos.forEach(a => {
+        if (a.col === col && a.alimento && !(a.row === row && a.col === col)) {
+            sumaSinEsta += (a.porcion || 0);
+        }
+    });
+    
+    let porcionNum = parseInt(porcion) || 0;
+    const restante = objetivo - sumaSinEsta;
+    if (porcionNum > restante && restante >= 0) {
+        porcionNum = restante;
+        // Actualizar input visualmente
+        const input = document.querySelector(`.porcion-input[data-comida="${comida}"][data-row="${row}"][data-col="${col}"]`);
+        if (input) input.value = porcionNum;
+    }
+    
+    const existente = estado[comida].alimentos.find(a => a.row === row && a.col === col);
+    if (existente) {
+        // Restar nutrientes del anterior si existía
+        if (existente.alimento) {
+            const nutrientesAnt = obtenerNutrientesDeAlimento(existente.alimento);
+            if (nutrientesAnt) restarNutrientes(nutrientesAnt, existente.porcion);
+        }
+        existente.alimento = alimento;
+        existente.porcion = porcionNum;
+        // Sumar nuevos nutrientes
+        if (alimento && porcionNum > 0) {
+            const nutrientesNue = obtenerNutrientesDeAlimento(alimento);
+            if (nutrientesNue) sumarNutrientes(nutrientesNue, porcionNum);
+        }
+    } else {
+        if (alimento && porcionNum > 0) {
+            estado[comida].alimentos.push({
+                row, col, grupo: grupos[col], alimento, porcion: porcionNum
+            });
+            const nutrientes = obtenerNutrientesDeAlimento(alimento);
+            if (nutrientes) sumarNutrientes(nutrientes, porcionNum);
+        }
+    }
+    
+    // Limpiar si alimento vacío
+    if (!alimento && existente) {
+        existente.alimento = '';
+        existente.porcion = 0;
+    }
+    
+    actualizarTotales();
+    actualizarContadorYFilas(comida, col);
+}
+
+function cambiarPlatillo(comida, index) {
+    const select = document.getElementById(`platillo_${comida}_${index}`);
+    const input = document.getElementById(`porcion_${comida}_${index}`);
+    
+    if (!select || !input) return;
+    
+    const nombre = select.value;
+    const porcion = parseInt(input.value) || 1;
+    
+    const existente = estado[comida].platillos.find(p => p.index === index);
+    
+    if (existente) {
+        if (existente.nombre) {
+            const nutrientes = obtenerNutrientesDePlatillo(existente.nombre);
+            if (nutrientes) restarNutrientes(nutrientes, existente.porcion);
+        }
+        existente.nombre = nombre;
+        existente.porcion = porcion;
+        if (nombre) {
+            const nutrientes = obtenerNutrientesDePlatillo(nombre);
+            if (nutrientes) sumarNutrientes(nutrientes, porcion);
+        }
+    } else {
+        estado[comida].platillos.push({ index, nombre, porcion });
+        if (nombre) {
+            const nutrientes = obtenerNutrientesDePlatillo(nombre);
+            if (nutrientes) sumarNutrientes(nutrientes, porcion);
+        }
+    }
+    
+    actualizarTotales();
 }
 
 // ========== FUNCIONES DE NUTRIENTES ==========
@@ -273,7 +432,6 @@ function restarNutrientes(nutrientes, factor = 1) {
 
 function obtenerNutrientesDeAlimento(nombreAlimento) {
     if (!nombreAlimento || !nutrientesAlimentos[nombreAlimento]) return null;
-    
     const nut = nutrientesAlimentos[nombreAlimento];
     return {
         hc: nut.HC || 0,
@@ -298,103 +456,11 @@ function actualizarTotales() {
         document.getElementById('pctHc').textContent = ((totales.hc / totalGramos) * 100).toFixed(1) + '%';
         document.getElementById('pctLipidos').textContent = ((totales.lipidos / totalGramos) * 100).toFixed(1) + '%';
         document.getElementById('pctProteinas').textContent = ((totales.proteinas / totalGramos) * 100).toFixed(1) + '%';
-    }
-}
-
-// ========== MANEJADORES DE EVENTOS ==========
-function cambiarAlimento(tablaId, row, col, alimento) {
-    const comida = obtenerComidaDesdeTabla(tablaId);
-    const grupo = grupos[col];
-    
-    const existente = estado[comida].alimentos.find(
-        a => a.row === row && a.col === col
-    );
-    
-    if (existente) {
-        if (existente.alimento) {
-            const nutrientes = obtenerNutrientesDeAlimento(existente.alimento);
-            restarNutrientes(nutrientes, existente.porcion);
-        }
-        
-        existente.alimento = alimento;
-        existente.porcion = parseInt(document.querySelector(`#${tablaId} [data-row="${row}"][data-col="${col}"] .porcion-input`).value) || 1;
-        
-        if (alimento) {
-            const nutrientes = obtenerNutrientesDeAlimento(alimento);
-            sumarNutrientes(nutrientes, existente.porcion);
-        }
     } else {
-        const porcion = parseInt(document.querySelector(`#${tablaId} [data-row="${row}"][data-col="${col}"] .porcion-input`).value) || 1;
-        
-        estado[comida].alimentos.push({
-            row, col, grupo, alimento, porcion
-        });
-        
-        if (alimento) {
-            const nutrientes = obtenerNutrientesDeAlimento(alimento);
-            sumarNutrientes(nutrientes, porcion);
-        }
+        document.getElementById('pctHc').textContent = '0.0%';
+        document.getElementById('pctLipidos').textContent = '0.0%';
+        document.getElementById('pctProteinas').textContent = '0.0%';
     }
-    
-    actualizarTotales();
-}
-
-function cambiarPorcion(tablaId, row, col, nuevaPorcion) {
-    const comida = obtenerComidaDesdeTabla(tablaId);
-    const alimento = estado[comida].alimentos.find(
-        a => a.row === row && a.col === col
-    );
-    
-    if (alimento && alimento.alimento) {
-        const porcionAnterior = alimento.porcion;
-        const nutrientes = obtenerNutrientesDeAlimento(alimento.alimento);
-        
-        if (nutrientes) {
-            restarNutrientes(nutrientes, porcionAnterior);
-            sumarNutrientes(nutrientes, nuevaPorcion);
-        }
-        
-        alimento.porcion = nuevaPorcion;
-        actualizarTotales();
-    }
-}
-
-function cambiarPlatillo(comida, index) {
-    const select = document.getElementById(`platillo_${comida}_${index}`);
-    const input = document.getElementById(`porcion_${comida}_${index}`);
-    
-    if (!select || !input) return;
-    
-    const nombre = select.value;
-    const porcion = parseInt(input.value) || 1;
-    
-    const existente = estado[comida].platillos.find(p => p.index === index);
-    
-    if (existente) {
-        if (existente.nombre) {
-            const nutrientes = obtenerNutrientesDePlatillo(existente.nombre);
-            restarNutrientes(nutrientes, existente.porcion);
-        }
-        
-        existente.nombre = nombre;
-        existente.porcion = porcion;
-        
-        if (nombre) {
-            const nutrientes = obtenerNutrientesDePlatillo(nombre);
-            sumarNutrientes(nutrientes, porcion);
-        }
-    } else {
-        estado[comida].platillos.push({
-            index, nombre, porcion
-        });
-        
-        if (nombre) {
-            const nutrientes = obtenerNutrientesDePlatillo(nombre);
-            sumarNutrientes(nutrientes, porcion);
-        }
-    }
-    
-    actualizarTotales();
 }
 
 // ========== VER TODOS LOS PLATILLOS ==========
@@ -430,6 +496,25 @@ function cerrarModal() {
 
 // ========== EXPORTAR A TXT ==========
 async function exportarTXT() {
+    // Verificar que todos los grupos tengan exactamente 10 porciones en cada comida
+    let incompletos = [];
+    for (let comida of ['desayuno', 'comida', 'cena']) {
+        for (let col = 0; col < grupos.length; col++) {
+            let suma = 0;
+            estado[comida].alimentos.forEach(a => {
+                if (a.col === col && a.alimento) suma += (a.porcion || 0);
+            });
+            if (suma !== LIMITE_POR_GRUPO) {
+                incompletos.push(`${comida.toUpperCase()} - ${grupos[col]} (${suma}/${LIMITE_POR_GRUPO})`);
+            }
+        }
+    }
+    
+    if (incompletos.length > 0) {
+        alert(`Faltan completar las porciones en:\n${incompletos.join('\n')}\n\nCada grupo debe tener exactamente ${LIMITE_POR_GRUPO} porciones en cada comida.`);
+        return;
+    }
+    
     const tieneDatos = Object.values(estado).some(comida => 
         comida.alimentos.some(a => a.alimento) || 
         comida.platillos.some(p => p.nombre)
@@ -451,7 +536,8 @@ async function exportarTXT() {
                     hc: idealHc, 
                     lipidos: idealLipidos, 
                     proteinas: idealProteinas 
-                } 
+                },
+                limitePorGrupo: LIMITE_POR_GRUPO
             })
         });
         
@@ -474,7 +560,6 @@ async function exportarTXT() {
 
 // ========== REGRESAR ==========
 function volverAtras() {
-    // Guardar que venimos de recordatorio
     sessionStorage.setItem('desdeDonde', 'recordatorio');
     sessionStorage.setItem('destino', 'equivalentes');
     window.location.href = 'equivalentes.html';
@@ -485,7 +570,6 @@ document.addEventListener('DOMContentLoaded', () => {
     obtenerValoresIdeales();
     cargarDatos();
     
-    // Event listeners
     document.getElementById('btnExportar')?.addEventListener('click', exportarTXT);
     document.getElementById('btnRegresar')?.addEventListener('click', volverAtras);
     

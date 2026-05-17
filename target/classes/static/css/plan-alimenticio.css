@@ -660,20 +660,149 @@ body {
 
 @media (max-width: 900px) {
   body { padding: 12px; }
-  .platillos-grid       { grid-template-columns: 1fr; }
-  .nutrientes-panels    { grid-template-columns: 1fr; }
-  .comida-grid          { flex-direction: column; align-items: center; }
-  .grupo-columna        { max-width: 100%; min-width: 0; width: 100%; }
-  .dias-tabs            { gap: 6px; }
-  .dia-tab              { padding: 9px 14px; font-size: 0.82rem; min-width: 70px; }
+
+  .platillos-grid { grid-template-columns: 1fr; }
+  .nutrientes-panels { grid-template-columns: 1fr; }
+
+  .comida-grid {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .grupo-columna {
+    flex: none;
+    width: auto;
+    max-width: 600px;
+    min-width: 280px;
+    margin: 0 auto;
+  }
+
+  .alimento-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+    padding: 12px;
+  }
+
+  .alimento-row select {
+    width: 100%;
+    flex: auto;
+    text-align: center;
+  }
+
+  .alimento-row input {
+    width: 100%;
+    margin-top: 4px;
+    text-align: center;
+  }
+
+  /* Asegurar que el contenedor de alimentos tenga scroll vertical si es necesario */
+  .grupo-alimentos {
+    max-height: 320px;
+    overflow-y: auto;
+  }
+
+  .dias-tabs { gap: 6px; }
+  .dia-tab { padding: 9px 14px; font-size: 0.82rem; min-width: 70px; }
 }
 
 @media (max-width: 600px) {
-  .header               { padding: 25px 20px; }
-  .header-content h1    { font-size: 1.3rem; }
-  .main-content         { padding: 18px 14px; }
-  .dias-tab             { padding: 8px 10px; font-size: 0.78rem; min-width: 60px; }
-  .nutrientes-table td  { padding: 12px 12px; }
-  .objetivo-card        { min-width: 130px; padding: 16px 18px; }
+  .header { padding: 25px 20px; }
+  .header-content h1 { font-size: 1.3rem; }
+  .main-content { padding: 18px 14px; }
+  .dias-tab { padding: 8px 10px; font-size: 0.78rem; min-width: 60px; }
+  .nutrientes-table td { padding: 12px 12px; }
+  .objetivo-card { min-width: 130px; padding: 16px 18px; }
   .objetivo-card strong { font-size: 1.8rem; }
+}
+
+/* ===== MEJORAS RESPONSIVE PARA PLATILLOS (DESAYUNO, COMIDA, CENA) ===== */
+.platillo-item {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 8px;
+    background: #F8F9FA;
+    border-radius: 10px;
+    width: 100%;
+}
+
+.platillo-item select {
+    flex: 1 1 60%;
+    min-width: 120px;
+    padding: 10px;
+    font-size: 0.9rem;
+}
+
+.platillo-item input {
+    width: 80px;
+    flex: 0 0 auto;
+}
+
+@media (max-width: 550px) {
+    .platillo-item {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .platillo-item select {
+        width: 100%;
+        flex: auto;
+    }
+    .platillo-item input {
+        width: 100%;
+        margin-top: 4px;
+    }
+}
+
+.platillo-card {
+    overflow: hidden;
+    width: 100%;
+}
+
+/* Solo para pantallas muy pequeñas (≤350px) - Ajuste de las 3 tablas de grupos */
+@media (max-width: 350px) {
+  /* Contenedor de cada comida (Desayuno, Comida, Cena) */
+  .comida-grid {
+    gap: 12px;
+  }
+
+  /* Cada columna de grupo (ej: Verduras) */
+  .grupo-columna {
+    min-width: 0;           /* anula el min-width: 280px que causa desborde */
+    width: 100%;
+    margin: 0;
+  }
+
+  /* Contenedor de las filas de alimentos */
+  .grupo-alimentos {
+    padding: 10px 8px;
+  }
+
+  /* Cada fila (select + input) se mantiene vertical (como ya está en <=900px) */
+  .alimento-row {
+    padding: 8px 6px;
+    gap: 4px;
+  }
+
+  /* Select ocupa todo el ancho y fuente más pequeña */
+  .alimento-row select {
+    font-size: 0.75rem;
+    padding: 8px 6px;
+  }
+
+  /* Input ocupa todo el ancho */
+  .alimento-row input {
+    font-size: 0.75rem;
+    padding: 8px 6px;
+    width: 100%;
+  }
+
+  /* Opcional: el header del grupo (nombre + contador) se ajusta */
+  .grupo-header {
+    padding: 8px 10px;
+    font-size: 0.85rem;
+  }
 }

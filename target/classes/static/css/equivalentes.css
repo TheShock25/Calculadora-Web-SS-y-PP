@@ -882,3 +882,27 @@ body {
     padding: 14px 18px;
   }
 }
+/* ===== SCROLL HORIZONTAL PARA TABLA NUTRIENTES CALCULADOS ===== */
+.mini-table-container.nutrientes {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+}
+
+.mini-table-container.nutrientes .mini-table {
+    min-width: 400px;   /* ancho mínimo para que las 4 columnas se vean completas */
+    width: 100%;
+}
+
+/* Personalización de scrollbar (opcional, para que se vea como la tabla principal) */
+.mini-table-container.nutrientes::-webkit-scrollbar {
+    height: 6px;
+}
+.mini-table-container.nutrientes::-webkit-scrollbar-track {
+    background: #E8F5E9;
+    border-radius: 3px;
+}
+.mini-table-container.nutrientes::-webkit-scrollbar-thumb {
+    background: var(--verde-claro);
+    border-radius: 3px;
+}

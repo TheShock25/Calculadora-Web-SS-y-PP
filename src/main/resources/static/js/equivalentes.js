@@ -110,130 +110,30 @@ function restaurarEstadoSiExiste() {
     }
 }
 
-// ========== RENDERIZAR TABLA PRINCIPAL ==========
-function renderizarTablaEquivalentes() {
-    const tbody = elementos.tablaEquivalentesBody;
-    tbody.innerHTML = '';
-   
-    datosEquivalentes.forEach((item, index) => {
-        const tr = document.createElement('tr');
-        if (item.porciones > 0) tr.classList.add('porcion-activa');
-       
-        const tdGrupo = document.createElement('td');
-        tdGrupo.textContent = item.grupo;
-        tr.appendChild(tdGrupo);
-       
-        const tdSubgrupo = document.createElement('td');
-        tdSubgrupo.textContent = item.subgrupo;
-        tr.appendChild(tdSubgrupo);
-       
-        // Porciones (editable)
-        const tdPorciones = document.createElement('td');
-        const inputPorciones = document.createElement('input');
-        inputPorciones.type = 'number';
-        inputPorciones.className = 'porciones-editor';
-        inputPorciones.value = item.porciones;
-        inputPorciones.min = 0;
-        inputPorciones.max = 99;
-        inputPorciones.step = 1;
-       
-        inputPorciones.addEventListener('change', (e) => {
-            const nuevasPorciones = parseInt(e.target.value) || 0;
-            actualizarPorciones(index, nuevasPorciones);
-        });
-       
-        tdPorciones.appendChild(inputPorciones);
-        tr.appendChild(tdPorciones);
-       
-        const tdEnergia = document.createElement('td');
-        tdEnergia.textContent = item.energiaCalculada;
-        tr.appendChild(tdEnergia);
-       
-        const tdProteinas = document.createElement('td');
-        tdProteinas.textContent = item.proteinasCalculadas;
-        tr.appendChild(tdProteinas);
-       
-        const tdLipidos = document.createElement('td');
-        tdLipidos.textContent = item.lipidosCalculados;
-        tr.appendChild(tdLipidos);
-       
-        const tdHC = document.createElement('td');
-        tdHC.textContent = item.hcCalculados;
-        tr.appendChild(tdHC);
-       
-        tbody.appendChild(tr);
+// ========== VALIDAR SUMA DE PORCENTAJES ==========
+// Retorna true si la suma está entre 99.9 y 100.1 (tolerancia por redondeo)
+function sumaPorcentajesValida() {
+    const suma = porcentajeHC + porcentajeProteinas + porcentajeLipidos;
+    return Math.abs(suma - 100) <= 0.1;
+}
+
+// Marca visualmente los inputs de porcentaje que no suman 100
+function aplicarEstiloValidacionPorcentajes() {
+    const inputs = document.querySelectorAll('#tablaPorcentajesBody .porcentaje-editor');
+    const esValido = sumaPorcentajesValida();
+    inputs.forEach(input => {
+        if (!esValido) {
+            input.style.borderColor = '#C62828';
+            input.style.backgroundColor = '#FFEBEE';
+        } else {
+            input.style.borderColor = 'var(--naranja)';
+            input.style.backgroundColor = 'white';
+        }
     });
+    return esValido;
 }
 
-// ========== ACTUALIZAR PORCIONES ==========
-function actualizarPorciones(index, nuevasPorciones) {
-    if (index < 0 || index >= datosEquivalentes.length) return;
-   
-    const item = datosEquivalentes[index];
-    item.porciones = nuevasPorciones;
-   
-    item.energiaCalculada = nuevasPorciones * item.energia;
-    item.proteinasCalculadas = nuevasPorciones * item.proteinas;
-    item.lipidosCalculados = nuevasPorciones * item.lipidos;
-    item.hcCalculados = nuevasPorciones * item.hc;
-   
-    renderizarTablaEquivalentes();
-    calcularTotales();
-   
-    mostrarNotif(`Actualizado: ${item.grupo} = ${nuevasPorciones} porciones`, 'success');
-}
-
-// ========== REDISTRIBUIR PORCENTAJES (NUEVO) ==========
-// Cuando se edita un nutriente, la diferencia se reparte proporcionalmente
-// entre los otros dos para que siempre sumen 100.
-function redistribuirPorcentajes(nutrienteEditado, nuevoValor) {
-    // Mapa de los tres nutrientes con sus valores actuales
-    const mapa = {
-        HC: porcentajeHC,
-        Proteinas: porcentajeProteinas,
-        Lipidos: porcentajeLipidos
-    };
-
-    // Clamp entre 0 y 100
-    nuevoValor = Math.min(100, Math.max(0, nuevoValor));
-
-    // Resto disponible para los otros dos
-    const resto = 100 - nuevoValor;
-
-    // Los otros dos nutrientes
-    const otros = Object.keys(mapa).filter(k => k !== nutrienteEditado);
-
-    const sumaOtros = mapa[otros[0]] + mapa[otros[1]];
-
-    let nuevos = { ...mapa };
-    nuevos[nutrienteEditado] = nuevoValor;
-
-    if (sumaOtros === 0) {
-        // Si ambos eran 0, repartir el resto en partes iguales
-        nuevos[otros[0]] = parseFloat((resto / 2).toFixed(1));
-        nuevos[otros[1]] = parseFloat((resto / 2).toFixed(1));
-    } else {
-        // Repartir proporcionalmente
-        nuevos[otros[0]] = parseFloat(((mapa[otros[0]] / sumaOtros) * resto).toFixed(1));
-        nuevos[otros[1]] = parseFloat(((mapa[otros[1]] / sumaOtros) * resto).toFixed(1));
-    }
-
-    // Ajuste de redondeo: asegurar que sumen exactamente 100
-    const suma = nuevos[nutrienteEditado] + nuevos[otros[0]] + nuevos[otros[1]];
-    const diff = parseFloat((100 - suma).toFixed(1));
-    if (diff !== 0) {
-        // Sumamos el ajuste al que tenga mayor valor entre los otros dos
-        const mayorOtro = nuevos[otros[0]] >= nuevos[otros[1]] ? otros[0] : otros[1];
-        nuevos[mayorOtro] = parseFloat((nuevos[mayorOtro] + diff).toFixed(1));
-    }
-
-    // Aplicar
-    porcentajeHC = nuevos.HC;
-    porcentajeProteinas = nuevos.Proteinas;
-    porcentajeLipidos = nuevos.Lipidos;
-}
-
-// ========== RENDERIZAR TABLA DE PORCENTAJES ==========
+// ========== RENDERIZAR TABLA DE PORCENTAJES (SIN REDISTRIBUCIÓN AUTOMÁTICA) ==========
 function renderizarTablaPorcentajes() {
     const tbody = elementos.tablaPorcentajesBody;
     tbody.innerHTML = '';
@@ -257,40 +157,64 @@ function renderizarTablaPorcentajes() {
         inputPorcentaje.className = 'porcentaje-editor';
         inputPorcentaje.value = item.porcentaje + '%';
        
+        // Almacenar el nombre del nutriente en el input para saber cuál modificar
+        inputPorcentaje.setAttribute('data-nutriente', item.nutriente);
+       
         inputPorcentaje.addEventListener('focus', (e) => {
-            // Al enfocar, mostrar solo el número para facilitar edición
-            e.target.value = parseFloat(e.target.value) || '';
+            // Mostrar solo el número sin el % para facilitar edición
+            let raw = e.target.value.replace('%', '').trim();
+            e.target.value = raw;
         });
-
+       
+        inputPorcentaje.addEventListener('blur', (e) => {
+            // Al salir del campo, agregar el % si el valor es numérico
+            let val = e.target.value.trim();
+            let num = parseFloat(val);
+            if (!isNaN(num)) {
+                e.target.value = num + '%';
+            } else {
+                e.target.value = '0%';
+            }
+        });
+       
         inputPorcentaje.addEventListener('change', (e) => {
             let valor = e.target.value.replace('%', '').trim();
             let num = parseFloat(valor);
             if (isNaN(num)) num = 0;
-
-            // Redistribuir los otros dos proporcionalmente
-            redistribuirPorcentajes(item.nutriente, num);
-
-            // Re-renderizar la tabla de porcentajes con los nuevos valores
+            // Limitar entre 0 y 100
+            num = Math.min(100, Math.max(0, num));
+           
+            // Actualizar la variable correspondiente
+            const nutriente = inputPorcentaje.getAttribute('data-nutriente');
+            switch (nutriente) {
+                case 'HC': porcentajeHC = num; break;
+                case 'Proteinas': porcentajeProteinas = num; break;
+                case 'Lipidos': porcentajeLipidos = num; break;
+            }
+           
+            // Volver a renderizar la tabla de porcentajes (para que todos los inputs reflejen los valores actuales)
             renderizarTablaPorcentajes();
            
+            // Actualizar las tablas que dependen de los porcentajes
             actualizarTablaDistribucion();
             calcularTotales();
-
-            const suma = parseFloat((porcentajeHC + porcentajeProteinas + porcentajeLipidos).toFixed(1));
-            mostrarNotif(`Porcentajes actualizados (suma: ${suma}%)`, 'success');
+           
+            // Validar suma y mostrar advertencia si no es 100
+            const suma = porcentajeHC + porcentajeProteinas + porcentajeLipidos;
+            if (Math.abs(suma - 100) > 0.1) {
+                mostrarNotif(`Los porcentajes suman ${suma.toFixed(1)}%. Deben sumar 100% para continuar.`, 'error');
+            } else {
+                mostrarNotif(`Porcentajes actualizados (suma = ${suma.toFixed(1)}%)`, 'success');
+            }
+            aplicarEstiloValidacionPorcentajes();
         });
        
         tdPorcentaje.appendChild(inputPorcentaje);
         tr.appendChild(tdPorcentaje);
         tbody.appendChild(tr);
     });
-
-    // Actualizar visualmente los inputs con el valor actual (post-redistribución)
-    const inputs = tbody.querySelectorAll('.porcentaje-editor');
-    const valores = [porcentajeHC, porcentajeProteinas, porcentajeLipidos];
-    inputs.forEach((inp, i) => {
-        inp.value = valores[i] + '%';
-    });
+   
+    aplicarEstiloValidacionPorcentajes();
 }
 
 // ========== ACTUALIZAR TABLA DE DISTRIBUCION ==========
@@ -448,6 +372,79 @@ function actualizarTablaNutrientes(totalKcal, totalProteinas, totalLipidos, tota
     tbody.appendChild(trTotal);
 }
 
+// ========== RENDERIZAR TABLA PRINCIPAL ==========
+function renderizarTablaEquivalentes() {
+    const tbody = elementos.tablaEquivalentesBody;
+    tbody.innerHTML = '';
+   
+    datosEquivalentes.forEach((item, index) => {
+        const tr = document.createElement('tr');
+        if (item.porciones > 0) tr.classList.add('porcion-activa');
+       
+        const tdGrupo = document.createElement('td');
+        tdGrupo.textContent = item.grupo;
+        tr.appendChild(tdGrupo);
+       
+        const tdSubgrupo = document.createElement('td');
+        tdSubgrupo.textContent = item.subgrupo;
+        tr.appendChild(tdSubgrupo);
+       
+        // Porciones (editable)
+        const tdPorciones = document.createElement('td');
+        const inputPorciones = document.createElement('input');
+        inputPorciones.type = 'number';
+        inputPorciones.className = 'porciones-editor';
+        inputPorciones.value = item.porciones;
+        inputPorciones.min = 0;
+        inputPorciones.max = 99;
+        inputPorciones.step = 1;
+       
+        inputPorciones.addEventListener('change', (e) => {
+            const nuevasPorciones = parseInt(e.target.value) || 0;
+            actualizarPorciones(index, nuevasPorciones);
+        });
+       
+        tdPorciones.appendChild(inputPorciones);
+        tr.appendChild(tdPorciones);
+       
+        const tdEnergia = document.createElement('td');
+        tdEnergia.textContent = item.energiaCalculada;
+        tr.appendChild(tdEnergia);
+       
+        const tdProteinas = document.createElement('td');
+        tdProteinas.textContent = item.proteinasCalculadas;
+        tr.appendChild(tdProteinas);
+       
+        const tdLipidos = document.createElement('td');
+        tdLipidos.textContent = item.lipidosCalculados;
+        tr.appendChild(tdLipidos);
+       
+        const tdHC = document.createElement('td');
+        tdHC.textContent = item.hcCalculados;
+        tr.appendChild(tdHC);
+       
+        tbody.appendChild(tr);
+    });
+}
+
+// ========== ACTUALIZAR PORCIONES ==========
+function actualizarPorciones(index, nuevasPorciones) {
+    if (index < 0 || index >= datosEquivalentes.length) return;
+   
+    const item = datosEquivalentes[index];
+    item.porciones = nuevasPorciones;
+   
+    item.energiaCalculada = nuevasPorciones * item.energia;
+    item.proteinasCalculadas = nuevasPorciones * item.proteinas;
+    item.lipidosCalculados = nuevasPorciones * item.lipidos;
+    item.hcCalculados = nuevasPorciones * item.hc;
+   
+    renderizarTablaEquivalentes();
+    calcularTotales();
+   
+    mostrarNotif(`Actualizado: ${item.grupo} = ${nuevasPorciones} porciones`, 'success');
+}
+
 // ========== REINICIAR TABLA ==========
 function reiniciarTabla() {
     if (confirm('¿Está seguro de reiniciar todas las porciones a 0?')) {
@@ -502,6 +499,84 @@ function exportarDatos() {
     mostrarNotif('Datos exportados correctamente', 'success');
 }
 
+// ========== VALIDAR Y NAVEGAR A PLAN ALIMENTICIO ==========
+function irAPlanAlimenticio() {
+    if (!sumaPorcentajesValida()) {
+        const suma = porcentajeHC + porcentajeProteinas + porcentajeLipidos;
+        alert(`Los porcentajes de macronutrientes suman ${suma.toFixed(1)}%. Deben sumar 100% exactamente para generar el plan alimenticio. Ajusta los valores en la tabla "Porcentajes (Editable)".`);
+        mostrarNotif('Corrige los porcentajes para que sumen 100%', 'error');
+        return false;
+    }
+   
+    guardarEstadoParaRegreso();
+
+    const gruposSeleccionados = [];
+    const porcionesSeleccionadas = [];
+   
+    datosEquivalentes.forEach(item => {
+        if (item.porciones > 0) {
+            const subgrupoLimpio = item.subgrupo ? item.subgrupo.trim() : '';
+            if (subgrupoLimpio !== '' && subgrupoLimpio !== ' ') {
+                gruposSeleccionados.push(`${item.grupo} - ${subgrupoLimpio}`);
+            } else {
+                gruposSeleccionados.push(item.grupo);
+            }
+            porcionesSeleccionadas.push(item.porciones);
+        }
+    });
+   
+    if (gruposSeleccionados.length === 0) {
+        alert('No hay grupos seleccionados. Por favor, asigne porciones a al menos un grupo.');
+        return false;
+    }
+   
+    const tablaNutrientes = document.getElementById('tablaNutrientesBody');
+    const filas = tablaNutrientes.querySelectorAll('tr');
+    
+    const hcGramos = parseFloat(filas[0]?.querySelectorAll('td')[2]?.textContent) || 0;
+    const lipidosGramos = parseFloat(filas[1]?.querySelectorAll('td')[2]?.textContent) || 0;
+    const proteinasGramos = parseFloat(filas[2]?.querySelectorAll('td')[2]?.textContent) || 0;
+   
+    sessionStorage.setItem('desdeDonde', 'equivalentes');
+    sessionStorage.setItem('destino', 'plan');
+   
+    const gruposStr = encodeURIComponent(JSON.stringify(gruposSeleccionados));
+    const porcionesStr = encodeURIComponent(JSON.stringify(porcionesSeleccionadas));
+   
+    window.location.href = `plan-alimenticio.html?hc=${hcGramos}&lipidos=${lipidosGramos}&proteinas=${proteinasGramos}&grupos=${gruposStr}&porciones=${porcionesStr}`;
+    return true;
+}
+
+// ========== VALIDAR Y NAVEGAR A R24H ==========
+function irAR24H() {
+    if (!sumaPorcentajesValida()) {
+        const suma = porcentajeHC + porcentajeProteinas + porcentajeLipidos;
+        alert(`⚠️ Los porcentajes de macronutrientes suman ${suma.toFixed(1)}%. Deben sumar 100% exactamente para generar el recordatorio. Ajusta los valores en la tabla "Porcentajes (Editable)".`);
+        mostrarNotif('Corrige los porcentajes para que sumen 100%', 'error');
+        return false;
+    }
+   
+    guardarEstadoParaRegreso();
+
+    // Obtener los valores IDEALES desde la tabla "Distribucion de Macronutrientes"
+    const tablaDistribucion = document.getElementById('tablaDistribucionBody');
+    if (!tablaDistribucion) {
+        alert('Error: No se encuentra la tabla de distribución de macronutrientes.');
+        return false;
+    }
+    const filas = tablaDistribucion.querySelectorAll('tr');
+    // Las filas son: HC, Lipidos, Proteinas, Total. La columna "g" es la cuarta (índice 3)
+    const hcGramosIdeal = parseFloat(filas[0]?.querySelectorAll('td')[3]?.textContent) || 0;
+    const lipidosGramosIdeal = parseFloat(filas[1]?.querySelectorAll('td')[3]?.textContent) || 0;
+    const proteinasGramosIdeal = parseFloat(filas[2]?.querySelectorAll('td')[3]?.textContent) || 0;
+
+    sessionStorage.setItem('desdeDonde', 'equivalentes');
+    sessionStorage.setItem('destino', 'recordatorio');
+   
+    window.location.href = `recordatorio.html?hc=${hcGramosIdeal}&lipidos=${lipidosGramosIdeal}&proteinas=${proteinasGramosIdeal}`;
+    return true;
+}
+
 // ========== EVENTOS ==========
 function inicializarEventos() {
     // Actualizar kcal objetivo
@@ -521,69 +596,17 @@ function inicializarEventos() {
     // Exportar
     elementos.exportarBtn.addEventListener('click', exportarDatos);
 
-    // === BOTÓN PLAN ALIMENTICIO ===
-    elementos.planBtn.addEventListener('click', () => {
-        guardarEstadoParaRegreso();
-
-        const gruposSeleccionados = [];
-        const porcionesSeleccionadas = [];
+    // Plan Alimenticio con validación
+    elementos.planBtn.addEventListener('click', irAPlanAlimenticio);
    
-        datosEquivalentes.forEach(item => {
-            if (item.porciones > 0) {
-                const subgrupoLimpio = item.subgrupo ? item.subgrupo.trim() : '';
-                if (subgrupoLimpio !== '' && subgrupoLimpio !== ' ') {
-                    gruposSeleccionados.push(`${item.grupo} - ${subgrupoLimpio}`);
-                } else {
-                    gruposSeleccionados.push(item.grupo);
-                }
-                porcionesSeleccionadas.push(item.porciones);
-            }
-        });
+    // R24H con validación
+    elementos.r24hBtn.addEventListener('click', irAR24H);
    
-        if (gruposSeleccionados.length === 0) {
-            alert('No hay grupos seleccionados. Por favor, asigne porciones a al menos un grupo.');
-            return;
-        }
-   
-        const tablaNutrientes = document.getElementById('tablaNutrientesBody');
-        const filas = tablaNutrientes.querySelectorAll('tr');
-        
-        const hcGramos = parseFloat(filas[0]?.querySelectorAll('td')[2]?.textContent) || 0;
-        const lipidosGramos = parseFloat(filas[1]?.querySelectorAll('td')[2]?.textContent) || 0;
-        const proteinasGramos = parseFloat(filas[2]?.querySelectorAll('td')[2]?.textContent) || 0;
-   
-        sessionStorage.setItem('desdeDonde', 'equivalentes');
-        sessionStorage.setItem('destino', 'plan');
-   
-        const gruposStr = encodeURIComponent(JSON.stringify(gruposSeleccionados));
-        const porcionesStr = encodeURIComponent(JSON.stringify(porcionesSeleccionadas));
-   
-        window.location.href = `plan-alimenticio.html?hc=${hcGramos}&lipidos=${lipidosGramos}&proteinas=${proteinasGramos}&grupos=${gruposStr}&porciones=${porcionesStr}`;
-    });
-   
-    // === BOTÓN R24H ===
-    elementos.r24hBtn.addEventListener('click', () => {
-        guardarEstadoParaRegreso();
-
-        const tablaNutrientes = document.getElementById('tablaNutrientesBody');
-        const filas = tablaNutrientes.querySelectorAll('tr');
-        
-        const hcGramos = parseFloat(filas[0]?.querySelectorAll('td')[2]?.textContent) || 0;
-        const lipidosGramos = parseFloat(filas[1]?.querySelectorAll('td')[2]?.textContent) || 0;
-        const proteinasGramos = parseFloat(filas[2]?.querySelectorAll('td')[2]?.textContent) || 0;
-   
-        sessionStorage.setItem('desdeDonde', 'equivalentes');
-        sessionStorage.setItem('destino', 'recordatorio');
-   
-        window.location.href = `recordatorio.html?hc=${hcGramos}&lipidos=${lipidosGramos}&proteinas=${proteinasGramos}`;
-    });
-   
-    // === BOTÓN REGRESAR ===
+    // Regresar
     elementos.btnRegresar.addEventListener('click', () => {
         sessionStorage.removeItem('desdeDonde');
         sessionStorage.removeItem('destino');
         sessionStorage.removeItem('datosEquivalentesGuardados');
-        
         window.location.href = 'index.html';
     });
    
@@ -600,7 +623,7 @@ document.addEventListener('DOMContentLoaded', () => {
     restaurarEstadoSiExiste();
     
     renderizarTablaEquivalentes();
-    renderizarTablaPorcentajes();
+    renderizarTablaPorcentajes();   // nueva versión sin redistribución automática
     actualizarTablaDistribucion();
     calcularTotales();
     inicializarEventos();
