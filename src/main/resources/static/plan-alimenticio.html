@@ -29,35 +29,50 @@
     </div>
 
     <!-- Panel de Objetivos -->
-    <div id="objetivosPanel" class="objetivos-panel">
-        <div class="objetivo-card hc-card">
-            <span>HC Objetivo</span>
-            <strong id="hcObjetivo">0</strong>
-            <small>g</small>
+<div id="objetivosPanel" class="objetivos-panel">
+    <!-- Tarjeta HC -->
+    <div class="objetivo-card hc-card">
+        <div class="card-title">HC Objetivo</div>
+        <div class="card-progreso">
+            <strong id="hcObjetivoKcal">0</strong> / <strong id="hcActualKcal">0.0</strong> <span>kcal</span>
         </div>
-        <div class="objetivo-card lipidos-card">
-            <span>Lípidos Objetivo</span>
-            <strong id="lipidosObjetivo">0</strong>
-            <small>g</small>
-        </div>
-        <div class="objetivo-card proteinas-card">
-            <span>Proteínas Objetivo</span>
-            <strong id="proteinasObjetivo">0</strong>
-            <small>g</small>
+        <div class="card-detalle">
+            <div>Hidratos de Carbono (g): <span id="hcActualGramos">0.0</span></div>
+            <div>Hidratos de Carbono (%): <span id="hcPorcentaje">0.0</span>%</div>
         </div>
     </div>
-    
-     <div id="diasNav" class="dias-nav">
-        <div class="dias-nav-title">Selecciona el día de la semana</div>
-        <div id="diasTabs" class="dias-tabs">
-            <!-- Los botones se generarán dinámicamente -->
+    <!-- Tarjeta Lípidos -->
+    <div class="objetivo-card lipidos-card">
+        <div class="card-title">Lípidos Objetivo</div>
+        <div class="card-progreso">
+            <strong id="lipidosObjetivoKcal">0</strong> / <strong id="lipidosActualKcal">0.0</strong> <span>kcal</span>
         </div>
+        <div class="card-detalle">
+            <div>Lípidos (g): <span id="lipidosActualGramos">0.0</span></div>
+            <div>Lípidos (%): <span id="lipidosPorcentaje">0.0</span>%</div>
+        </div>
+    </div>
+    <!-- Tarjeta Proteínas -->
+    <div class="objetivo-card proteinas-card">
+        <div class="card-title">Proteínas Objetivo</div>
+        <div class="card-progreso">
+            <strong id="proteinasObjetivoKcal">0</strong> / <strong id="proteinasActualKcal">0.0</strong> <span>kcal</span>
+        </div>
+        <div class="card-detalle">
+            <div>Proteínas (g): <span id="proteinasActualGramos">0.0</span></div>
+            <div>Proteínas (%): <span id="proteinasPorcentaje">0.0</span>%</div>
+        </div>
+    </div>
+</div>
+    
+    <div id="diasNav" class="dias-nav">
+        <div class="dias-nav-title">Selecciona el día de la semana</div>
+        <div id="diasTabs" class="dias-tabs"></div>
         <div id="diaIndicador" class="dia-indicador">Editando: Lunes</div>
     </div>
 
     <!-- Contenido Principal -->
     <div id="mainContent" class="main-content">
-       
         <!-- Panel de Platillos Específicos -->
         <div class="platillos-grid">
             <div class="platillo-card desayuno">
@@ -65,13 +80,11 @@
                 <div id="platillosDesayuno" class="platillos-container"></div>
                 <button class="btn-ver-todos" onclick="verTodosPlatillos('DESAYUNO')">Ver todos</button>
             </div>
-           
             <div class="platillo-card comida">
                 <h3>COMIDA</h3>
                 <div id="platillosComida" class="platillos-container"></div>
                 <button class="btn-ver-todos" onclick="verTodosPlatillos('COMIDA')">Ver todos</button>
             </div>
-           
             <div class="platillo-card cena">
                 <h3>CENA</h3>
                 <div id="platillosCena" class="platillos-container"></div>
@@ -84,26 +97,6 @@
 
         <!-- Tablas de Comidas -->
         <div id="comidasContainer" class="comidas-container"></div>
-
-        <!-- Paneles de Nutrientes -->
-        <div class="nutrientes-panels">
-            <div class="nutriente-card nutrientes-actuales">
-                <h3>NUTRIENTES ACTUALES (g)</h3>
-                <table class="nutrientes-table">
-                    <tr><td>Hidratos de Carbono</td><td id="totalHc">0.0</td></tr>
-                    <tr><td>Lípidos</td><td id="totalLipidos">0.0</td></tr>
-                    <tr><td>Proteínas</td><td id="totalProteinas">0.0</td></tr>
-                </table>
-            </div>
-            <div class="nutriente-card porcentaje-nutrientes">
-                <h3>PORCENTAJE DE NUTRIENTES (%)</h3>
-                <table class="nutrientes-table">
-                    <tr><td>Hidratos de Carbono</td><td id="pctHc">0.0%</td></tr>
-                    <tr><td>Lípidos</td><td id="pctLipidos">0.0%</td></tr>
-                    <tr><td>Proteínas</td><td id="pctProteinas">0.0%</td></tr>
-                </table>
-            </div>
-        </div>
     </div>
 </div>
 

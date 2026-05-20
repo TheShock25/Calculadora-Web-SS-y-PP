@@ -152,7 +152,7 @@ body {
   font-weight: 600;
 }
 
-/* ===== OBJETIVOS PANEL ===== */
+/* ===== OBJETIVOS PANEL (nuevo diseño compacto) ===== */
 .objetivos-panel {
   background: white;
   padding: 25px 30px;
@@ -165,29 +165,64 @@ body {
 
 .objetivo-card {
   color: white;
-  padding: 20px 30px;
-  border-radius: 16px;
+  padding: 20px;
+  border-radius: 20px;
   text-align: center;
-  min-width: 160px;
+  min-width: 220px;
   box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-  border-bottom: 4px solid;
   transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
+  gap: 10px;
 }
 
-.objetivo-card:hover { transform: translateY(-4px); }
+.objetivo-card:hover {
+  transform: translateY(-4px);
+}
 
-.hc-card       { background: linear-gradient(135deg, #1976D2, #1565C0); border-bottom-color: #0D47A1; }
-.lipidos-card  { background: linear-gradient(135deg, #FF9800, #F57C00); border-bottom-color: #E65100; }
-.proteinas-card{ background: linear-gradient(135deg, #4CAF50, #2E7D32); border-bottom-color: #1B5E20; }
+.hc-card {
+  background: linear-gradient(135deg, #1976D2, #1565C0);
+  border-bottom: 4px solid #0D47A1;
+}
 
-.objetivo-card span   { font-size: 0.85rem; opacity: 0.95; font-weight: 600; text-transform: uppercase; text-align: center; }
-.objetivo-card strong { font-size: 2.2rem; font-weight: 800; text-align: center; line-height: 1; }
-.objetivo-card small  { font-size: 0.95rem; opacity: 0.85; text-align: center; }
+.lipidos-card {
+  background: linear-gradient(135deg, #FF9800, #F57C00);
+  border-bottom: 4px solid #E65100;
+}
+
+.proteinas-card {
+  background: linear-gradient(135deg, #4CAF50, #2E7D32);
+  border-bottom: 4px solid #1B5E20;
+}
+
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.card-progreso {
+  font-size: 1.8rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.card-progreso span {
+  font-size: 0.9rem;
+  font-weight: normal;
+}
+
+.card-detalle {
+  font-size: 0.85rem;
+  border-top: 1px solid rgba(255,255,255,0.3);
+  padding-top: 10px;
+  margin-top: 5px;
+}
+
+.card-detalle div {
+  margin: 4px 0;
+}
 
 /* ===== NAVEGACIÓN DE DÍAS ===== */
 .dias-nav {
@@ -247,7 +282,6 @@ body {
   transform: translateY(-2px);
 }
 
-/* Punto indicador de que el día tiene datos */
 .dia-tab.tiene-datos::after {
   content: '';
   position: absolute;
@@ -409,14 +443,13 @@ body {
 .comida-seccion.comida   { border-color: #FFB74D; }
 .comida-seccion.cena     { border-color: #BA68C8; }
 
-/* Grid de columnas */
 .comida-grid {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
   padding: 20px;
   background: #F8F9FA;
-  justify-content: center;   /* ← centrar columnas */
+  justify-content: center;
 }
 
 .grupo-columna {
@@ -438,7 +471,7 @@ body {
   padding: 12px 16px;
   font-weight: 700;
   font-size: 1rem;
-  text-align: center;      /* ← centrar título del grupo */
+  text-align: center;
 }
 
 .grupo-alimentos {
@@ -458,7 +491,7 @@ body {
   border-radius: 8px;
   border: 1px solid #EEEEEE;
   align-items: center;
-  justify-content: center;  /* ← centrar contenido de cada fila */
+  justify-content: center;
 }
 
 .alimento-row select {
@@ -481,7 +514,6 @@ body {
   flex-shrink: 0;
 }
 
-/* Vista tabla (muchos grupos) */
 .tabla-container {
   padding: 20px;
   overflow-x: auto;
@@ -532,70 +564,6 @@ body {
   text-align: center;
 }
 
-/* ===== NUTRIENTES PANELS ===== */
-.nutrientes-panels {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 25px;
-  margin-top: 30px;
-}
-
-.nutriente-card {
-  border: 3px solid;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 6px 25px rgba(0,0,0,0.1);
-}
-
-.nutriente-card h3 {
-  color: white;
-  padding: 18px;
-  margin: 0;
-  text-align: center;
-  font-weight: 800;
-  text-transform: uppercase;
-}
-
-.nutrientes-actuales  { border-color: #90CAF9; }
-.porcentaje-nutrientes{ border-color: #A5D6A7; }
-
-.nutrientes-actuales   h3 { background: linear-gradient(135deg, var(--azul), #1565C0); }
-.porcentaje-nutrientes h3 { background: linear-gradient(135deg, var(--verde), var(--verde-oscuro)); }
-
-/* Tabla de nutrientes centrada */
-.nutrientes-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.nutrientes-table tr {
-  border-bottom: 1px solid #E8F5E9;
-}
-
-.nutrientes-table tr:last-child {
-  border-bottom: none;
-}
-
-.nutrientes-table td {
-  padding: 14px 20px;
-  text-align: center;      /* ← centrar valores */
-  vertical-align: middle;
-}
-
-.nutrientes-table td:first-child {
-  font-weight: 600;
-  background: #F8F9FA;
-  text-align: left;        /* ← nombre a la izquierda, valor al centro */
-  width: 60%;
-}
-
-.nutrientes-table td:last-child {
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: var(--verde-oscuro);
-  text-align: center;
-}
-
 /* ===== MODAL ===== */
 .modal {
   position: fixed;
@@ -642,7 +610,6 @@ body {
   border-bottom: 1px solid #ECEFF1;
 }
 
-/* ===== INDICADOR DE DÍA ACTIVO ===== */
 .dia-indicador {
   text-align: center;
   font-size: 0.85rem;
@@ -660,16 +627,12 @@ body {
 
 @media (max-width: 900px) {
   body { padding: 12px; }
-
   .platillos-grid { grid-template-columns: 1fr; }
-  .nutrientes-panels { grid-template-columns: 1fr; }
-
   .comida-grid {
     flex-direction: column;
     align-items: center;
     gap: 20px;
   }
-
   .grupo-columna {
     flex: none;
     width: auto;
@@ -677,32 +640,26 @@ body {
     min-width: 280px;
     margin: 0 auto;
   }
-
   .alimento-row {
     flex-direction: column;
     align-items: stretch;
     gap: 6px;
     padding: 12px;
   }
-
   .alimento-row select {
     width: 100%;
     flex: auto;
     text-align: center;
   }
-
   .alimento-row input {
     width: 100%;
     margin-top: 4px;
     text-align: center;
   }
-
-  /* Asegurar que el contenedor de alimentos tenga scroll vertical si es necesario */
   .grupo-alimentos {
     max-height: 320px;
     overflow-y: auto;
   }
-
   .dias-tabs { gap: 6px; }
   .dia-tab { padding: 9px 14px; font-size: 0.82rem; min-width: 70px; }
 }
@@ -712,12 +669,10 @@ body {
   .header-content h1 { font-size: 1.3rem; }
   .main-content { padding: 18px 14px; }
   .dias-tab { padding: 8px 10px; font-size: 0.78rem; min-width: 60px; }
-  .nutrientes-table td { padding: 12px 12px; }
-  .objetivo-card { min-width: 130px; padding: 16px 18px; }
-  .objetivo-card strong { font-size: 1.8rem; }
+  .objetivo-card { min-width: 180px; padding: 15px; }
+  .card-progreso { font-size: 1.4rem; }
 }
 
-/* ===== MEJORAS RESPONSIVE PARA PLATILLOS (DESAYUNO, COMIDA, CENA) ===== */
 .platillo-item {
     display: flex;
     flex-wrap: wrap;
@@ -762,45 +717,31 @@ body {
     width: 100%;
 }
 
-/* Solo para pantallas muy pequeñas (≤350px) - Ajuste de las 3 tablas de grupos */
 @media (max-width: 350px) {
-  /* Contenedor de cada comida (Desayuno, Comida, Cena) */
   .comida-grid {
     gap: 12px;
   }
-
-  /* Cada columna de grupo (ej: Verduras) */
   .grupo-columna {
-    min-width: 0;           /* anula el min-width: 280px que causa desborde */
+    min-width: 0;
     width: 100%;
     margin: 0;
   }
-
-  /* Contenedor de las filas de alimentos */
   .grupo-alimentos {
     padding: 10px 8px;
   }
-
-  /* Cada fila (select + input) se mantiene vertical (como ya está en <=900px) */
   .alimento-row {
     padding: 8px 6px;
     gap: 4px;
   }
-
-  /* Select ocupa todo el ancho y fuente más pequeña */
   .alimento-row select {
     font-size: 0.75rem;
     padding: 8px 6px;
   }
-
-  /* Input ocupa todo el ancho */
   .alimento-row input {
     font-size: 0.75rem;
     padding: 8px 6px;
     width: 100%;
   }
-
-  /* Opcional: el header del grupo (nombre + contador) se ajusta */
   .grupo-header {
     padding: 8px 10px;
     font-size: 0.85rem;

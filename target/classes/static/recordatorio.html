@@ -28,9 +28,45 @@
         <p>Cargando recordatorio alimenticio...</p>
     </div>
 
+    <!-- Tarjetas de Nutrientes (asegurar que los ids existan) -->
+    <div id="nutrientesTarjetas" class="nutrientes-tarjetas">
+        <!-- Tarjeta HC -->
+        <div class="nutriente-card hc-card">
+            <div class="card-title">HC</div>
+            <div class="card-progreso">
+                <strong id="hcObjetivoGramos">0.0</strong> / <strong id="hcActualGramos">0.0</strong> <span>g</span>
+            </div>
+            <div class="card-detalle">
+                <div>Kcal: <span id="hcObjetivoKcal">0.0</span> / <span id="hcActualKcal">0.0</span></div>
+                <div>Porcentaje: <span id="hcPorcentaje">0.0</span>%</div>
+            </div>
+        </div>
+        <!-- Tarjeta Lípidos -->
+        <div class="nutriente-card lipidos-card">
+            <div class="card-title">Lípidos</div>
+            <div class="card-progreso">
+                <strong id="lipidosObjetivoGramos">0.0</strong> / <strong id="lipidosActualGramos">0.0</strong> <span>g</span>
+            </div>
+            <div class="card-detalle">
+                <div>Kcal: <span id="lipidosObjetivoKcal">0.0</span> / <span id="lipidosActualKcal">0.0</span></div>
+                <div>Porcentaje: <span id="lipidosPorcentaje">0.0</span>%</div>
+            </div>
+        </div>
+        <!-- Tarjeta Proteínas -->
+        <div class="nutriente-card proteinas-card">
+            <div class="card-title">Proteínas</div>
+            <div class="card-progreso">
+                <strong id="proteinasObjetivoGramos">0.0</strong> / <strong id="proteinasActualGramos">0.0</strong> <span>g</span>
+            </div>
+            <div class="card-detalle">
+                <div>Kcal: <span id="proteinasObjetivoKcal">0.0</span> / <span id="proteinasActualKcal">0.0</span></div>
+                <div>Porcentaje: <span id="proteinasPorcentaje">0.0</span>%</div>
+            </div>
+        </div>
+    </div>
+
     <!-- Contenido Principal -->
     <div id="mainContent" class="main-content">
-       
         <!-- Panel de Platillos Específicos -->
         <div class="platillos-grid">
             <div class="platillo-card desayuno">
@@ -38,13 +74,11 @@
                 <div id="platillosDesayuno" class="platillos-container"></div>
                 <button class="btn-ver-todos" onclick="verTodosPlatillos('DESAYUNO')">Ver todos</button>
             </div>
-           
             <div class="platillo-card comida">
                 <h3>COMIDA</h3>
                 <div id="platillosComida" class="platillos-container"></div>
                 <button class="btn-ver-todos" onclick="verTodosPlatillos('COMIDA')">Ver todos</button>
             </div>
-           
             <div class="platillo-card cena">
                 <h3>CENA</h3>
                 <div id="platillosCena" class="platillos-container"></div>
@@ -64,7 +98,6 @@
                     <table id="tablaDesayuno" class="data-table"></table>
                 </div>
             </div>
-            
             <!-- COMIDA -->
             <div class="tabla-container comida">
                 <div class="tabla-header">
@@ -75,7 +108,6 @@
                     <table id="tablaComida" class="data-table"></table>
                 </div>
             </div>
-            
             <!-- CENA -->
             <div class="tabla-container cena">
                 <div class="tabla-header">
@@ -85,26 +117,6 @@
                 <div class="table-wrapper">
                     <table id="tablaCena" class="data-table"></table>
                 </div>
-            </div>
-        </div>
-
-        <!-- Paneles de Nutrientes -->
-        <div class="nutrientes-panels">
-            <div class="nutriente-card nutrientes-actuales">
-                <h3>NUTRIENTES ACTUALES (g)</h3>
-                <table id="tablaNutrientes" class="nutrientes-table">
-                    <tr><td>Hidratos de Carbono</td><td id="totalHc">0.0</td></tr>
-                    <tr><td>Lípidos</td><td id="totalLipidos">0.0</td></tr>
-                    <tr><td>Proteínas</td><td id="totalProteinas">0.0</td></tr>
-                </table>
-            </div>
-            <div class="nutriente-card porcentaje-nutrientes">
-                <h3>PORCENTAJE DE NUTRIENTES (%)</h3>
-                <table id="tablaPorcentajes" class="nutrientes-table">
-                    <tr><td>Hidratos de Carbono</td><td id="pctHc">0.0%</td></tr>
-                    <tr><td>Lípidos</td><td id="pctLipidos">0.0%</td></tr>
-                    <tr><td>Proteínas</td><td id="pctProteinas">0.0%</td></tr>
-                </table>
             </div>
         </div>
     </div>
