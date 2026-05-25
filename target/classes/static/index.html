@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- Estructura principal de la pantalla. -->
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -38,12 +39,12 @@
     <div class="row">
       <div class="form-group">
         <label for="peso">Peso (kg)</label>
-        <input 
-          type="text" 
-          inputmode="decimal" 
+        <input
+          type="text"
+          inputmode="decimal"
           pattern="[0-9]*[.]?[0-9]*"
-          id="peso" 
-          placeholder="Ej: 70.5" 
+          id="peso"
+          placeholder="Ej: 70.5"
           maxlength="6"
           autocomplete="off"
           onkeypress="return soloNumerosYPunto(event)"
@@ -53,12 +54,12 @@
 
       <div class="form-group">
         <label for="altura">Altura (cm)</label>
-        <input 
-          type="text" 
-          inputmode="numeric" 
+        <input
+          type="text"
+          inputmode="numeric"
           pattern="[0-9]*"
-          id="altura" 
-          placeholder="Ej: 175" 
+          id="altura"
+          placeholder="Ej: 175"
           maxlength="3"
           autocomplete="off"
           onkeypress="return soloNumeros(event)"
@@ -70,12 +71,12 @@
     <div class="row">
       <div class="form-group">
         <label for="edad">Edad (años)</label>
-        <input 
-          type="text" 
-          inputmode="numeric" 
+        <input
+          type="text"
+          inputmode="numeric"
           pattern="[0-9]*"
-          id="edad" 
-          placeholder="Ej: 25" 
+          id="edad"
+          placeholder="Ej: 25"
           maxlength="3"
           autocomplete="off"
           onkeypress="return soloNumeros(event)"
@@ -116,20 +117,17 @@
     </div>
   </div>
 
-  <!-- BOTONES -->
   <div class="buttons">
-    <button id="calcular" class="btn-primary">⚡ Calcular Gasto Energético</button>
-    <button id="equivalentes" class="btn-secondary">🍎 Sistema de Equivalentes</button>
-    <button id="menu" class="btn-success">🏠 Menú Principal</button>
+    <button id="calcular" class="btn-primary"> Calcular Gasto Energético</button>
+    <button id="equivalentes" class="btn-secondary"> Sistema de Equivalentes</button>
+    <button id="menu" class="btn-success"> Menú Principal</button>
   </div>
 
 </div>
 
-<!-- Notificación toast -->
 <div id="notification" class="notification"></div>
 
 <script>
-// Funciones inline para bloqueo inmediato
 function soloNumeros(e) {
   const char = String.fromCharCode(e.which || e.keyCode);
   if (!/[0-9]/.test(char)) {
@@ -142,19 +140,17 @@ function soloNumeros(e) {
 function soloNumerosYPunto(e) {
   const char = String.fromCharCode(e.which || e.keyCode);
   const input = e.target;
-  
-  // Solo permitir números y un punto
+
   if (!/[0-9.]/.test(char)) {
     e.preventDefault();
     return false;
   }
-  
-  // Si ya hay un punto, no permitir otro
+
   if (char === '.' && input.value.includes('.')) {
     e.preventDefault();
     return false;
   }
-  
+
   return true;
 }
 </script>

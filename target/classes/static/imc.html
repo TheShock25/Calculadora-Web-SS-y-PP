@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- Estructura principal de la pantalla. -->
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -6,7 +7,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  
+
   <title>IMC y Composicion Corporal</title>
   <link rel="stylesheet" href="css/imc.css?v=2">
 </head>
@@ -14,7 +15,6 @@
 
 <div class="container">
 
-  <!-- Header -->
   <header class="header">
     <div class="header-content">
       <h1>IMC Y DENSIDAD CORPORAL</h1>
@@ -26,15 +26,13 @@
       <button id="infoParams" class="btn-primary">Info Parametros</button>
     </div>
   </header>
-  
-  <!-- Boton Regresar -->
+
   <div class="nav-bar">
       <button id="btnRegresar" class="btn-regresar">← Regresar a Menu</button>
   </div>
 
   <div class="main-content">
 
-    <!-- Panel Izquierdo - Resultados Principales -->
     <aside class="panel-izquierdo">
       <div class="result-card">
         <div class="result-item">
@@ -64,10 +62,8 @@
       </div>
     </aside>
 
-    <!-- Panel Central - Formularios -->
     <main class="panel-central">
-      
-      <!-- SECCION 1: DATOS BASICOS (Precargados del index/menu) -->
+
       <section class="seccion">
         <h3 class="seccion-titulo">Datos Basicos (Precargados)</h3>
         <div class="campo-grid">
@@ -88,7 +84,6 @@
         </div>
       </section>
 
-      <!-- SECCION 2: MEDIDAS ANTROPOMETRICAS -->
       <section class="seccion">
         <h3 class="seccion-titulo">Medidas Antropometricas</h3>
         <div class="campo-grid">
@@ -105,7 +100,6 @@
         </div>
       </section>
 
-      <!-- SECCION 3: AREAS CORPORALES -->
       <section class="seccion">
         <h3 class="seccion-titulo">Areas Corporales (Auto-calculado)</h3>
         <div class="resultados-grid">
@@ -124,7 +118,6 @@
         </div>
       </section>
 
-      <!-- SECCION 4: MASA OSEA -->
       <section class="seccion">
         <h3 class="seccion-titulo">Masa Osea</h3>
         <div class="campo-grid">
@@ -154,7 +147,6 @@
         </div>
       </section>
 
-      <!-- SECCION 5: PLIEGUES CUTANEOS -->
       <section class="seccion">
         <h3 class="seccion-titulo">Pliegues Cutaneos (mm)</h3>
         <div class="pliegues-grid">
@@ -189,7 +181,6 @@
         </div>
       </section>
 
-      <!-- SECCION 6: CIRCUNFERENCIAS CORPORALES -->
       <section class="seccion">
         <h3 class="seccion-titulo">Circunferencias Corporales</h3>
         <div class="campo-grid">
@@ -204,7 +195,6 @@
         </div>
       </section>
 
-      <!-- SECCION 7: COMPOSICION CORPORAL -->
       <section class="seccion">
         <h3 class="seccion-titulo">Composicion Corporal</h3>
         <div class="resultado-item destacado" data-key="Densidad Corporal">
@@ -215,14 +205,12 @@
     </main>
   </div>
 
-  <!-- Boton Calcular -->
   <div class="bottom-panel">
     <button id="calcularBtn" class="btn-calcular">Calcular Areas y Composicion</button>
   </div>
 
 </div>
 
-<!-- Popup hover para informacion de parametros -->
 <div id="hoverPopup" class="hover-popup">
   <div class="popup-content">
     <h4 id="popupTitle"></h4>
@@ -230,7 +218,6 @@
   </div>
 </div>
 
-<!-- Notificacion -->
 <div id="notification" class="notification"></div>
 
 <script src="js/imc.js?v=2"></script>

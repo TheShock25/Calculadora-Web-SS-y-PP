@@ -1,4 +1,4 @@
-/* ========== PALETA DE COLORES ========== */
+/* Estilos visuales de la pantalla. */
 :root {
   --verde-oscuro: #1B5E20;
   --verde: #2E7D32;
@@ -34,7 +34,6 @@ body {
   width: 100%;
 }
 
-/* ===== HEADER ===== */
 .header {
   background: linear-gradient(135deg, var(--verde-oscuro) 0%, var(--verde-claro) 100%);
   border-radius: 20px 20px 0 0;
@@ -69,7 +68,6 @@ body {
   font-weight: 500;
 }
 
-/* ===== BOTON REGRESAR ===== */
 .nav-bar {
   background: white;
   padding: 20px 25px;
@@ -107,7 +105,6 @@ body {
   transform: translateX(0);
 }
 
-/* ===== CONTENIDO PRINCIPAL ===== */
 .content {
   background: white;
   padding: 40px;
@@ -117,7 +114,6 @@ body {
   border-top: none;
 }
 
-/* Secciones de tablas */
 .tabla-seccion {
   margin-bottom: 50px;
 }
@@ -146,7 +142,6 @@ body {
   border-radius: 2px;
 }
 
-/* Tabla responsiva */
 .table-responsive {
   overflow-x: auto;
   margin-bottom: 25px;
@@ -213,7 +208,6 @@ body {
   border-radius: 0 0 12px 0;
 }
 
-/* Estilos especiales para celdas */
 .parametro-nombre {
   font-weight: 800;
   color: var(--verde-oscuro);
@@ -245,7 +239,6 @@ body {
   line-height: 1.7;
 }
 
-/* ===== PANEL DE NOTAS ===== */
 .notas-panel {
   background: linear-gradient(135deg, #FFF8E1, #FFECB3);
   border-left: 6px solid var(--naranja);
@@ -305,7 +298,6 @@ body {
   line-height: 1;
 }
 
-/* ===== FOOTER ===== */
 .footer {
   text-align: center;
   margin-top: 30px;
@@ -318,7 +310,6 @@ body {
   border-radius: 0 0 16px 16px;
 }
 
-/* ===== NOTIFICACION ===== */
 .notification {
   position: fixed;
   top: 20px;
@@ -340,117 +331,112 @@ body {
   transform: translateX(0);
 }
 
-.notification.success { 
-  background: linear-gradient(135deg, var(--verde), var(--verde-oscuro)); 
+.notification.success {
+  background: linear-gradient(135deg, var(--verde), var(--verde-oscuro));
 }
-.notification.error { 
-  background: linear-gradient(135deg, var(--rojo), #B71C1C); 
+.notification.error {
+  background: linear-gradient(135deg, var(--rojo), #B71C1C);
 }
 
-/* ===== RESPONSIVE ===== */
-
-/* Tablet */
 @media (max-width: 1024px) {
   .header-content h1 {
     font-size: 1.5rem;
   }
-  
+
   .content {
     padding: 30px 25px;
   }
-  
+
   .seccion-titulo {
     font-size: 1.2rem;
   }
-  
+
   .tabla-parametros {
     font-size: 0.9rem;
     min-width: 800px;
   }
-  
+
   .tabla-parametros th,
   .tabla-parametros td {
     padding: 14px 12px;
   }
 }
 
-/* Movil */
 @media (max-width: 768px) {
   body {
     padding: 10px;
   }
-  
+
   .header {
     padding: 25px 20px;
     border-radius: 16px 16px 0 0;
   }
-  
+
   .header-content h1 {
     font-size: 1.3rem;
     line-height: 1.3;
   }
-  
+
   .header-content p {
     font-size: 0.95rem;
   }
-  
+
   .nav-bar {
     padding: 15px 20px;
   }
-  
+
   .btn-regresar {
     padding: 10px 20px;
     font-size: 0.9rem;
     width: 100%;
     justify-content: center;
   }
-  
+
   .content {
     padding: 25px 20px;
     border-radius: 0 0 16px 16px;
   }
-  
+
   .seccion-titulo {
     font-size: 1.1rem;
     margin-bottom: 20px;
   }
-  
+
   .notas-panel {
     padding: 25px 20px;
   }
-  
+
   .notas-titulo {
     font-size: 1.1rem;
   }
-  
+
   .notas-contenido p {
     font-size: 0.9rem;
   }
-  
+
   .tabla-parametros {
     min-width: 700px;
   }
-  
+
   .tabla-parametros th,
   .tabla-parametros td {
     padding: 12px 10px;
   }
 }
 
-/* Movil pequeño */
 @media (max-width: 480px) {
   .header-content h1 {
     font-size: 1.1rem;
   }
-  
+
   .btn-regresar {
     font-size: 0.85rem;
   }
-  
+
   .seccion-titulo {
     font-size: 1rem;
   }
-  
+
   .notas-panel::before {
     width: 30px;
     height: 30px;
@@ -458,36 +444,34 @@ body {
     top: -10px;
     right: 15px;
   }
-  
+
   .footer {
     font-size: 0.85rem;
     padding: 20px 15px;
   }
 }
 
-/* Ajustes para tablas */
 @media (max-width: 900px) {
   .table-responsive {
     border-radius: 12px;
     border: 2px solid #E8F5E9;
   }
-  
+
   .tabla-parametros td {
     white-space: normal;
     word-wrap: break-word;
   }
 }
 
-/* Soporte para pantallas tactiles */
 @media (hover: none) {
   .btn-regresar:hover {
     transform: none;
   }
-  
+
   .tabla-parametros tbody tr:hover {
     background-color: transparent;
   }
-  
+
   .tabla-parametros tbody tr:active {
     background-color: #F1F8E9;
   }

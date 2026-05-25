@@ -1,4 +1,4 @@
-/* ========== PALETA DE COLORES ========== */
+/* Estilos visuales de la pantalla. */
 :root {
   --verde-oscuro: #1B5E20;
   --verde: #2E7D32;
@@ -10,8 +10,7 @@
   --azul: #1976D2;
   --gris: #616161;
   --sombra: rgba(27, 94, 32, 0.15);
-  
-  /* Colores especificos somatotipo */
+
   --endo: #D32F2F;
   --meso: #388E3C;
   --ecto: #1976D2;
@@ -38,7 +37,6 @@ body {
   width: 100%;
 }
 
-/* ===== HEADER ===== */
 .header {
   background: linear-gradient(135deg, var(--verde-oscuro) 0%, var(--verde-claro) 100%);
   color: white;
@@ -72,7 +70,6 @@ body {
   font-weight: 500;
 }
 
-/* ===== BOTON REGRESAR ===== */
 .nav-bar {
   background: white;
   padding: 20px 25px;
@@ -106,7 +103,6 @@ body {
   box-shadow: 0 6px 20px rgba(0,0,0,0.2);
 }
 
-/* ===== PESTAÑAS ===== */
 .tab-container {
   display: flex;
   background: white;
@@ -152,7 +148,6 @@ body {
   color: var(--verde);
 }
 
-/* ===== PANELES ===== */
 .tab-panel {
   display: none;
   background: white;
@@ -167,7 +162,6 @@ body {
   display: block;
 }
 
-/* ===== SECCIONES DE DATOS ===== */
 .data-section {
   background: white;
   border-radius: 16px;
@@ -252,7 +246,6 @@ input::placeholder {
   font-weight: 400;
 }
 
-/* Estados de validacion */
 input.valid {
   border-color: var(--verde) !important;
   background-color: #E8F5E9 !important;
@@ -284,7 +277,6 @@ input.invalid {
   display: block;
 }
 
-/* ===== BOTON CALCULAR ===== */
 .button-container {
   text-align: center;
   margin-top: 30px;
@@ -315,7 +307,6 @@ input.invalid {
   box-shadow: 0 12px 40px rgba(46, 125, 50, 0.4);
 }
 
-/* ===== RESULTADOS ===== */
 .results-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -403,7 +394,6 @@ input.invalid {
   letter-spacing: 0.5px;
 }
 
-/* Tipo dominante */
 .tipo-card {
   background: linear-gradient(135deg, var(--verde-claro), var(--verde));
   color: white;
@@ -451,7 +441,6 @@ input.invalid {
   font-weight: 900;
 }
 
-/* Descripcion */
 .descripcion-card {
   background: white;
   border-radius: 16px;
@@ -482,7 +471,6 @@ input.invalid {
   border-left: 5px solid var(--verde-claro);
 }
 
-/* ===== VISUALIZACION ===== */
 .graphics-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -546,7 +534,6 @@ canvas {
 .leyenda-item.meso { background: var(--meso); }
 .leyenda-item.ecto { background: var(--ecto); }
 
-/* ===== NOTIFICACION ===== */
 .notification {
   position: fixed;
   top: 20px;
@@ -568,23 +555,22 @@ canvas {
   transform: translateX(0);
 }
 
-.notification.success { 
-  background: linear-gradient(135deg, var(--verde), var(--verde-oscuro)); 
+.notification.success {
+  background: linear-gradient(135deg, var(--verde), var(--verde-oscuro));
 }
-.notification.error { 
-  background: linear-gradient(135deg, var(--rojo), #B71C1C); 
+.notification.error {
+  background: linear-gradient(135deg, var(--rojo), #B71C1C);
 }
 
-/* ===== RESPONSIVE ===== */
 @media (max-width: 900px) {
   .graphics-container {
     grid-template-columns: 1fr;
   }
-  
+
   .results-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .form-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -594,30 +580,30 @@ canvas {
   .header-content h1 {
     font-size: 1.4rem;
   }
-  
+
   .tab-button {
     padding: 15px;
     font-size: 0.9rem;
     min-width: auto;
   }
-  
+
   .tab-panel {
     padding: 25px 20px;
   }
-  
+
   .form-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .result-value {
     font-size: 2rem;
   }
-  
+
   .somatocarta-container,
   .body-type-container {
     height: 350px;
   }
-  
+
   .btn-calcular {
     width: 100%;
     padding: 16px;

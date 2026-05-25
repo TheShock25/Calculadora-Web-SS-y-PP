@@ -1,4 +1,4 @@
-// ========== CONFIGURACIÓN INICIAL ==========
+// Codigo de la interfaz para eventos, calculos y navegacion.
 const actividadHombre = [
   "Sedentaria (1.2)", "Ligero (1.4)", "Moderado (1.6)", "Activo (1.75)", "Muy Activo (1.95)"
 ];
@@ -7,7 +7,6 @@ const actividadMujer = [
   "Sedentaria (1.2)", "Ligero (1.35)", "Moderado (1.5)", "Activo (1.65)", "Muy Activo (1.8)"
 ];
 
-// Referencias DOM
 const sexo = document.getElementById("sexo");
 const actividad = document.getElementById("actividad");
 const ecuacion = document.getElementById("ecuacion");
@@ -23,30 +22,22 @@ const notification = document.getElementById("notification");
 
 let ultimoGET = 2000;
 
-// ========== BLOQUEO TOTAL DE CARACTERES INVÁLIDOS ==========
-
 function bloquearCaracteresInvalidos(input, permitirPunto = false) {
-  // Bloquear en keydown (más rápido que keypress)
   input.addEventListener('keydown', function(e) {
-    // Permitir: backspace, delete, tab, escape, enter, flechas
     if ([8, 46, 9, 27, 13, 37, 38, 39, 40].includes(e.keyCode)) {
       return;
     }
-    
-    // Permitir: Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X
+
     if ((e.ctrlKey || e.metaKey) && [65, 67, 86, 88].includes(e.keyCode)) {
       return;
     }
-    
-    // Permitir números del teclado principal
+
     if ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105)) {
       return;
     }
-    
-    // Permitir punto solo si se indica y no existe ya
+
     if (permitirPunto && (e.key === '.' || e.key === ',' || e.keyCode === 190 || e.keyCode === 110)) {
       if (!this.value.includes('.')) {
-        // Reemplazar coma por punto
         if (e.key === ',') {
           e.preventDefault();
           this.value += '.';
@@ -54,42 +45,35 @@ function bloquearCaracteresInvalidos(input, permitirPunto = false) {
         return;
       }
     }
-    
-    // Bloquear todo lo demás
+
     e.preventDefault();
   });
-  
-  // Bloquear input directo (para móviles y pegado)
+
   input.addEventListener('input', function(e) {
     let valor = this.value;
     let cursorPos = this.selectionStart;
-    
+
     if (permitirPunto) {
-      // Solo números y un punto
       valor = valor.replace(/[^0-9.]/g, '');
-      // Solo un punto
       const partes = valor.split('.');
       if (partes.length > 2) {
         valor = partes[0] + '.' + partes.slice(1).join('');
       }
-      // Máximo 2 decimales
       if (partes[1] && partes[1].length > 2) {
         valor = partes[0] + '.' + partes[1].substring(0, 2);
       }
     } else {
-      // Solo números enteros
       valor = valor.replace(/\D/g, '');
     }
-    
+
     this.value = valor;
     validarCampo(this, permitirPunto ? 'peso' : (input.id === 'altura' ? 'altura' : 'edad'));
   });
-  
-  // Bloquear pegado de caracteres inválidos
+
   input.addEventListener('paste', function(e) {
     e.preventDefault();
     const texto = (e.clipboardData || window.clipboardData).getData('text');
-    
+
     let limpio;
     if (permitirPunto) {
       limpio = texto.replace(/[^0-9.]/g, '');
@@ -98,29 +82,27 @@ function bloquearCaracteresInvalidos(input, permitirPunto = false) {
     } else {
       limpio = texto.replace(/\D/g, '');
     }
-    
-    // Limitar longitud
+
     const maxLength = parseInt(this.getAttribute('maxlength')) || 10;
     this.value = limpio.substring(0, maxLength);
-    
+
     validarCampo(this, permitirPunto ? 'peso' : (input.id === 'altura' ? 'altura' : 'edad'));
   });
 }
 
-// ========== VALIDACIÓN VISUAL ==========
 function validarCampo(input, tipo) {
   const valor = input.value;
   const errorElement = document.getElementById(`${tipo}-error`);
-  
+
   if (valor === '') {
     input.classList.remove('valid', 'invalid');
     errorElement.classList.remove('show');
     return false;
   }
-  
+
   let esValido = false;
   const num = parseFloat(valor);
-  
+
   switch(tipo) {
     case 'peso':
       esValido = /^\d{2,3}(\.\d{1,2})?$/.test(valor) && num >= 20 && num <= 300;
@@ -132,7 +114,7 @@ function validarCampo(input, tipo) {
       esValido = /^\d{1,3}$/.test(valor) && num >= 18 && num <= 120;
       break;
   }
-  
+
   if (esValido) {
     input.classList.add('valid');
     input.classList.remove('invalid');
@@ -142,11 +124,10 @@ function validarCampo(input, tipo) {
     input.classList.remove('valid');
     errorElement.classList.add('show');
   }
-  
+
   return esValido;
 }
 
-// ========== FUNCIONES DE ACTIVIDAD ==========
 function cargarActividad() {
   if (!actividad) return;
   actividad.innerHTML = "";
@@ -162,10 +143,10 @@ function cargarActividad() {
 function obtenerFactorActividad() {
   const nivel = actividad.value;
   if (!nivel) return 1.0;
-  
+
   const inicio = nivel.indexOf('(');
   const fin = nivel.indexOf(')');
-  
+
   if (inicio !== -1 && fin !== -1 && fin > inicio) {
     try {
       const factorStr = nivel.substring(inicio + 1, fin);
@@ -177,7 +158,6 @@ function obtenerFactorActividad() {
   return 1.0;
 }
 
-// ========== CÁLCULOS ==========
 function calcularGEBHarrisBenedict(sexoVal, pesoVal, alturaVal, edadVal) {
   if (sexoVal === "Hombre") {
     return 66.4730 + (13.7516 * pesoVal) + (5.0033 * alturaVal) - (6.7559 * edadVal);
@@ -207,18 +187,16 @@ function calcularGEBValencia(sexoVal, pesoVal, edadVal) {
   }
 }
 
-// ========== NOTIFICACIONES ==========
 function mostrarNotificacion(mensaje, tipo = 'info', duracion = 3000) {
   notification.textContent = mensaje;
   notification.className = `notification ${tipo}`;
   notification.classList.add('show');
-  
+
   setTimeout(() => {
     notification.classList.remove('show');
   }, duracion);
 }
 
-// ========== PERSISTENCIA ==========
 function guardarDatosUsuario() {
   const datos = {
     sexo: sexo.value,
@@ -237,7 +215,7 @@ function cargarDatosUsuario() {
   if (datosGuardados) {
     try {
       const usuario = JSON.parse(datosGuardados);
-      
+
       if (usuario.sexo && sexo) sexo.value = usuario.sexo;
       if (usuario.ecuacion && ecuacion) ecuacion.value = usuario.ecuacion;
       if (usuario.peso && peso) {
@@ -252,21 +230,20 @@ function cargarDatosUsuario() {
         edad.value = usuario.edad;
         validarCampo(edad, 'edad');
       }
-      
+
       cargarActividad();
-      
+
       if (usuario.actividad && actividad) {
         const opciones = Array.from(actividad.options);
         const opcion = opciones.find(opt => opt.value === usuario.actividad);
         if (opcion) actividad.value = usuario.actividad;
       }
-      
+
       if (peso.value && altura.value && edad.value) {
         setTimeout(realizarCalculo, 300);
       }
-      
+
     } catch (e) {
-      console.error("Error al cargar datos:", e);
     }
   }
 }
@@ -291,15 +268,14 @@ function obtenerGETActual() {
   return 2000;
 }
 
-// ========== CÁLCULO PRINCIPAL ==========
 function realizarCalculo() {
   try {
     const pesoValido = validarCampo(peso, 'peso');
     const alturaValida = validarCampo(altura, 'altura');
     const edadValida = validarCampo(edad, 'edad');
-    
+
     if (!pesoValido || !alturaValida || !edadValida) {
-      mostrarNotificacion('⚠️ Corrige los campos marcados en rojo', 'error');
+      mostrarNotificacion(' Corrige los campos marcados en rojo', 'error');
       return;
     }
 
@@ -332,7 +308,7 @@ function realizarCalculo() {
     geb.textContent = `${Math.round(gastoBasal)} kcal/día`;
     eta.textContent = `${Math.round(etaVal)} kcal/día`;
     get.textContent = `${Math.round(gastoTotal)} kcal/día`;
-    
+
     modelo.textContent = `Ecuación: ${ecuacionVal}`;
 
     const maxReferencia = 4000;
@@ -342,16 +318,14 @@ function realizarCalculo() {
 
     guardarDatosUsuario();
     guardarGET();
-    
-    mostrarNotificacion('✅ Cálculo completado', 'success');
+
+    mostrarNotificacion(' Cálculo completado', 'success');
 
   } catch (error) {
-    console.error("Error:", error);
-    mostrarNotificacion('❌ Error en cálculo', 'error');
+    mostrarNotificacion(' Error en cálculo', 'error');
   }
 }
 
-// ========== EVENTOS ==========
 if (sexo) {
   sexo.addEventListener('change', () => {
     cargarActividad();
@@ -366,7 +340,6 @@ if (ecuacion && modelo) {
   });
 }
 
-// Botones
 document.getElementById("calcular").addEventListener('click', realizarCalculo);
 
 document.getElementById("menu").addEventListener('click', () => {
@@ -380,16 +353,14 @@ document.getElementById("equivalentes").addEventListener('click', () => {
   window.location.href = `equivalentes.html?get=${getValor}`;
 });
 
-// ========== INICIALIZACIÓN ==========
 document.addEventListener('DOMContentLoaded', function() {
-  // Aplicar bloqueo de caracteres
-  bloquearCaracteresInvalidos(peso, true);   // Peso: números y punto
-  bloquearCaracteresInvalidos(altura, false); // Altura: solo números
-  bloquearCaracteresInvalidos(edad, false);   // Edad: solo números
-  
+  bloquearCaracteresInvalidos(peso, true);
+  bloquearCaracteresInvalidos(altura, false);
+  bloquearCaracteresInvalidos(edad, false);
+
   cargarActividad();
   cargarDatosUsuario();
-  
+
   const getGuardado = localStorage.getItem('ultimoGETNutri');
   if (getGuardado) {
     ultimoGET = parseInt(getGuardado);

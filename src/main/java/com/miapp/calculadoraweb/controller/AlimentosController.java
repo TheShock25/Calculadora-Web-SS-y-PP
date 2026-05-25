@@ -1,3 +1,4 @@
+/* Codigo del servidor para controlar datos, calculos y respuestas de la aplicacion. */
 package com.miapp.calculadoraweb.controller;
 
 import com.miapp.calculadoraweb.model.Alimento;
@@ -12,22 +13,22 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/alimentos")
-@CrossOrigin(origins = "*") // Permitir peticiones del frontend
+@CrossOrigin(origins = "*")
 public class AlimentosController {
-    
+
     @Autowired
     private ExcelReaderService excelReaderService;
-    
+
     @GetMapping
     public ResponseEntity<Map<String, Object>> obtenerTodos() {
         try {
             List<Alimento> alimentos = excelReaderService.leerTodosLosAlimentos();
-            
+
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
             response.put("data", alimentos);
             response.put("total", alimentos.size());
-            
+
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             Map<String, Object> error = new HashMap<>();
@@ -36,17 +37,17 @@ public class AlimentosController {
             return ResponseEntity.status(500).body(error);
         }
     }
-    
+
     @GetMapping("/grupo/{grupo}")
     public ResponseEntity<Map<String, Object>> obtenerPorGrupo(@PathVariable String grupo) {
         try {
             List<Alimento> alimentos = excelReaderService.buscarPorGrupo(grupo);
-            
+
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
             response.put("data", alimentos);
             response.put("total", alimentos.size());
-            
+
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             Map<String, Object> error = new HashMap<>();
@@ -55,17 +56,17 @@ public class AlimentosController {
             return ResponseEntity.status(500).body(error);
         }
     }
-    
+
     @GetMapping("/buscar")
     public ResponseEntity<Map<String, Object>> buscarPorNombre(@RequestParam String q) {
         try {
             List<Alimento> alimentos = excelReaderService.buscarPorNombre(q);
-            
+
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
             response.put("data", alimentos);
             response.put("total", alimentos.size());
-            
+
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             Map<String, Object> error = new HashMap<>();
@@ -74,7 +75,7 @@ public class AlimentosController {
             return ResponseEntity.status(500).body(error);
         }
     }
-    
+
     @GetMapping("/grupos")
     public ResponseEntity<Map<String, Object>> obtenerGrupos() {
         try {
@@ -84,12 +85,12 @@ public class AlimentosController {
                     .distinct()
                     .sorted()
                     .toList();
-            
+
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
             response.put("data", grupos);
             response.put("total", grupos.size());
-            
+
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             Map<String, Object> error = new HashMap<>();

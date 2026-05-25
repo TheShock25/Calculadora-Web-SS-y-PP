@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- Estructura principal de la pantalla. -->
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -6,7 +7,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  
+
   <title>Calculadora de Somatotipo Heath-Carter</title>
   <link rel="stylesheet" href="css/somatotipo.css?v=2">
 </head>
@@ -14,7 +15,6 @@
 
 <div class="container">
 
-  <!-- Header -->
   <header class="header">
     <div class="header-content">
       <h1>Calculadora de Somatotipo Heath-Carter</h1>
@@ -22,22 +22,18 @@
     </div>
   </header>
 
-  <!-- Boton Regresar -->
   <div class="nav-bar">
     <button id="btnRegresar" class="btn-regresar">← Regresar a Menu</button>
   </div>
 
-  <!-- Pestañas de navegacion -->
   <div class="tab-container">
     <button class="tab-button active" data-tab="input">Datos Antropometricos</button>
     <button class="tab-button" data-tab="results">Resultados</button>
     <button class="tab-button" data-tab="graphics">Visualizacion</button>
   </div>
 
-  <!-- PANEL 1: DATOS ANTROPOMETRICOS -->
   <div id="tab-input" class="tab-panel active">
 
-    <!-- Datos Basicos (Precargados) -->
     <section class="data-section basicos">
       <h3 class="section-title">Datos Basicos (Precargados)</h3>
       <div class="form-grid">
@@ -54,7 +50,6 @@
       </div>
     </section>
 
-    <!-- Pliegues Cutaneos -->
     <section class="data-section pliegues">
       <h3 class="section-title">Pliegues Cutaneos (mm)</h3>
       <div class="form-grid">
@@ -81,7 +76,6 @@
       </div>
     </section>
 
-    <!-- Diametros Oseos -->
     <section class="data-section diametros">
       <h3 class="section-title">Diametros Oseos (cm)</h3>
       <div class="form-grid">
@@ -98,7 +92,6 @@
       </div>
     </section>
 
-    <!-- Perimetros -->
     <section class="data-section perimetros">
       <h3 class="section-title">Perimetros (cm)</h3>
       <div class="form-grid">
@@ -115,19 +108,16 @@
       </div>
     </section>
 
-    <!-- Boton Calcular -->
     <div class="button-container">
       <button id="calcularBtn" class="btn-calcular">Calcular Somatotipo</button>
     </div>
 
   </div>
 
-  <!-- PANEL 2: RESULTADOS -->
   <div id="tab-results" class="tab-panel">
 
     <div class="results-grid">
 
-      <!-- Tarjetas de resultados -->
       <div class="result-card endomorfo">
         <div class="result-icon">E</div>
         <h3>Endomorfia</h3>
@@ -160,12 +150,10 @@
 
     </div>
 
-    <!-- Tipo dominante -->
     <div class="tipo-card" id="tipoCard">
       <h2 id="tipoLabel">Tipo dominante: -</h2>
     </div>
 
-    <!-- Descripcion y recomendaciones -->
     <div class="descripcion-card">
       <h3>Descripcion y Recomendaciones</h3>
       <div id="descripcionArea" class="descripcion-area">
@@ -175,11 +163,9 @@
 
   </div>
 
-  <!-- PANEL 3: VISUALIZACION -->
   <div id="tab-graphics" class="tab-panel">
 
     <div class="graphics-container">
-      <!-- Somatocarta -->
       <div class="graph-card">
         <h3>Somatocarta</h3>
         <div class="somatocarta-container">
@@ -192,7 +178,6 @@
         </div>
       </div>
 
-      <!-- Representacion corporal -->
       <div class="graph-card">
         <h3>Representacion Corporal</h3>
         <div class="body-type-container">
@@ -208,7 +193,6 @@
 
 </div>
 
-<!-- Notificacion -->
 <div id="notification" class="notification"></div>
 
 <script src="js/somatotipo.js?v=2"></script>

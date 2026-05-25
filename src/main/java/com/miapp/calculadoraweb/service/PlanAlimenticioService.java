@@ -1,3 +1,4 @@
+/* Codigo del servidor para controlar datos, calculos y respuestas de la aplicacion. */
 package com.miapp.calculadoraweb.service;
 
 import java.nio.charset.StandardCharsets;
@@ -29,12 +30,9 @@ public class PlanAlimenticioService {
 
     private final Map<String, PlanAlimenticioData> cachePorSesion = new ConcurrentHashMap<>();
 
-    // ========== NORMALIZACIÓN DE GRUPOS ==========
-
     private String normalizarNombreGrupo(String grupo) {
         if (grupo == null) return "";
         String normalizado = grupo.replaceAll("\\s*-\\s*$", "").trim();
-        System.out.println("Normalizando grupo: '" + grupo + "' → '" + normalizado + "'");
         return normalizado;
     }
 
@@ -52,8 +50,6 @@ public class PlanAlimenticioService {
         return null;
     }
 
-    // ========== OBTENER DATOS DEL PLAN ==========
-
     public PlanAlimenticioData getPlanData(SolicitudPlan solicitud) {
         String clave = generarClaveUnica(solicitud);
         if (cachePorSesion.containsKey(clave)) return cachePorSesion.get(clave);
@@ -62,10 +58,6 @@ public class PlanAlimenticioService {
 
         PlanAlimenticioData data = new PlanAlimenticioData();
         Map<String, List<String>> todosLosGrupos = excelReaderService.getAlimentosPorGrupo();
-
-        System.out.println("=== PROCESANDO SOLICITUD PLAN ===");
-        System.out.println("Grupos solicitados: " + solicitud.getGrupos());
-        System.out.println("Grupos disponibles: " + todosLosGrupos.keySet());
 
         List<String> gruposNormalizados = new ArrayList<>();
         for (String grupo : solicitud.getGrupos())
@@ -91,9 +83,7 @@ public class PlanAlimenticioService {
                     if (todosNutrientes.containsKey(alimento))
                         nutrientesFiltrados.put(alimento, todosNutrientes.get(alimento));
                 }
-                System.out.println("✓ " + grupoOriginal + " → '" + grupoEncontrado + "' (" + alimentos.size() + " alimentos)");
             } else {
-                System.err.println("✗ GRUPO NO ENCONTRADO: " + grupoOriginal);
                 gruposFiltrados.put(grupoOriginal, new ArrayList<>());
             }
         }
@@ -118,8 +108,6 @@ public class PlanAlimenticioService {
     private String generarClaveUnica(SolicitudPlan solicitud) {
         return UUID.randomUUID().toString();
     }
-
-    // ========== CALCULAR NUTRIENTES (endpoint /calcular) ==========
 
     @SuppressWarnings("unchecked")
     public Map<String, Object> calcularNutrientes(Map<String, Object> selecciones) {
@@ -148,13 +136,10 @@ public class PlanAlimenticioService {
         return resultado;
     }
 
-    // ========== GENERAR TXT SEMANAL ==========
-
     @SuppressWarnings("unchecked")
     public byte[] generarTXT(Map<String, Object> datos) {
         StringBuilder sb = new StringBuilder();
 
-        // Obtener valores objetivo
         Map<String, Object> ideales    = (Map<String, Object>) datos.getOrDefault("ideales", new HashMap<>());
         List<String> grupos            = (List<String>)        datos.getOrDefault("grupos", new ArrayList<>());
         List<String> diasSemana        = (List<String>)        datos.getOrDefault("diasSemana",
@@ -164,13 +149,11 @@ public class PlanAlimenticioService {
         double lipidosIdeal   = ideales.containsKey("lipidos")   ? ((Number) ideales.get("lipidos")).doubleValue()   : 0;
         double proteinasIdeal = ideales.containsKey("proteinas") ? ((Number) ideales.get("proteinas")).doubleValue() : 0;
 
-        // Estado por día: puede venir como "estadoPorDia" (nuevo) o "estado" (retrocompatibilidad)
         Map<String, Object> estadoPorDia = null;
         if (datos.containsKey("estadoPorDia")) {
             estadoPorDia = (Map<String, Object>) datos.get("estadoPorDia");
         }
 
-        // ===== ENCABEZADO GENERAL =====
         sb.append("=".repeat(80)).append("\n");
         sb.append("         PLAN ALIMENTICIO PERSONALIZADO - PLAN SEMANAL\n");
         sb.append("=".repeat(80)).append("\n\n");
@@ -185,7 +168,6 @@ public class PlanAlimenticioService {
             sb.append("GRUPOS ALIMENTARIOS: ").append(String.join(", ", grupos)).append("\n\n");
         }
 
-        // ===== SECCIÓN POR DÍA =====
         if (estadoPorDia != null) {
             for (String dia : diasSemana) {
                 Map<String, Object> estadoDia = (Map<String, Object>) estadoPorDia.get(dia);
@@ -210,7 +192,6 @@ public class PlanAlimenticioService {
                 sb.append("\n");
             }
         } else {
-            // Retrocompatibilidad: si el frontend envió "estado" en lugar de "estadoPorDia"
             Map<String, Object> estadoUnico = (Map<String, Object>) datos.getOrDefault("estado", new HashMap<>());
             sb.append("=".repeat(80)).append("\n");
             sb.append("  PLAN DIARIO\n");
@@ -229,7 +210,6 @@ public class PlanAlimenticioService {
         return sb.toString().getBytes(StandardCharsets.UTF_8);
     }
 
-    // -------- Auxiliar: procesar las 3 comidas de un día --------
     @SuppressWarnings("unchecked")
     private double[] procesarComidas(StringBuilder sb, Map<String, Object> estadoDia, List<String> grupos) {
         double totalHc = 0, totalLipidos = 0, totalProteinas = 0;
@@ -249,7 +229,6 @@ public class PlanAlimenticioService {
 
             boolean hayAlgo = false;
 
-            // Platillos
             List<Map<String, Object>> platillosComida =
                     (List<Map<String, Object>>) datosComida.getOrDefault("platillos", new ArrayList<>());
             for (Map<String, Object> p : platillosComida) {
@@ -271,7 +250,6 @@ public class PlanAlimenticioService {
                 }
             }
 
-            // Alimentos
             List<Map<String, Object>> alimentosComida =
                     (List<Map<String, Object>>) datosComida.getOrDefault("alimentos", new ArrayList<>());
             for (Map<String, Object> a : alimentosComida) {
@@ -306,7 +284,6 @@ public class PlanAlimenticioService {
         return new double[]{ totalHc, totalLipidos, totalProteinas };
     }
 
-    // -------- Auxiliar: verificar si el estado de un día está vacío --------
     @SuppressWarnings("unchecked")
     private boolean esEstadoVacio(Map<String, Object> estadoDia) {
         for (String comida : new String[]{ "desayuno", "comida", "cena" }) {

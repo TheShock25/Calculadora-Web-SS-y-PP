@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- Estructura principal de la pantalla. -->
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -8,7 +9,6 @@
 </head>
 <body>
 <div class="container">
-    <!-- Header -->
     <header class="header">
         <div class="header-content">
             <h1>RECORDATORIO ALIMENTICIO - TODOS LOS GRUPOS</h1>
@@ -17,20 +17,16 @@
         <button id="btnExportar" class="btn-success">Exportar a TXT</button>
     </header>
 
-    <!-- Botón Regresar -->
     <div class="nav-bar">
         <button id="btnRegresar" class="btn-regresar">← REGRESAR A EQUIVALENTES</button>
     </div>
 
-    <!-- Panel de Carga -->
     <div id="loadingPanel" class="loading-panel">
         <div class="spinner"></div>
         <p>Cargando recordatorio alimenticio...</p>
     </div>
 
-    <!-- Tarjetas de Nutrientes (asegurar que los ids existan) -->
     <div id="nutrientesTarjetas" class="nutrientes-tarjetas">
-        <!-- Tarjeta HC -->
         <div class="nutriente-card hc-card">
             <div class="card-title">HC</div>
             <div class="card-progreso">
@@ -41,7 +37,6 @@
                 <div>Porcentaje: <span id="hcPorcentaje">0.0</span>%</div>
             </div>
         </div>
-        <!-- Tarjeta Lípidos -->
         <div class="nutriente-card lipidos-card">
             <div class="card-title">Lípidos</div>
             <div class="card-progreso">
@@ -52,7 +47,6 @@
                 <div>Porcentaje: <span id="lipidosPorcentaje">0.0</span>%</div>
             </div>
         </div>
-        <!-- Tarjeta Proteínas -->
         <div class="nutriente-card proteinas-card">
             <div class="card-title">Proteínas</div>
             <div class="card-progreso">
@@ -65,9 +59,7 @@
         </div>
     </div>
 
-    <!-- Contenido Principal -->
     <div id="mainContent" class="main-content">
-        <!-- Panel de Platillos Específicos -->
         <div class="platillos-grid">
             <div class="platillo-card desayuno">
                 <h3>DESAYUNO</h3>
@@ -86,9 +78,7 @@
             </div>
         </div>
 
-        <!-- Tablas de Comidas -->
         <div class="comidas-tables">
-            <!-- DESAYUNO -->
             <div class="tabla-container desayuno">
                 <div class="tabla-header">
                     <h3>DESAYUNO</h3>
@@ -98,7 +88,6 @@
                     <table id="tablaDesayuno" class="data-table"></table>
                 </div>
             </div>
-            <!-- COMIDA -->
             <div class="tabla-container comida">
                 <div class="tabla-header">
                     <h3>COMIDA</h3>
@@ -108,7 +97,6 @@
                     <table id="tablaComida" class="data-table"></table>
                 </div>
             </div>
-            <!-- CENA -->
             <div class="tabla-container cena">
                 <div class="tabla-header">
                     <h3>CENA</h3>
@@ -122,7 +110,6 @@
     </div>
 </div>
 
-<!-- Modal para Platillos -->
 <div id="modalPlatillos" class="modal">
     <div class="modal-content">
         <span class="close" onclick="cerrarModal()">&times;</span>

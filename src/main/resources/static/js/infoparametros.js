@@ -1,4 +1,4 @@
-// ========== DATOS DE LAS TABLAS ==========
+// Codigo de la interfaz para eventos, calculos y navegacion.
 const datosBasicos = [
   {
     parametro: "IMC (kg/m²)",
@@ -83,7 +83,6 @@ const datosAvanzados = [
   }
 ];
 
-// ========== NOTIFICACIONES ==========
 function mostrarNotif(mensaje, tipo) {
   const n = document.getElementById('notification');
   n.textContent = mensaje;
@@ -91,54 +90,46 @@ function mostrarNotif(mensaje, tipo) {
   setTimeout(() => n.classList.remove('show'), 3000);
 }
 
-// ========== RENDERIZAR TABLAS ==========
 function renderizarTabla(datos, elementoId) {
   const tbody = document.getElementById(elementoId);
   if (!tbody) return;
-  
+
   tbody.innerHTML = '';
-  
+
   datos.forEach(item => {
     const fila = document.createElement('tr');
-    
-    // Parametro
+
     const tdParametro = document.createElement('td');
     tdParametro.textContent = item.parametro;
     tdParametro.className = 'parametro-nombre';
     fila.appendChild(tdParametro);
-    
-    // Hombres
+
     const tdHombres = document.createElement('td');
     tdHombres.textContent = item.hombres;
     tdHombres.className = 'datos-sexo hombres';
     fila.appendChild(tdHombres);
-    
-    // Mujeres
+
     const tdMujeres = document.createElement('td');
     tdMujeres.textContent = item.mujeres;
     tdMujeres.className = 'datos-sexo mujeres';
     fila.appendChild(tdMujeres);
-    
-    // Interpretacion
+
     const tdInterpretacion = document.createElement('td');
     tdInterpretacion.textContent = item.interpretacion;
     tdInterpretacion.className = 'interpretacion';
     fila.appendChild(tdInterpretacion);
-    
+
     tbody.appendChild(fila);
   });
 }
 
-// ========== NAVEGACION CORREGIDA ==========
 function volverAtras() {
-  // Obtener la pagina de origen desde localStorage
   const ultimaPagina = localStorage.getItem('ultimaPagina');
   const urlParams = new URLSearchParams(window.location.search);
   const desde = urlParams.get('desde');
-  
-  // Prioridad: parametro URL > localStorage > default (imc)
+
   let destino = 'imc.html';
-  
+
   if (desde === 'menu') {
     destino = 'menu.html';
   } else if (desde === 'imc') {
@@ -148,30 +139,25 @@ function volverAtras() {
   } else if (ultimaPagina === 'imc') {
     destino = 'imc.html';
   }
-  
+
   window.location.href = destino;
 }
 
-// ========== INICIALIZACION ==========
 document.addEventListener('DOMContentLoaded', () => {
-  // Renderizar tablas
   renderizarTabla(datosBasicos, 'tablaBasicos');
   renderizarTabla(datosAvanzados, 'tablaAvanzados');
-  
-  // Configurar boton regresar
+
   const btnRegresar = document.getElementById('btnRegresar');
   if (btnRegresar) {
-    // Personalizar texto segun origen
     const urlParams = new URLSearchParams(window.location.search);
     const desde = urlParams.get('desde');
     if (desde) {
       btnRegresar.textContent = `← Regresar a ${desde.charAt(0).toUpperCase() + desde.slice(1)}`;
     }
-    
+
     btnRegresar.addEventListener('click', volverAtras);
   }
-  
-  // Tooltips para movil
+
   if (window.innerWidth <= 768) {
     const celdas = document.querySelectorAll('.tabla-parametros td');
     celdas.forEach(celda => {
@@ -180,11 +166,10 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
-  
+
   mostrarNotif('Tablas cargadas correctamente', 'success');
 });
 
-// Manejar cambio de orientacion en movil
 window.addEventListener('orientationchange', () => {
   setTimeout(() => {
     const tablas = document.querySelectorAll('.table-responsive');

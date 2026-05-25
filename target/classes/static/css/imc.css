@@ -1,4 +1,4 @@
-/* ========== PALETA DE COLORES ========== */
+/* Estilos visuales de la pantalla. */
 :root {
   --verde-oscuro: #1B5E20;
   --verde: #2E7D32;
@@ -32,7 +32,6 @@ body {
   width: 100%;
 }
 
-/* ===== HEADER ===== */
 .header {
   background: linear-gradient(135deg, var(--verde-oscuro) 0%, var(--verde-claro) 100%);
   border-radius: 20px;
@@ -102,7 +101,6 @@ body {
   box-shadow: 0 6px 20px rgba(0,0,0,0.2);
 }
 
-/* ===== BARRA NAVEGACION ===== */
 .nav-bar {
   margin-bottom: 20px;
 }
@@ -126,14 +124,12 @@ body {
   box-shadow: 0 6px 20px rgba(0,0,0,0.2);
 }
 
-/* ===== MAIN CONTENT ===== */
 .main-content {
   display: grid;
   grid-template-columns: 300px 1fr;
   gap: 20px;
 }
 
-/* ===== PANEL IZQUIERDO ===== */
 .panel-izquierdo {
   background: white;
   border-radius: 20px;
@@ -183,7 +179,6 @@ body {
   text-align: center;
 }
 
-/* ===== PANEL CENTRAL ===== */
 .panel-central {
   background: white;
   border-radius: 20px;
@@ -228,7 +223,6 @@ body {
   border-radius: 2px;
 }
 
-/* Grids */
 .campo-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -278,7 +272,6 @@ body {
   font-weight: 400;
 }
 
-/* Estados validacion */
 input.valid {
   border-color: var(--verde) !important;
   background-color: #E8F5E9 !important;
@@ -319,7 +312,6 @@ input.invalid {
   font-size: 1.1rem;
 }
 
-/* Resultados */
 .resultados-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -351,7 +343,6 @@ input.invalid {
   font-size: 1.1rem;
 }
 
-/* ===== BOTON CALCULAR ===== */
 .bottom-panel {
   margin-top: 25px;
   text-align: center;
@@ -379,7 +370,6 @@ input.invalid {
   box-shadow: 0 12px 40px rgba(46, 125, 50, 0.4);
 }
 
-/* ===== POPUP HOVER ===== */
 .hover-popup {
   display: none;
   position: fixed;
@@ -412,7 +402,6 @@ input.invalid {
   line-height: 1.5;
 }
 
-/* ===== NOTIFICACION ===== */
 .notification {
   position: fixed;
   top: 20px;
@@ -434,33 +423,32 @@ input.invalid {
   transform: translateX(0);
 }
 
-.notification.success { 
-  background: linear-gradient(135deg, var(--verde), var(--verde-oscuro)); 
+.notification.success {
+  background: linear-gradient(135deg, var(--verde), var(--verde-oscuro));
 }
-.notification.error { 
-  background: linear-gradient(135deg, var(--rojo), #B71C1C); 
+.notification.error {
+  background: linear-gradient(135deg, var(--rojo), #B71C1C);
 }
 
-/* ===== RESPONSIVE ===== */
 @media (max-width: 900px) {
   .main-content {
     grid-template-columns: 1fr;
   }
-  
+
   .panel-izquierdo {
     position: static;
     order: 2;
   }
-  
+
   .panel-central {
     order: 1;
   }
-  
+
   .header {
     flex-direction: column;
     text-align: center;
   }
-  
+
   .pliegues-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -470,20 +458,20 @@ input.invalid {
   .header-content h1 {
     font-size: 1.3rem;
   }
-  
+
   .header-buttons {
     flex-direction: column;
     width: 100%;
   }
-  
+
   .header-buttons button {
     width: 100%;
   }
-  
+
   .pliegues-grid, .campo-grid, .resultados-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .btn-calcular {
     width: 100%;
     padding: 16px;

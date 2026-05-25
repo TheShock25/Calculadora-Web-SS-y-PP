@@ -1,17 +1,17 @@
-/* ========== PALETA NUTRICIÓN/SALUD ========== */
+/* Estilos visuales de la pantalla. */
 :root {
-  --primary: #1B5E20;        /* Verde oscuro profesional */
-  --primary-light: #4CAF50;  /* Verde brillante */
-  --accent: #FF6D00;         /* Naranja energía */
-  --accent-light: #FF9800;   /* Naranja claro */
-  --info: #0097A7;           /* Cyan médico */
-  --bg-body: #E8F5E9;        /* Fondo verde muy claro */
+  --primary: #1B5E20;
+  --primary-light: #4CAF50;
+  --accent: #FF6D00;
+  --accent-light: #FF9800;
+  --info: #0097A7;
+  --bg-body: #E8F5E9;
   --bg-card: #FFFFFF;
   --text-dark: #1B1B1B;
   --text-medium: #616161;
-  --border: #A5D6A7;         /* Verde borde */
-  --error: #C62828;          /* Rojo error */
-  --success: #2E7D32;        /* Verde éxito */
+  --border: #A5D6A7;
+  --error: #C62828;
+  --success: #2E7D32;
   --shadow: rgba(27, 94, 32, 0.2);
 }
 
@@ -36,7 +36,6 @@ body {
   width: 100%;
 }
 
-/* ===== HEADER ===== */
 header {
   text-align: center;
   margin-bottom: 30px;
@@ -50,7 +49,7 @@ header {
 }
 
 header::before {
-  content: '🥗';
+  content: '';
   position: absolute;
   top: 10px;
   right: 20px;
@@ -76,7 +75,6 @@ header h1 {
   backdrop-filter: blur(10px);
 }
 
-/* ===== CARD ===== */
 .card {
   background: var(--bg-card);
   padding: 35px;
@@ -154,7 +152,6 @@ input::placeholder {
   font-weight: 400;
 }
 
-/* Estados de validación */
 input.valid {
   border-color: var(--success);
   background-color: #E8F5E9;
@@ -193,7 +190,6 @@ input.invalid {
   to { opacity: 1; transform: translateX(0); }
 }
 
-/* ===== RESULTADOS ===== */
 .results {
   margin-top: 30px;
   display: grid;
@@ -243,7 +239,6 @@ input.invalid {
   text-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-/* ===== BARRA ===== */
 .bar-container {
   margin: 30px 0;
   background: white;
@@ -277,10 +272,10 @@ input.invalid {
 #barFill {
   height: 100%;
   width: 0%;
-  background: linear-gradient(90deg, 
-    var(--success) 0%, 
-    #FFC107 40%, 
-    var(--accent-light) 70%, 
+  background: linear-gradient(90deg,
+    var(--success) 0%,
+    #FFC107 40%,
+    var(--accent-light) 70%,
     var(--error) 100%
   );
   border-radius: 15px;
@@ -296,9 +291,9 @@ input.invalid {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(90deg, 
-    transparent 0%, 
-    rgba(255,255,255,0.4) 50%, 
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(255,255,255,0.4) 50%,
     transparent 100%
   );
   animation: shimmer 2.5s infinite;
@@ -309,7 +304,6 @@ input.invalid {
   100% { transform: translateX(100%); }
 }
 
-/* ===== BOTONES ===== */
 .buttons {
   display: flex;
   flex-direction: column;
@@ -350,9 +344,9 @@ button:active::before {
   height: 400px;
 }
 
-.btn-primary { 
-  background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%); 
-  color: white; 
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
+  color: white;
   border-bottom: 4px solid #1B5E20;
 }
 
@@ -361,9 +355,9 @@ button:active::before {
   box-shadow: 0 10px 30px rgba(27, 94, 32, 0.4);
 }
 
-.btn-secondary { 
-  background: linear-gradient(135deg, var(--accent-light) 0%, var(--accent) 100%); 
-  color: white; 
+.btn-secondary {
+  background: linear-gradient(135deg, var(--accent-light) 0%, var(--accent) 100%);
+  color: white;
   border-bottom: 4px solid #E65100;
 }
 
@@ -372,9 +366,9 @@ button:active::before {
   box-shadow: 0 10px 30px rgba(255, 109, 0, 0.4);
 }
 
-.btn-success { 
-  background: linear-gradient(135deg, #66BB6A 0%, var(--success) 100%); 
-  color: white; 
+.btn-success {
+  background: linear-gradient(135deg, #66BB6A 0%, var(--success) 100%);
+  color: white;
   border-bottom: 4px solid #1B5E20;
 }
 
@@ -383,7 +377,6 @@ button:active::before {
   box-shadow: 0 10px 30px rgba(46, 125, 50, 0.4);
 }
 
-/* ===== NOTIFICACIONES ===== */
 .notification {
   position: fixed;
   top: 20px;
@@ -405,20 +398,19 @@ button:active::before {
   transform: translateX(0);
 }
 
-.notification.success { 
-  background: linear-gradient(135deg, var(--success), #1B5E20); 
+.notification.success {
+  background: linear-gradient(135deg, var(--success), #1B5E20);
 }
-.notification.error { 
-  background: linear-gradient(135deg, var(--error), #B71C1C); 
+.notification.error {
+  background: linear-gradient(135deg, var(--error), #B71C1C);
 }
-.notification.info { 
-  background: linear-gradient(135deg, var(--info), #006064); 
+.notification.info {
+  background: linear-gradient(135deg, var(--info), #006064);
 }
 
-/* ===== RESPONSIVE ===== */
 @media (max-width: 575px) {
   body { padding: 15px; }
-  
+
   .row {
     grid-template-columns: 1fr;
     gap: 20px;
@@ -427,14 +419,14 @@ button:active::before {
   .results {
     grid-template-columns: 1fr;
   }
-  
+
   .card { padding: 25px 20px; }
-  
-  button { 
-    padding: 16px 20px; 
+
+  button {
+    padding: 16px 20px;
     font-size: 1rem;
   }
-  
+
   .result-value { font-size: 1.4rem; }
 }
 

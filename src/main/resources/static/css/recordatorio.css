@@ -1,4 +1,4 @@
-/* ========== PALETA DE COLORES (igual que equivalentes y plan) ========== */
+/* Estilos visuales de la pantalla. */
 :root {
   --verde-oscuro: #1B5E20;
   --verde: #2E7D32;
@@ -33,7 +33,6 @@ body {
   width: 100%;
 }
 
-/* ===== HEADER ===== */
 .header {
   background: linear-gradient(135deg, var(--verde-oscuro) 0%, var(--verde-claro) 100%);
   color: white;
@@ -91,7 +90,6 @@ body {
   box-shadow: 0 10px 30px rgba(76, 175, 80, 0.3);
 }
 
-/* ===== BOTÓN REGRESAR ===== */
 .nav-bar {
   background: white;
   padding: 20px 25px;
@@ -121,7 +119,6 @@ body {
   box-shadow: 0 6px 20px rgba(0,0,0,0.2);
 }
 
-/* ===== LOADING PANEL ===== */
 .loading-panel {
   background: white;
   padding: 60px 30px;
@@ -152,7 +149,6 @@ body {
   font-weight: 600;
 }
 
-/* ===== TARJETAS DE NUTRIENTES (nuevas) ===== */
 .nutrientes-tarjetas {
   background: white;
   padding: 25px 30px;
@@ -224,7 +220,6 @@ body {
   margin: 4px 0;
 }
 
-/* ===== MAIN CONTENT ===== */
 .main-content {
   background: white;
   padding: 30px;
@@ -234,7 +229,6 @@ body {
   border-top: none;
 }
 
-/* ===== PLATILLOS GRID ===== */
 .platillos-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -321,7 +315,6 @@ body {
   box-shadow: 0 6px 15px rgba(46, 125, 50, 0.3);
 }
 
-/* ===== TABLAS DE COMIDAS ===== */
 .comidas-tables {
   display: flex;
   flex-direction: column;
@@ -441,7 +434,6 @@ body {
   font-weight: normal;
 }
 
-/* ===== MODAL ===== */
 .modal {
   position: fixed;
   z-index: 1000;
@@ -480,7 +472,6 @@ body {
   color: var(--rojo);
 }
 
-/* ===== RESPONSIVE ===== */
 @media (max-width: 1200px) {
   .platillos-grid {
     grid-template-columns: repeat(2, 1fr);

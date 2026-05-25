@@ -1,10 +1,9 @@
-// ========== CONFIGURACIÓN INICIAL ==========
+// Codigo de la interfaz para eventos, calculos y navegacion.
 const API_URL = '/api/plan';
 const STORAGE_KEY = 'planAlimenticioTemp';
 
 const DIAS_SEMANA = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
 
-// Variables globales
 let datosPlan = null;
 let gruposEspecificos = [];
 let alimentosPorGrupo = {};
@@ -12,14 +11,12 @@ let nutrientesAlimentos = {};
 let platillos = [];
 let platillosPorNombre = {};
 
-// Valores objetivo (recibidos de la URL)
 let hcObjetivo = 0;
 let lipidosObjetivo = 0;
 let proteinasObjetivo = 0;
 let gruposParam = [];
 let porcionesParam = [];
 
-// Estado por día
 let estadoPorDia = {};
 let diaActivo = 0;
 let porcionesObjetivoPorGrupo = [];
@@ -39,7 +36,6 @@ function obtenerEstadoDia(diaIndex) {
     return estadoPorDia[diaIndex];
 }
 
-// ========== PERSISTENCIA EN SESION ==========
 function guardarEstadoEnSession() {
     const datosAGuardar = {
         estadoPorDia,
@@ -63,28 +59,27 @@ function cargarEstadoDesdeSession() {
     }
 }
 
-// ========== FUNCIÓN PARA ADAPTAR ESTADO GUARDADO A NUEVOS GRUPOS ==========
 function adaptarEstadoGuardado(estadoAntiguo, gruposAntiguos, porcionesAntiguas, nuevosGrupos, nuevasPorciones) {
     const nuevoEstado = {};
-    
+
     const grupoANuevoIndice = {};
     nuevosGrupos.forEach((grupo, idx) => {
         grupoANuevoIndice[grupo] = idx;
     });
-    
+
     for (let dia = 0; dia < DIAS_SEMANA.length; dia++) {
         const diaAntiguo = estadoAntiguo[dia];
         if (!diaAntiguo) {
             nuevoEstado[dia] = estadoVacioDia();
             continue;
         }
-        
+
         const nuevoDia = estadoVacioDia();
-        
+
         nuevoDia.desayuno.platillos = [...(diaAntiguo.desayuno?.platillos || [])];
         nuevoDia.comida.platillos = [...(diaAntiguo.comida?.platillos || [])];
         nuevoDia.cena.platillos = [...(diaAntiguo.cena?.platillos || [])];
-        
+
         function adaptarAlimentos(comidaAntigua, nuevaComida) {
             const alimentosAntiguos = comidaAntigua?.alimentos || [];
             const totalPorGrupo = {};
@@ -94,18 +89,18 @@ function adaptarEstadoGuardado(estadoAntiguo, gruposAntiguos, porcionesAntiguas,
                 if (!totalPorGrupo[grupo]) totalPorGrupo[grupo] = 0;
                 totalPorGrupo[grupo] += (al.porcion || 0);
             });
-            
+
             for (const [grupo, totalAntiguo] of Object.entries(totalPorGrupo)) {
                 const nuevoIndice = grupoANuevoIndice[grupo];
                 if (nuevoIndice === undefined) continue;
-                
+
                 const nuevoObjetivo = nuevasPorciones[nuevoIndice] || 0;
                 let totalAjustado = totalAntiguo;
                 if (totalAntiguo > nuevoObjetivo) {
                     totalAjustado = nuevoObjetivo;
                 }
                 if (totalAjustado <= 0) continue;
-                
+
                 const filaIndex = 0;
                 const existente = nuevaComida.alimentos.find(a => a.col === nuevoIndice && a.row === filaIndex);
                 if (existente) {
@@ -122,22 +117,21 @@ function adaptarEstadoGuardado(estadoAntiguo, gruposAntiguos, porcionesAntiguas,
                 }
             }
         }
-        
+
         adaptarAlimentos(diaAntiguo.desayuno, nuevoDia.desayuno);
         adaptarAlimentos(diaAntiguo.comida, nuevoDia.comida);
         adaptarAlimentos(diaAntiguo.cena, nuevoDia.cena);
-        
+
         nuevoEstado[dia] = nuevoDia;
     }
-    
+
     for (let dia = 0; dia < DIAS_SEMANA.length; dia++) {
         if (!nuevoEstado[dia]) nuevoEstado[dia] = estadoVacioDia();
     }
-    
+
     return nuevoEstado;
 }
 
-// ========== OBTENER PARÁMETROS DE LA URL ==========
 function obtenerParametrosURL() {
     const urlParams = new URLSearchParams(window.location.search);
 
@@ -154,15 +148,14 @@ function obtenerParametrosURL() {
 
     if (gruposStr) {
         try { gruposParam = JSON.parse(decodeURIComponent(gruposStr)); }
-        catch (e) { console.error('Error parseando grupos:', e); }
+        catch (e) {}
     }
     if (porcionesStr) {
         try { porcionesParam = JSON.parse(decodeURIComponent(porcionesStr)); }
-        catch (e) { console.error('Error parseando porciones:', e); }
+        catch (e) {}
     }
 }
 
-// ========== MOSTRAR VALORES OBJETIVO (en kcal) ==========
 function mostrarValoresObjetivo() {
     const hcKcal        = hcObjetivo * 4;
     const lipidosKcal   = lipidosObjetivo * 9;
@@ -175,37 +168,32 @@ function mostrarValoresObjetivo() {
     document.getElementById('objetivosPanel').style.display = 'flex';
 }
 
-// ========== ACTUALIZAR TARJETAS CON VALORES ACTUALES ==========
 function actualizarTarjetasNutrientes(hcGramos, lipidosGramos, proteinasGramos) {
-    // Gramos
     document.getElementById('hcActualGramos').textContent = hcGramos.toFixed(1);
     document.getElementById('lipidosActualGramos').textContent = lipidosGramos.toFixed(1);
     document.getElementById('proteinasActualGramos').textContent = proteinasGramos.toFixed(1);
-    
-    // Kcal actuales
+
     const hcKcalActual = hcGramos * 4;
     const lipidosKcalActual = lipidosGramos * 9;
     const proteinasKcalActual = proteinasGramos * 4;
-    
+
     document.getElementById('hcActualKcal').textContent = hcKcalActual.toFixed(1);
     document.getElementById('lipidosActualKcal').textContent = lipidosKcalActual.toFixed(1);
     document.getElementById('proteinasActualKcal').textContent = proteinasKcalActual.toFixed(1);
-    
-    // Porcentajes respecto a objetivo en kcal
+
     const hcObjKcal = hcObjetivo * 4;
     const lipObjKcal = lipidosObjetivo * 9;
     const protObjKcal = proteinasObjetivo * 4;
-    
+
     const pctHc = hcObjKcal > 0 ? (hcKcalActual / hcObjKcal) * 100 : 0;
     const pctLip = lipObjKcal > 0 ? (lipidosKcalActual / lipObjKcal) * 100 : 0;
     const pctProt = protObjKcal > 0 ? (proteinasKcalActual / protObjKcal) * 100 : 0;
-    
+
     document.getElementById('hcPorcentaje').textContent = pctHc.toFixed(1);
     document.getElementById('lipidosPorcentaje').textContent = pctLip.toFixed(1);
     document.getElementById('proteinasPorcentaje').textContent = pctProt.toFixed(1);
 }
 
-// ========== LOADING ==========
 function mostrarLoading(mostrar) {
     const loading = document.getElementById('loadingPanel');
     const main = document.getElementById('mainContent');
@@ -257,14 +245,14 @@ async function cargarDatos() {
             const sessionData = cargarEstadoDesdeSession();
             let usarSession = false;
             let estadoAdaptado = null;
-            
+
             if (sessionData && sessionData.gruposEspecificos) {
                 const mismosGrupos = JSON.stringify(sessionData.gruposEspecificos) === JSON.stringify(gruposEspecificos);
                 const mismasPorciones = JSON.stringify(sessionData.porcionesObjetivoPorGrupo) === JSON.stringify(porcionesObjetivoPorGrupo);
-                const mismosMacros = sessionData.hcObjetivo === hcObjetivo && 
-                                     sessionData.lipidosObjetivo === lipidosObjetivo && 
+                const mismosMacros = sessionData.hcObjetivo === hcObjetivo &&
+                                     sessionData.lipidosObjetivo === lipidosObjetivo &&
                                      sessionData.proteinasObjetivo === proteinasObjetivo;
-                
+
                 if (mismosGrupos && mismasPorciones && mismosMacros) {
                     if (confirm('¿Deseas continuar con el plan que estabas editando?')) {
                         usarSession = true;
@@ -295,7 +283,7 @@ async function cargarDatos() {
                     }
                 }
             }
-            
+
             if (usarSession && estadoAdaptado) {
                 estadoPorDia = estadoAdaptado;
                 DIAS_SEMANA.forEach((_, idx) => {
@@ -305,14 +293,13 @@ async function cargarDatos() {
                 estadoPorDia = {};
                 diaActivo = 0;
             }
-            
+
             verificarDatosCargados();
             inicializarInterfaz();
         } else {
             mostrarError('Error cargando datos: ' + result.error);
         }
     } catch (error) {
-        console.error('Error:', error);
         mostrarError('No se pudieron cargar los datos. Verifique la conexión con el servidor.');
     } finally {
         mostrarLoading(false);
@@ -320,26 +307,19 @@ async function cargarDatos() {
 }
 
 function verificarDatosCargados() {
-    console.log('=== VERIFICACIÓN DE DATOS CARGADOS ===');
-    console.log('Grupos específicos:', gruposEspecificos);
     gruposEspecificos.forEach(grupo => {
         const alimentos = alimentosPorGrupo[grupo];
         if (alimentos && alimentos.length > 0) {
-            console.log(`✓ Grupo "${grupo}": ${alimentos.length} alimentos`);
         } else {
-            console.log(`✗ Grupo "${grupo}": NO CARGADO`);
         }
     });
-    console.log('=== FIN VERIFICACIÓN ===');
 }
 
-// ========== INICIALIZAR INTERFAZ ==========
 function inicializarInterfaz() {
     mostrarInfoGrupos();
     renderizarNavDias();
     cambiarDia(0);
     mostrarValoresObjetivo();
-    console.log('Interfaz inicializada');
 }
 
 function mostrarInfoGrupos() {
@@ -353,7 +333,6 @@ function mostrarInfoGrupos() {
     container.innerHTML = html;
 }
 
-// ========== NAVEGACIÓN DE DÍAS ==========
 function renderizarNavDias() {
     const tabsContainer = document.getElementById('diasTabs');
     tabsContainer.innerHTML = '';
@@ -404,7 +383,6 @@ function cambiarDia(nuevoDia) {
     guardarEstadoEnSession();
 }
 
-// ========== SELECTORES DE PLATILLOS (4 fijos) ==========
 function crearSelectoresPlatillos(comida) {
     const container = document.getElementById(`platillos${capitalize(comida)}`);
     if (!container) return;
@@ -444,7 +422,6 @@ function crearSelectoresPlatillos(comida) {
     }
 }
 
-// ========== CREAR SECCIONES DE COMIDAS (vista dinámica) ==========
 function crearSeccionesComidas() {
     const container = document.getElementById('comidasContainer');
     if (!container) return;
@@ -477,7 +454,6 @@ function crearSeccionesComidas() {
     });
 }
 
-// ---------- VISTA COLUMNAS ----------
 function crearVistaColumnas(comida) {
     const grid = document.createElement('div');
     grid.className = 'comida-grid';
@@ -548,7 +524,6 @@ function crearVistaColumnas(comida) {
     return grid;
 }
 
-// ---------- VISTA TABLA (más de 4 grupos) ----------
 function crearVistaTabla(comida) {
     const container = document.createElement('div');
     container.className = 'tabla-container';
@@ -622,12 +597,10 @@ function crearVistaTabla(comida) {
     return container;
 }
 
-// ========== FUNCIONES GLOBALES POR GRUPO (ahora soporta vista tabla) ==========
 function actualizarGrupoGlobal(colIndex) {
     const objetivo = porcionesObjetivoPorGrupo[colIndex] || 0;
     const estado = obtenerEstadoDia(diaActivo);
 
-    // Sumar total global de este grupo en el día actual
     let totalGlobal = 0;
     ['desayuno', 'comida', 'cena'].forEach(comida => {
         estado[comida].alimentos.forEach(a => {
@@ -637,7 +610,6 @@ function actualizarGrupoGlobal(colIndex) {
         });
     });
 
-    // Actualizar contadores visuales en las tres comidas
     ['desayuno', 'comida', 'cena'].forEach(comida => {
         const contadorSpan = document.getElementById(`contador_${comida}_${colIndex}`);
         if (contadorSpan) contadorSpan.textContent = `${totalGlobal} / ${objetivo}`;
@@ -645,10 +617,8 @@ function actualizarGrupoGlobal(colIndex) {
 
     const esVistaTabla = gruposEspecificos.length > 4;
 
-    // Para cada comida, actualizar habilitación de filas
     ['desayuno', 'comida', 'cena'].forEach(comida => {
         if (esVistaTabla) {
-            // Vista tabla: buscar la tabla correspondiente
             const tablaContainer = document.querySelector(`.comida-seccion.${comida} .tabla-container`);
             if (!tablaContainer) return;
             const tabla = tablaContainer.querySelector('table.tabla-grupos');
@@ -656,7 +626,7 @@ function actualizarGrupoGlobal(colIndex) {
             const tbody = tabla.querySelector('tbody');
             if (!tbody) return;
             const rows = tbody.querySelectorAll('tr');
-            
+
             let sumaParcial = 0;
             rows.forEach((row, rowIndex) => {
                 const celda = row.cells[colIndex];
@@ -666,22 +636,22 @@ function actualizarGrupoGlobal(colIndex) {
                 const select = editor.querySelector('select');
                 const input = editor.querySelector('input');
                 if (!select || !input) return;
-                
+
                 const valorActual = parseFloat(input.value) || 0;
                 const tieneSeleccion = select.value && valorActual > 0;
-                
+
                 if (tieneSeleccion) sumaParcial += valorActual;
-                
+
                 let deshabilitar = false;
                 if (totalGlobal >= objetivo && !tieneSeleccion) {
                     deshabilitar = true;
                 } else if (!tieneSeleccion && sumaParcial > totalGlobal) {
                     deshabilitar = true;
                 }
-                
+
                 select.disabled = deshabilitar;
                 input.disabled = deshabilitar;
-                
+
                 if (!deshabilitar) {
                     const restante = objetivo - totalGlobal + (tieneSeleccion ? valorActual : 0);
                     const maxPermitido = Math.max(0, restante);
@@ -694,7 +664,6 @@ function actualizarGrupoGlobal(colIndex) {
                 }
             });
         } else {
-            // Vista columnas: usar contenedor específico
             const container = document.getElementById(`alimentos_${comida}_${colIndex}`);
             if (!container) return;
             const rows = container.querySelectorAll('.alimento-row');
@@ -703,22 +672,22 @@ function actualizarGrupoGlobal(colIndex) {
                 const select = row.querySelector('select');
                 const input = row.querySelector('input');
                 if (!select || !input) return;
-                
+
                 const valorActual = parseFloat(input.value) || 0;
                 const tieneSeleccion = select.value && valorActual > 0;
-                
+
                 if (tieneSeleccion) sumaParcial += valorActual;
-                
+
                 let deshabilitar = false;
                 if (totalGlobal >= objetivo && !tieneSeleccion) {
                     deshabilitar = true;
                 } else if (!tieneSeleccion && sumaParcial > totalGlobal) {
                     deshabilitar = true;
                 }
-                
+
                 select.disabled = deshabilitar;
                 input.disabled = deshabilitar;
-                
+
                 if (!deshabilitar) {
                     const restante = objetivo - totalGlobal + (tieneSeleccion ? valorActual : 0);
                     const maxPermitido = Math.max(0, restante);
@@ -740,7 +709,6 @@ function actualizarTodosLosGruposGlobales() {
     }
 }
 
-// ========== RESTAURAR SELECCIONES DEL DÍA ==========
 function restaurarSeleccionesDia(diaIndex) {
     const est = obtenerEstadoDia(diaIndex);
 
@@ -769,7 +737,6 @@ function restaurarSeleccionesDia(diaIndex) {
     }
 }
 
-// ========== NUTRIENTES ==========
 function obtenerNutrientesDeAlimento(nombreAlimento) {
     if (!nombreAlimento || !nutrientesAlimentos[nombreAlimento]) return null;
     const nut = nutrientesAlimentos[nombreAlimento];
@@ -811,7 +778,6 @@ function recalcularTotalesDia(diaIndex) {
     actualizarTarjetasNutrientes(hcGramos, lipidosGramos, proteinasGramos);
 }
 
-// ========== MANEJADORES DE CAMBIO ==========
 function cambiarAlimento(comida, col, row, alimento, porcion) {
     const est = obtenerEstadoDia(diaActivo);
     const objetivo = porcionesObjetivoPorGrupo[col] || 0;
@@ -880,7 +846,6 @@ function cambiarPlatillo(comida, index) {
     guardarEstadoEnSession();
 }
 
-// ========== VER TODOS LOS PLATILLOS ==========
 function verTodosPlatillos(comida) {
     const modal  = document.getElementById('modalPlatillos');
     const titulo = document.getElementById('modalTitulo');
@@ -910,7 +875,6 @@ function cerrarModal() {
     document.getElementById('modalPlatillos').style.display = 'none';
 }
 
-// ========== VALIDACIÓN ANTES DE EXPORTAR (GLOBAL POR DÍA) ==========
 function validarPorcionesCompletas() {
     for (let dia = 0; dia < DIAS_SEMANA.length; dia++) {
         const estado = estadoPorDia[dia];
@@ -933,7 +897,6 @@ function validarPorcionesCompletas() {
     return true;
 }
 
-// ========== EXPORTAR A TXT ==========
 async function exportarTXT() {
     if (!validarPorcionesCompletas()) return;
 
@@ -983,12 +946,10 @@ async function exportarTXT() {
             alert('Error al exportar');
         }
     } catch (error) {
-        console.error('Error exportando:', error);
         alert('Error al exportar: ' + error.message);
     }
 }
 
-// ========== REGRESAR ==========
 function volverAtras() {
     guardarEstadoEnSession();
     sessionStorage.setItem('desdeDonde', 'plan');
@@ -1000,7 +961,6 @@ function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-// ========== INICIALIZACIÓN ==========
 document.addEventListener('DOMContentLoaded', () => {
     obtenerParametrosURL();
 
@@ -1020,5 +980,4 @@ document.addEventListener('DOMContentLoaded', () => {
         if (event.target === modal) modal.style.display = 'none';
     };
 
-    console.log('Plan Alimenticio inicializado');
 });

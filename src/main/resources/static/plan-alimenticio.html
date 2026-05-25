@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- Estructura principal de la pantalla. -->
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -8,7 +9,6 @@
 </head>
 <body>
 <div class="container">
-    <!-- Header -->
     <header class="header">
         <div class="header-content">
             <h1>PLAN ALIMENTICIO PERSONALIZADO</h1>
@@ -17,20 +17,16 @@
         <button id="btnExportar" class="btn-success">Exportar a TXT</button>
     </header>
 
-    <!-- Botón Regresar -->
     <div class="nav-bar">
         <button id="btnRegresar" class="btn-regresar">← REGRESAR A EQUIVALENTES</button>
     </div>
 
-    <!-- Panel de Carga -->
     <div id="loadingPanel" class="loading-panel">
         <div class="spinner"></div>
         <p>Cargando plan alimenticio...</p>
     </div>
 
-    <!-- Panel de Objetivos -->
 <div id="objetivosPanel" class="objetivos-panel">
-    <!-- Tarjeta HC -->
     <div class="objetivo-card hc-card">
         <div class="card-title">HC Objetivo</div>
         <div class="card-progreso">
@@ -41,7 +37,6 @@
             <div>Hidratos de Carbono (%): <span id="hcPorcentaje">0.0</span>%</div>
         </div>
     </div>
-    <!-- Tarjeta Lípidos -->
     <div class="objetivo-card lipidos-card">
         <div class="card-title">Lípidos Objetivo</div>
         <div class="card-progreso">
@@ -52,7 +47,6 @@
             <div>Lípidos (%): <span id="lipidosPorcentaje">0.0</span>%</div>
         </div>
     </div>
-    <!-- Tarjeta Proteínas -->
     <div class="objetivo-card proteinas-card">
         <div class="card-title">Proteínas Objetivo</div>
         <div class="card-progreso">
@@ -64,16 +58,14 @@
         </div>
     </div>
 </div>
-    
+
     <div id="diasNav" class="dias-nav">
         <div class="dias-nav-title">Selecciona el día de la semana</div>
         <div id="diasTabs" class="dias-tabs"></div>
         <div id="diaIndicador" class="dia-indicador">Editando: Lunes</div>
     </div>
 
-    <!-- Contenido Principal -->
     <div id="mainContent" class="main-content">
-        <!-- Panel de Platillos Específicos -->
         <div class="platillos-grid">
             <div class="platillo-card desayuno">
                 <h3>DESAYUNO</h3>
@@ -92,15 +84,12 @@
             </div>
         </div>
 
-        <!-- Información de Grupos -->
         <div id="gruposInfo" class="grupos-info"></div>
 
-        <!-- Tablas de Comidas -->
         <div id="comidasContainer" class="comidas-container"></div>
     </div>
 </div>
 
-<!-- Modal para Platillos -->
 <div id="modalPlatillos" class="modal">
     <div class="modal-content">
         <span class="close" onclick="cerrarModal()">&times;</span>

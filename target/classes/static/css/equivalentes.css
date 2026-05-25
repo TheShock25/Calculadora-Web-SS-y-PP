@@ -1,4 +1,4 @@
-/* ========== PALETA DE COLORES ========== */
+/* Estilos visuales de la pantalla. */
 :root {
   --verde-oscuro: #1B5E20;
   --verde: #2E7D32;
@@ -33,7 +33,6 @@ body {
   width: 100%;
 }
 
-/* ===== HEADER ===== */
 .header {
   background: linear-gradient(135deg, var(--verde-oscuro) 0%, var(--verde-claro) 100%);
   color: white;
@@ -68,7 +67,6 @@ body {
   font-weight: 500;
 }
 
-/* ===== BOTON REGRESAR ===== */
 .nav-bar {
   background: white;
   padding: 20px 25px;
@@ -102,7 +100,6 @@ body {
   box-shadow: 0 6px 20px rgba(0,0,0,0.2);
 }
 
-/* ===== PANEL SUPERIOR ===== */
 .top-panel {
   background: white;
   padding: 20px 25px;
@@ -142,7 +139,6 @@ body {
   box-shadow: 0 12px 35px rgba(25, 118, 210, 0.4);
 }
 
-/* Estados de coincidencia */
 #sumaKcalCard.match-perfect {
   background: linear-gradient(135deg, var(--verde-claro), var(--verde));
   border-bottom-color: var(--verde-oscuro);
@@ -233,7 +229,6 @@ body {
   box-shadow: 0 6px 20px rgba(46, 125, 50, 0.4);
 }
 
-/* ===== CONTENIDO PRINCIPAL ===== */
 .main-content {
   display: grid;
   grid-template-columns: 1fr 360px;
@@ -246,14 +241,13 @@ body {
   border-top: none;
 }
 
-/* ===== TABLA PRINCIPAL ===== */
 .table-container {
   background: white;
   border-radius: 16px;
   padding: 25px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.08);
   border: 3px solid #E8F5E9;
-  /* Importante: no dejar que desborde el grid */
+
   min-width: 0;
   overflow: hidden;
 }
@@ -279,7 +273,7 @@ body {
   border-radius: 12px;
   border: 2px solid #E8F5E9;
   -webkit-overflow-scrolling: touch;
-  /* Indicador visual de scroll */
+
   scrollbar-width: thin;
   scrollbar-color: var(--verde-claro) #E8F5E9;
 }
@@ -302,7 +296,7 @@ body {
   border-spacing: 0;
   font-size: 0.9rem;
   background: white;
-  /* Ancho mínimo para que los datos sean legibles */
+
   min-width: 560px;
 }
 
@@ -338,14 +332,12 @@ body {
 .data-table tbody tr:last-child td:first-child { border-radius: 0 0 0 10px; }
 .data-table tbody tr:last-child td:last-child  { border-radius: 0 0 10px 0; }
 
-/* Filas activas */
 .data-table tr.porcion-activa td {
   background: #E8F5E9 !important;
   font-weight: 700;
   color: var(--verde-oscuro);
 }
 
-/* Editor de porciones */
 .porciones-editor {
   width: 65px;
   padding: 8px;
@@ -365,12 +357,11 @@ body {
   box-shadow: 0 0 0 5px rgba(76, 175, 80, 0.15);
 }
 
-/* ===== PANEL DERECHO ===== */
 .right-panel {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  /* Evita que desborde */
+
   min-width: 0;
 }
 
@@ -381,7 +372,7 @@ body {
   box-shadow: 0 4px 20px rgba(0,0,0,0.08);
   border: 3px solid;
   transition: all 0.3s ease;
-  /* Evita overflow interno */
+
   overflow: hidden;
 }
 
@@ -406,7 +397,6 @@ body {
   border-bottom: 2px solid currentColor;
 }
 
-/* Mini tablas */
 .mini-table {
   width: 100%;
   border-collapse: separate;
@@ -438,7 +428,6 @@ body {
   background: #FAFAFA;
 }
 
-/* Colores para % adecuacion */
 .adecuacion-verde {
   background: linear-gradient(135deg, #81C784, var(--verde-claro)) !important;
   color: white !important;
@@ -458,7 +447,6 @@ body {
   border-radius: 6px;
 }
 
-/* Editor de porcentajes */
 .porcentaje-editor {
   width: 75px;
   padding: 7px;
@@ -478,7 +466,6 @@ body {
   box-shadow: 0 0 0 4px rgba(255, 152, 0, 0.15);
 }
 
-/* ===== BOTONES INFERIORES ===== */
 .bottom-buttons {
   background: white;
   padding: 25px;
@@ -528,7 +515,6 @@ body {
   box-shadow: 0 10px 30px rgba(0,0,0,0.25);
 }
 
-/* ===== NOTIFICACION ===== */
 .notification {
   position: fixed;
   top: 20px;
@@ -557,9 +543,6 @@ body {
   background: linear-gradient(135deg, var(--rojo), #B71C1C);
 }
 
-/* ==================== RESPONSIVE ==================== */
-
-/* --- Tablet grande: el panel derecho pasa abajo --- */
 @media (max-width: 1100px) {
   .main-content {
     grid-template-columns: 1fr;
@@ -578,7 +561,6 @@ body {
   }
 }
 
-/* --- Tablet mediana --- */
 @media (max-width: 900px) {
   body {
     padding: 12px;
@@ -593,7 +575,6 @@ body {
     padding: 16px 20px;
   }
 
-  /* Cards de kcal en fila, lado a lado */
   .info-card {
     flex: 1 1 120px;
     min-width: 0;
@@ -604,7 +585,6 @@ body {
     font-size: 1.6rem;
   }
 
-  /* Input group no se separa con margin auto */
   .input-group {
     margin-left: 0;
     width: 100%;
@@ -641,7 +621,6 @@ body {
   }
 }
 
-/* --- Móvil grande (≤768px) --- */
 @media (max-width: 768px) {
   body {
     padding: 8px;
@@ -650,7 +629,7 @@ body {
   .header {
     padding: 22px 16px;
     border-radius: 14px 14px 0 0;
-    text-align: center;       /* asegurar centrado */
+    text-align: center;
   }
 
   .header-content {
@@ -675,7 +654,6 @@ body {
     font-size: 0.9rem;
   }
 
-  /* Cards en fila compacta */
   .top-panel {
     flex-direction: row;
     flex-wrap: wrap;
@@ -705,7 +683,7 @@ body {
     gap: 8px;
     padding: 10px 12px;
     justify-content: center;
-    flex-wrap: nowrap;         /* evita que label/input/btn salten de línea */
+    flex-wrap: nowrap;
   }
 
   .input-group label {
@@ -753,7 +731,6 @@ body {
     font-size: 0.95rem;
   }
 
-  /* Panel derecho: columna única */
   .right-panel {
     flex-direction: column;
     gap: 12px;
@@ -763,7 +740,6 @@ body {
     width: 100%;
   }
 
-  /* Botones inferiores: 2 por fila en móvil grande */
   .bottom-buttons {
     gap: 10px;
     padding: 18px 16px;
@@ -783,7 +759,6 @@ body {
   }
 }
 
-/* --- Móvil pequeño (≤480px) --- */
 @media (max-width: 480px) {
   body {
     padding: 6px;
@@ -802,14 +777,12 @@ body {
     font-size: 1.05rem;
   }
 
-  /* Cards apiladas en pantalla muy pequeña */
   .info-card {
     flex: 1 1 100%;
     padding: 11px;
     text-align: center;
   }
 
-  /* Input group en fila compacta */
   .input-group {
     flex-wrap: nowrap;
     gap: 6px;
@@ -859,7 +832,6 @@ body {
     font-size: 0.9rem;
   }
 
-  /* Botones: mantener 2 por fila incluso en pantalla pequeña */
   .bottom-buttons {
     gap: 8px;
     padding: 14px 12px;
@@ -882,7 +854,7 @@ body {
     padding: 14px 18px;
   }
 }
-/* ===== SCROLL HORIZONTAL PARA TABLA NUTRIENTES CALCULADOS ===== */
+
 .mini-table-container.nutrientes {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
@@ -890,11 +862,10 @@ body {
 }
 
 .mini-table-container.nutrientes .mini-table {
-    min-width: 400px;   /* ancho mínimo para que las 4 columnas se vean completas */
+    min-width: 400px;
     width: 100%;
 }
 
-/* Personalización de scrollbar (opcional, para que se vea como la tabla principal) */
 .mini-table-container.nutrientes::-webkit-scrollbar {
     height: 6px;
 }
