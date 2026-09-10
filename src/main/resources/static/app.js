@@ -23,80 +23,25 @@ const notification = document.getElementById("notification");
 let ultimoGET = 2000;
 
 function bloquearCaracteresInvalidos(input, permitirPunto = false) {
-  input.addEventListener('keydown', function(e) {
-    if ([8, 46, 9, 27, 13, 37, 38, 39, 40].includes(e.keyCode)) {
-      return;
-    }
-
-    if ((e.ctrlKey || e.metaKey) && [65, 67, 86, 88].includes(e.keyCode)) {
-      return;
-    }
-
-    if ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105)) {
-      return;
-    }
-
-    if (permitirPunto && (e.key === '.' || e.key === ',' || e.keyCode === 190 || e.keyCode === 110)) {
-      if (!this.value.includes('.')) {
-        if (e.key === ',') {
-          e.preventDefault();
-          this.value += '.';
-        }
-        return;
-      }
-    }
-
-    e.preventDefault();
-  });
-
-  input.addEventListener('input', function(e) {
-    let valor = this.value;
-    let cursorPos = this.selectionStart;
-
-    if (permitirPunto) {
-      valor = valor.replace(/[^0-9.]/g, '');
-      const partes = valor.split('.');
-      if (partes.length > 2) {
-        valor = partes[0] + '.' + partes.slice(1).join('');
-      }
-      if (partes[1] && partes[1].length > 2) {
-        valor = partes[0] + '.' + partes[1].substring(0, 2);
-      }
-    } else {
-      valor = valor.replace(/\D/g, '');
-    }
-
-    this.value = valor;
-    validarCampo(this, permitirPunto ? 'peso' : (input.id === 'altura' ? 'altura' : 'edad'));
-  });
-
-  input.addEventListener('paste', function(e) {
-    e.preventDefault();
-    const texto = (e.clipboardData || window.clipboardData).getData('text');
-
-    let limpio;
-    if (permitirPunto) {
-      limpio = texto.replace(/[^0-9.]/g, '');
-      const partes = limpio.split('.');
-      if (partes.length > 2) limpio = partes[0] + '.' + partes[1];
-    } else {
-      limpio = texto.replace(/\D/g, '');
-    }
-
-    const maxLength = parseInt(this.getAttribute('maxlength')) || 10;
-    this.value = limpio.substring(0, maxLength);
-
-    validarCampo(this, permitirPunto ? 'peso' : (input.id === 'altura' ? 'altura' : 'edad'));
-  });
+  if (window.SecurityValidator) {
+    const tipo = permitirPunto ? 'peso' : (input.id === 'altura' ? 'altura' : 'edad');
+    const configs = {
+      peso: { allowDecimal: true, min: 20, max: 300, maxDecimals: 2, maxLength: 6, errorElementId: 'peso-error' },
+      altura: { allowDecimal: false, min: 50, max: 250, maxLength: 3, errorElementId: 'altura-error' },
+      edad: { allowDecimal: false, min: 18, max: 120, maxLength: 3, errorElementId: 'edad-error' }
+    };
+    SecurityValidator.attachNumericFilter(input, configs[tipo]);
+    return;
+  }
 }
 
 function validarCampo(input, tipo) {
-  const valor = input.value;
+  const valor = input.value.trim();
   const errorElement = document.getElementById(`${tipo}-error`);
 
   if (valor === '') {
     input.classList.remove('valid', 'invalid');
-    errorElement.classList.remove('show');
+    if (errorElement) errorElement.classList.remove('show');
     return false;
   }
 
@@ -118,11 +63,11 @@ function validarCampo(input, tipo) {
   if (esValido) {
     input.classList.add('valid');
     input.classList.remove('invalid');
-    errorElement.classList.remove('show');
+    if (errorElement) errorElement.classList.remove('show');
   } else {
     input.classList.add('invalid');
     input.classList.remove('valid');
-    errorElement.classList.add('show');
+    if (errorElement) errorElement.classList.add('show');
   }
 
   return esValido;

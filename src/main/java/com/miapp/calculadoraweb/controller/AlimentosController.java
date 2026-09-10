@@ -41,7 +41,15 @@ public class AlimentosController {
     @GetMapping("/grupo/{grupo}")
     public ResponseEntity<Map<String, Object>> obtenerPorGrupo(@PathVariable String grupo) {
         try {
-            List<Alimento> alimentos = excelReaderService.buscarPorGrupo(grupo);
+            if (grupo == null || grupo.trim().isEmpty() || grupo.length() > 80) {
+                Map<String, Object> error = new HashMap<>();
+                error.put("success", false);
+                error.put("error", "Nombre de grupo inválido");
+                return ResponseEntity.badRequest().body(error);
+            }
+
+            String grupoLimpio = grupo.trim().replaceAll("[<>\"'%]", "");
+            List<Alimento> alimentos = excelReaderService.buscarPorGrupo(grupoLimpio);
 
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
@@ -52,15 +60,24 @@ public class AlimentosController {
         } catch (Exception e) {
             Map<String, Object> error = new HashMap<>();
             error.put("success", false);
-            error.put("error", e.getMessage());
+            error.put("error", "Error interno al procesar la solicitud");
             return ResponseEntity.status(500).body(error);
         }
     }
 
     @GetMapping("/buscar")
-    public ResponseEntity<Map<String, Object>> buscarPorNombre(@RequestParam String q) {
+    public ResponseEntity<Map<String, Object>> buscarPorNombre(@RequestParam(name = "q", defaultValue = "") String q) {
         try {
-            List<Alimento> alimentos = excelReaderService.buscarPorNombre(q);
+            if (q == null || q.trim().isEmpty() || q.length() > 60) {
+                Map<String, Object> response = new HashMap<>();
+                response.put("success", true);
+                response.put("data", List.of());
+                response.put("total", 0);
+                return ResponseEntity.ok(response);
+            }
+
+            String terminoLimpio = q.trim().replaceAll("[<>\"'%]", "");
+            List<Alimento> alimentos = excelReaderService.buscarPorNombre(terminoLimpio);
 
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
@@ -71,7 +88,7 @@ public class AlimentosController {
         } catch (Exception e) {
             Map<String, Object> error = new HashMap<>();
             error.put("success", false);
-            error.put("error", e.getMessage());
+            error.put("error", "Error interno al procesar la búsqueda");
             return ResponseEntity.status(500).body(error);
         }
     }

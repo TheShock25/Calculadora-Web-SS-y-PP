@@ -2,6 +2,7 @@
 package com.miapp.calculadoraweb.controller;
 
 import com.miapp.calculadoraweb.service.*;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -11,7 +12,7 @@ public class CalculadoraController {
     private final CalculadoraEnergeticaService service = new CalculadoraEnergeticaService();
 
     @PostMapping("/calcular")
-    public Resultado calcular(@RequestBody DatosEntrada datos) {
+    public Resultado calcular(@Valid @RequestBody DatosEntrada datos) {
         return service.calcular(datos);
     }
 }

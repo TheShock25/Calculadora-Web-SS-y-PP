@@ -151,8 +151,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if (btnRegresar) {
     const urlParams = new URLSearchParams(window.location.search);
     const desde = urlParams.get('desde');
-    if (desde) {
-      btnRegresar.textContent = `← Regresar a ${desde.charAt(0).toUpperCase() + desde.slice(1)}`;
+    if (desde === 'menu' || desde === 'imc') {
+      btnRegresar.textContent = `← Regresar a ${desde.toUpperCase()}`;
     }
 
     btnRegresar.addEventListener('click', volverAtras);

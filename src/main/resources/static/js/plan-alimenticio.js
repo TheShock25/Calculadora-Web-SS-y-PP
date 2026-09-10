@@ -139,20 +139,34 @@ function obtenerParametrosURL() {
     const lip  = urlParams.get('lipidos');
     const prot = urlParams.get('proteinas');
 
-    if (hc)   hcObjetivo        = parseFloat(hc);
-    if (lip)  lipidosObjetivo   = parseFloat(lip);
-    if (prot) proteinasObjetivo = parseFloat(prot);
+    if (window.SecurityValidator) {
+        hcObjetivo        = SecurityValidator.parseSafeNumber(hc, 0, 0, 2000);
+        lipidosObjetivo   = SecurityValidator.parseSafeNumber(lip, 0, 0, 1000);
+        proteinasObjetivo = SecurityValidator.parseSafeNumber(prot, 0, 0, 1000);
+    } else {
+        if (hc)   hcObjetivo        = parseFloat(hc) || 0;
+        if (lip)  lipidosObjetivo   = parseFloat(lip) || 0;
+        if (prot) proteinasObjetivo = parseFloat(prot) || 0;
+    }
 
     const gruposStr   = urlParams.get('grupos');
     const porcionesStr = urlParams.get('porciones');
 
     if (gruposStr) {
-        try { gruposParam = JSON.parse(decodeURIComponent(gruposStr)); }
-        catch (e) {}
+        try {
+            const parsed = JSON.parse(decodeURIComponent(gruposStr));
+            if (Array.isArray(parsed)) {
+                gruposParam = parsed.map(g => String(g).substring(0, 80));
+            }
+        } catch (e) {}
     }
     if (porcionesStr) {
-        try { porcionesParam = JSON.parse(decodeURIComponent(porcionesStr)); }
-        catch (e) {}
+        try {
+            const parsed = JSON.parse(decodeURIComponent(porcionesStr));
+            if (Array.isArray(parsed)) {
+                porcionesParam = parsed.map(p => Math.max(0, Math.min(99, parseInt(p) || 0)));
+            }
+        } catch (e) {}
     }
 }
 
@@ -327,7 +341,8 @@ function mostrarInfoGrupos() {
     if (!container) return;
     let html = '<strong>Grupos seleccionados:</strong> ';
     gruposEspecificos.forEach((grupo, index) => {
-        html += `<span>${index + 1}. ${grupo}</span>`;
+        const grupoSeguro = window.SecurityValidator ? SecurityValidator.sanitizeHTML(grupo) : grupo;
+        html += `<span>${index + 1}. ${grupoSeguro}</span>`;
     });
     html += ` <em>(${gruposEspecificos.length} grupos)</em>`;
     container.innerHTML = html;

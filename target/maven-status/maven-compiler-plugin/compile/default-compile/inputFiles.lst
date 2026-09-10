@@ -1,9 +1,12 @@
+C:\Users\hugo\Documents\NetBeansProjects\calculadoraweb\src\main\java\com\miapp\calculadoraweb\controller\GlobalExceptionHandler.java
 C:\Users\hugo\Documents\NetBeansProjects\calculadoraweb\src\main\java\com\miapp\calculadoraweb\model\Alimento.java
 C:\Users\hugo\Documents\NetBeansProjects\calculadoraweb\src\main\java\com\miapp\calculadoraweb\model\SolicitudPlan.java
 C:\Users\hugo\Documents\NetBeansProjects\calculadoraweb\src\main\java\com\miapp\calculadoraweb\model\Nutrientes.java
 C:\Users\hugo\Documents\NetBeansProjects\calculadoraweb\src\main\java\com\miapp\calculadoraweb\service\RecordatorioService.java
 C:\Users\hugo\Documents\NetBeansProjects\calculadoraweb\src\main\java\com\miapp\calculadoraweb\service\PlanAlimenticioService.java
 C:\Users\hugo\Documents\NetBeansProjects\calculadoraweb\src\main\java\com\miapp\calculadoraweb\controller\RecordatorioController.java
+C:\Users\hugo\Documents\NetBeansProjects\calculadoraweb\src\main\java\com\miapp\calculadoraweb\security\SecurityHeadersFilter.java
+C:\Users\hugo\Documents\NetBeansProjects\calculadoraweb\src\main\java\com\miapp\calculadoraweb\security\RateLimitingFilter.java
 C:\Users\hugo\Documents\NetBeansProjects\calculadoraweb\src\main\java\com\miapp\calculadoraweb\controller\AlimentosController.java
 C:\Users\hugo\Documents\NetBeansProjects\calculadoraweb\src\main\java\com\miapp\calculadoraweb\model\Platillo.java
 C:\Users\hugo\Documents\NetBeansProjects\calculadoraweb\src\main\java\com\miapp\calculadoraweb\service\CalculadoraEnergeticaService.java

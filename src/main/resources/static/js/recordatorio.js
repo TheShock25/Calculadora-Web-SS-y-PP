@@ -30,16 +30,21 @@ function obtenerValoresIdeales() {
     const lipGramos = urlParams.get('lipidos');
     const protGramos = urlParams.get('proteinas');
 
-    if (hcGramos && !isNaN(parseFloat(hcGramos))) {
-        idealHcGramos = parseFloat(hcGramos);
+    if (window.SecurityValidator) {
+        idealHcGramos = SecurityValidator.parseSafeNumber(hcGramos, 300.0, 0, 2000);
+        idealLipidosGramos = SecurityValidator.parseSafeNumber(lipGramos, 33.3, 0, 1000);
+        idealProteinasGramos = SecurityValidator.parseSafeNumber(protGramos, 125.0, 0, 1000);
+    } else {
+        if (hcGramos && !isNaN(parseFloat(hcGramos))) {
+            idealHcGramos = parseFloat(hcGramos);
+        }
+        if (lipGramos && !isNaN(parseFloat(lipGramos))) {
+            idealLipidosGramos = parseFloat(lipGramos);
+        }
+        if (protGramos && !isNaN(parseFloat(protGramos))) {
+            idealProteinasGramos = parseFloat(protGramos);
+        }
     }
-    if (lipGramos && !isNaN(parseFloat(lipGramos))) {
-        idealLipidosGramos = parseFloat(lipGramos);
-    }
-    if (protGramos && !isNaN(parseFloat(protGramos))) {
-        idealProteinasGramos = parseFloat(protGramos);
-    }
-
 }
 
 function actualizarTarjetasNutrientes() {
@@ -199,7 +204,8 @@ function crearTablas() {
 
         let html = '<thead><tr>';
         grupos.forEach((grupo, idx) => {
-            html += `<th><div class="grupo-header-con-contador">${grupo}<span class="contador-porciones-grupo" id="contador_${comida}_${idx}">0/${LIMITE_POR_GRUPO}</span></div></th>`;
+            const grupoSeguro = window.SecurityValidator ? SecurityValidator.sanitizeHTML(grupo) : grupo;
+            html += `<th><div class="grupo-header-con-contador">${grupoSeguro}<span class="contador-porciones-grupo" id="contador_${comida}_${idx}">0/${LIMITE_POR_GRUPO}</span></div></th>`;
         });
         html += '</tr></thead><tbody>';
 
@@ -208,17 +214,18 @@ function crearTablas() {
             for (let j = 0; j < grupos.length; j++) {
                 const grupo = grupos[j];
                 const alimentos = alimentosPorGrupo[grupo] || [];
-                html += `<td data-row="${i}" data-col="${j}" data-grupo="${grupo}" data-comida="${comida}">`;
+                const grupoSeguro = window.SecurityValidator ? SecurityValidator.sanitizeHTML(grupo) : grupo;
+                html += `<td data-row="${i}" data-col="${j}" data-grupo="${grupoSeguro}" data-comida="${comida}">`;
                 html += `<div class="cell-editor">`;
                 html += `<select class="alimento-select" data-comida="${comida}" data-row="${i}" data-col="${j}">`;
                 html += `<option value="">-- Seleccionar --</option>`;
                 alimentos.forEach(alimento => {
-                    html += `<option value="${alimento}">${alimento}</option>`;
+                    const alimentoSeguro = window.SecurityValidator ? SecurityValidator.sanitizeHTML(alimento) : alimento;
+                    html += `<option value="${alimentoSeguro}">${alimentoSeguro}</option>`;
                 });
                 html += `</select>`;
                 html += `<input type="number" min="0" max="${LIMITE_POR_GRUPO}" value="1" class="porcion-input" data-comida="${comida}" data-row="${i}" data-col="${j}">`;
-                html += `</div>`;
-                html += `</table>`;
+                html += `</div></td>`;
             }
             html += '</tr>';
         }

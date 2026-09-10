@@ -22,7 +22,7 @@ public class PlanAlimenticioController {
     private PlanAlimenticioService planAlimenticioService;
 
     @PostMapping("/datos")
-    public ResponseEntity<Map<String, Object>> obtenerDatos(@RequestBody SolicitudPlan solicitud) {
+    public ResponseEntity<Map<String, Object>> obtenerDatos(@jakarta.validation.Valid @RequestBody SolicitudPlan solicitud) {
         try {
             PlanAlimenticioData data = planAlimenticioService.getPlanData(solicitud);
 

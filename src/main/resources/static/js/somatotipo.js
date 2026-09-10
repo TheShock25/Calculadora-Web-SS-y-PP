@@ -37,63 +37,29 @@ let resultadoActual = null;
 function configurarBloqueo(input, tipo) {
   if (!input) return;
 
-  const permitirDecimal = ['peso', 'tricipital', 'subescapular', 'supraespinal',
-                         'pantorrillaPliegue', 'diametroHumero', 'diametroFemur',
-                         'perimetroBrazo', 'perimetroPantorrilla'].includes(tipo);
+  if (window.SecurityValidator) {
+    const esDecimal = ['peso', 'tricipital', 'subescapular', 'supraespinal',
+                       'pantorrillaPliegue', 'diametroHumero', 'diametroFemur',
+                       'perimetroBrazo', 'perimetroPantorrilla'].includes(tipo);
 
-  input.addEventListener('keydown', function(e) {
-    if ([8, 46, 9, 27, 13, 37, 38, 39, 40].includes(e.keyCode)) return;
-    if ((e.ctrlKey || e.metaKey) && [65, 67, 86, 88].includes(e.keyCode)) return;
+    let min = esDecimal ? 0 : 50;
+    let max = esDecimal ? 300 : 250;
+    let maxDecimals = 2;
+    let maxLength = esDecimal ? 5 : 3;
 
-    if (permitirDecimal) {
-      if ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105)) return;
-      if ((e.key === '.' || e.keyCode === 190 || e.keyCode === 110) && !this.value.includes('.')) return;
-    } else {
-      if ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105)) return;
-    }
+    if (tipo === 'peso') { min = 20; max = 300; maxLength = 6; }
+    if (tipo === 'altura') { min = 50; max = 250; maxLength = 3; }
 
-    e.preventDefault();
-    return false;
-  });
-
-  input.addEventListener('input', function() {
-    let valor = this.value;
-
-    if (permitirDecimal) {
-      valor = valor.replace(/[^0-9.]/g, '');
-      const partes = valor.split('.');
-      if (partes.length > 2) valor = partes[0] + '.' + partes[1];
-      if (partes[1] && partes[1].length > 2) valor = partes[0] + '.' + partes[1].substring(0, 2);
-    } else {
-      valor = valor.replace(/\D/g, '');
-    }
-
-    const maxLen = parseInt(this.getAttribute('maxlength')) || 10;
-    if (valor.length > maxLen) valor = valor.substring(0, maxLen);
-
-    if (this.value !== valor) this.value = valor;
-    validarVisual(input, tipo);
-  });
-
-  input.addEventListener('paste', function(e) {
-    e.preventDefault();
-    const texto = (e.clipboardData || window.clipboardData).getData('text');
-    let limpio;
-
-    if (permitirDecimal) {
-      limpio = texto.replace(/[^0-9.]/g, '');
-      const partes = limpio.split('.');
-      if (partes.length > 2) limpio = partes[0] + '.' + partes[1];
-      limpio = limpio.substring(0, 5);
-    } else {
-      limpio = texto.replace(/\D/g, '').substring(0, 3);
-    }
-
-    this.value = limpio;
-    validarVisual(input, tipo);
-  });
-
-  input.addEventListener('drop', e => e.preventDefault());
+    SecurityValidator.attachNumericFilter(input, {
+      allowDecimal: esDecimal,
+      min: min,
+      max: max,
+      maxDecimals: maxDecimals,
+      maxLength: maxLength,
+      errorElementId: `${tipo}-error`
+    });
+    return;
+  }
 }
 
 function validarVisual(input, tipo) {

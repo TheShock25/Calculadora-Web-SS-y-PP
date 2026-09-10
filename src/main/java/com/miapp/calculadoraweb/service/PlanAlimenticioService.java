@@ -7,10 +7,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,8 +23,6 @@ public class PlanAlimenticioService {
 
     @Autowired
     private CSVReaderService csvReaderService;
-
-    private final Map<String, PlanAlimenticioData> cachePorSesion = new ConcurrentHashMap<>();
 
     private String normalizarNombreGrupo(String grupo) {
         if (grupo == null) return "";
@@ -51,8 +45,9 @@ public class PlanAlimenticioService {
     }
 
     public PlanAlimenticioData getPlanData(SolicitudPlan solicitud) {
-        String clave = generarClaveUnica(solicitud);
-        if (cachePorSesion.containsKey(clave)) return cachePorSesion.get(clave);
+        if (solicitud == null || solicitud.getGrupos() == null) {
+            return new PlanAlimenticioData();
+        }
 
         excelReaderService.verificarYAñadirGrupos(solicitud.getGrupos());
 
@@ -97,16 +92,7 @@ public class PlanAlimenticioService {
         data.setLipidosObjetivo(solicitud.getLipidos());
         data.setProteinasObjetivo(solicitud.getProteinas());
 
-        cachePorSesion.put(clave, data);
-        new Timer().schedule(new TimerTask() {
-            @Override public void run() { cachePorSesion.remove(clave); }
-        }, 30 * 60 * 1000);
-
         return data;
-    }
-
-    private String generarClaveUnica(SolicitudPlan solicitud) {
-        return UUID.randomUUID().toString();
     }
 
     @SuppressWarnings("unchecked")

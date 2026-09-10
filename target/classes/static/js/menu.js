@@ -17,62 +17,20 @@ const notification = document.getElementById("notification");
 function configurarBloqueo(input, tipo) {
   if (!input) return;
 
-  input.addEventListener('keydown', function(e) {
-    if ([8, 46, 9, 27, 13, 37, 38, 39, 40].includes(e.keyCode)) return;
-    if ((e.ctrlKey || e.metaKey) && [65, 67, 86, 88].includes(e.keyCode)) return;
-
-    if (tipo === 'peso') {
-      if ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105)) return;
-      if ((e.key === '.' || e.keyCode === 190 || e.keyCode === 110) && !this.value.includes('.')) return;
-    } else {
-      if ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105)) return;
-    }
-
-    e.preventDefault();
-    e.stopPropagation();
-    return false;
-  });
-
-  input.addEventListener('input', function() {
-    let valor = this.value;
-
-    if (tipo === 'peso') {
-      valor = valor.replace(/[^0-9.]/g, '');
-      const partes = valor.split('.');
-      if (partes.length > 2) valor = partes[0] + '.' + partes[1];
-      if (partes[1] && partes[1].length > 2) valor = partes[0] + '.' + partes[1].substring(0, 2);
-    } else {
-      valor = valor.replace(/\D/g, '');
-    }
-
-    const maxLen = tipo === 'peso' ? 6 : 3;
-    if (valor.length > maxLen) valor = valor.substring(0, maxLen);
-
-    if (this.value !== valor) this.value = valor;
-    validarVisual(input, tipo);
-    guardarCambiosLocales();
-  });
-
-  input.addEventListener('paste', function(e) {
-    e.preventDefault();
-    const texto = (e.clipboardData || window.clipboardData).getData('text');
-    let limpio;
-
-    if (tipo === 'peso') {
-      limpio = texto.replace(/[^0-9.]/g, '');
-      const partes = limpio.split('.');
-      if (partes.length > 2) limpio = partes[0] + '.' + partes[1];
-      limpio = limpio.substring(0, 6);
-    } else {
-      limpio = texto.replace(/\D/g, '').substring(0, 3);
-    }
-
-    this.value = limpio;
-    validarVisual(input, tipo);
-    guardarCambiosLocales();
-  });
-
-  input.addEventListener('drop', e => e.preventDefault());
+  if (window.SecurityValidator) {
+    const configs = {
+      peso: { allowDecimal: true, min: 20, max: 300, maxDecimals: 2, maxLength: 6, errorElementId: 'peso-error' },
+      altura: { allowDecimal: false, min: 50, max: 250, maxLength: 3, errorElementId: 'altura-error' },
+      edad: { allowDecimal: false, min: 1, max: 120, maxLength: 3, errorElementId: 'edad-error' }
+    };
+    SecurityValidator.attachNumericFilter(input, {
+      ...configs[tipo],
+      onValidate: () => {
+        guardarCambiosLocales();
+      }
+    });
+    return;
+  }
 }
 
 function validarVisual(input, tipo) {

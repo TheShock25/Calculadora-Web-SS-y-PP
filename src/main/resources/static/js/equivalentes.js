@@ -62,7 +62,11 @@ function obtenerGetDeURL() {
     const urlParams = new URLSearchParams(window.location.search);
     const getValor = urlParams.get('get');
     if (getValor) {
-        kcalObjetivo = parseFloat(getValor) || 2000;
+        if (window.SecurityValidator) {
+            kcalObjetivo = SecurityValidator.parseSafeNumber(getValor, 2000, 500, 5000);
+        } else {
+            kcalObjetivo = parseFloat(getValor) || 2000;
+        }
     }
 }
 
@@ -357,17 +361,26 @@ function renderizarTablaEquivalentes() {
 
         const tdPorciones = document.createElement('td');
         const inputPorciones = document.createElement('input');
-        inputPorciones.type = 'number';
+        inputPorciones.type = 'text';
         inputPorciones.className = 'porciones-editor';
         inputPorciones.value = item.porciones;
-        inputPorciones.min = 0;
-        inputPorciones.max = 99;
-        inputPorciones.step = 1;
 
-        inputPorciones.addEventListener('change', (e) => {
-            const nuevasPorciones = parseInt(e.target.value) || 0;
-            actualizarPorciones(index, nuevasPorciones);
-        });
+        if (window.SecurityValidator) {
+            SecurityValidator.attachNumericFilter(inputPorciones, {
+                allowDecimal: false,
+                min: 0,
+                max: 99,
+                maxLength: 2,
+                onValidate: (isValid, val) => {
+                    actualizarPorciones(index, isValid ? val : 0);
+                }
+            });
+        } else {
+            inputPorciones.addEventListener('change', (e) => {
+                const nuevasPorciones = parseInt(e.target.value) || 0;
+                actualizarPorciones(index, nuevasPorciones);
+            });
+        }
 
         tdPorciones.appendChild(inputPorciones);
         tr.appendChild(tdPorciones);
