@@ -1,5 +1,5 @@
 // Codigo de la interfaz para eventos, calculos y navegacion.
-const API_URL = '/api/plan';
+const API_URL = 'api/plan';
 const STORAGE_KEY = 'planAlimenticioTemp';
 
 const DIAS_SEMANA = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];

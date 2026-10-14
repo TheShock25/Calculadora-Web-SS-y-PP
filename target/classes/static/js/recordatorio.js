@@ -1,5 +1,5 @@
 // Codigo de la interfaz para eventos, calculos y navegacion.
-const API_URL = '/api/recordatorio';
+const API_URL = 'api/recordatorio';
 const STORAGE_KEY = 'recordatorioTemp';
 
 let datosRecordatorio = null;
