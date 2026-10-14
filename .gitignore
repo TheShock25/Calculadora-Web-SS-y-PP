@@ -1,10 +1,7 @@
-"# Archivos generados por NetBeans" 
-"target/" 
-"nbproject/" 
-"nb-configuration.xml" 
-".mvn/" 
-"mvnw" 
-"mvnw.cmd" 
-".gitattributes" 
-"*.class" 
-".DS_Store" 
+# Archivos temporales y de compilacion
+target/
+nbproject/
+nb-configuration.xml
+*.class
+.DS_Store
+node_modules/

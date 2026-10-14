@@ -1,129 +1,154 @@
 <!DOCTYPE html>
-<!-- Estructura principal de la pantalla. -->
+<!-- Pantalla del sistema de equivalentes nutricionales -->
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
-
-  <title>Sistema de Equivalentes</title>
-  <link rel="stylesheet" href="css/equivalentes.css?v=2">
+  <title>Paso 3: Sistema de Equivalentes - NutriEnergía</title>
+  <link rel="stylesheet" href="css/tailwind.min.css">
+  <link rel="stylesheet" href="css/equivalentes.css?v=4">
 </head>
-<body>
+<body class="bg-cream-50 font-sans text-charcoal min-h-screen">
 
-<div class="container">
+  <main class="main-wrapper p-4 md:p-8 max-w-6xl">
 
-  <header class="header">
-    <div class="header-content">
-      <h1>Sistema de Equivalentes Nutricionales</h1>
-      <p>Distribucion por equivalentes - Las columnas de nutrientes muestran valores totales por porciones</p>
+    <!-- Encabezado unificado -->
+    <div class="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-peach-100 text-peach-600 text-xs font-bold mb-2">
+          <span>Paso 3 de 5</span>
+          <span>•</span>
+          <span>Sistema SMAE</span>
+        </div>
+        <h1 class="text-2xl md:text-3xl font-extrabold text-charcoal tracking-tight">Sistema de Equivalentes</h1>
+        <p class="text-charcoal-muted text-sm mt-1">Distribución nutricional por porciones y cálculo de macronutrientes.</p>
+      </div>
+      <button id="btnRegresar" class="self-start sm:self-auto px-4 py-2 rounded-2xl bg-white border border-cream-200 text-xs font-bold text-charcoal hover:bg-cream-100 transition-all">
+        ← Volver al Tablero
+      </button>
     </div>
-  </header>
 
-  <div class="nav-bar">
-    <button id="btnRegresar" class="btn-regresar">← Regresar a Calculadora</button>
-  </div>
+    <!-- Panel superior con metas de kcal -->
+    <div class="bg-white rounded-3xl p-6 border border-cream-200 shadow-sm mb-8 flex flex-col lg:flex-row items-center justify-between gap-6">
+      <div class="flex items-center gap-4 flex-wrap w-full lg:w-auto">
+        <div class="info-card flex-1 sm:flex-initial" id="kcalDiaCard">
+          <span class="info-label">Kcal Objetivo</span>
+          <strong id="kcalDiaValor" class="info-value">2000</strong>
+        </div>
+        <div class="info-card flex-1 sm:flex-initial" id="sumaKcalCard">
+          <span class="info-label">Suma Actual</span>
+          <strong id="sumaKcalValor" class="info-value">0</strong>
+        </div>
+      </div>
 
-  <div class="top-panel">
-    <div class="info-card" id="kcalDiaCard">
-      <span class="info-label">Kcal al dia</span>
-      <strong id="kcalDiaValor" class="info-value">2000</strong>
-    </div>
-    <div class="info-card" id="sumaKcalCard">
-      <span class="info-label">Suma Kcal</span>
-      <strong id="sumaKcalValor" class="info-value">0</strong>
-    </div>
-    <div class="input-group">
-      <label for="kcalInput">Kcal/dia:</label>
-      <input type="number" id="kcalInput" value="2000" step="10" min="500" max="5000">
-      <button id="actualizarBtn" class="btn-small">Actualizar</button>
-    </div>
-  </div>
-
-  <div class="main-content">
-
-    <div class="table-container principal">
-      <h3 class="section-title">Distribucion por Equivalentes</h3>
-      <div class="table-responsive">
-        <table id="tablaEquivalentes" class="data-table">
-          <thead>
-            <tr>
-              <th>Grupo de alimento</th>
-              <th>Subgrupo</th>
-              <th>Porciones</th>
-              <th>Energia</th>
-              <th>Proteinas</th>
-              <th>Lipidos</th>
-              <th>HC</th>
-            </tr>
-          </thead>
-          <tbody id="tablaEquivalentesBody"></tbody>
-        </table>
+      <div class="input-group w-full lg:w-auto">
+        <label for="kcalInput" class="text-xs font-bold uppercase text-charcoal-muted">Kcal/día:</label>
+        <input type="number" id="kcalInput" value="2000" step="10" min="500" max="5000" class="px-3 py-2 rounded-xl bg-cream-50 border border-cream-300 text-charcoal font-bold text-sm focus:outline-none focus:ring-2 focus:ring-sage-500">
+        <button id="actualizarBtn" class="btn-small px-4 py-2 rounded-xl bg-sage-600 text-white font-bold text-xs hover:bg-sage-700 transition-all">Actualizar</button>
       </div>
     </div>
 
-    <div class="right-panel">
+    <!-- Tablas principales -->
+    <div class="main-content mb-8">
 
-      <div class="mini-table-container distribucion">
-        <h4 class="mini-title">Distribucion de Macronutrientes</h4>
-        <table id="tablaDistribucion" class="mini-table">
-          <thead>
-            <tr>
-              <th>Macro</th>
-              <th>%</th>
-              <th>Kcal</th>
-              <th>g</th>
-            </tr>
-          </thead>
-          <tbody id="tablaDistribucionBody"></tbody>
-        </table>
+      <!-- Tabla de distribucion por equivalentes -->
+      <div class="table-container principal">
+        <h3 class="section-title">Distribución por Equivalentes</h3>
+        <div class="table-responsive custom-scroll">
+          <table id="tablaEquivalentes" class="data-table">
+            <thead>
+              <tr>
+                <th>Grupo de alimento</th>
+                <th>Subgrupo</th>
+                <th>Porciones</th>
+                <th>Energía</th>
+                <th>Proteínas</th>
+                <th>Lípidos</th>
+                <th>HC</th>
+              </tr>
+            </thead>
+            <tbody id="tablaEquivalentesBody"></tbody>
+          </table>
+        </div>
       </div>
 
-      <div class="mini-table-container nutrientes">
-        <h4 class="mini-title">Nutrientes Calculados</h4>
-        <table id="tablaNutrientes" class="mini-table">
-          <thead>
-            <tr>
-              <th>Nutriente</th>
-              <th>Total Kcal</th>
-              <th>Total gramos</th>
-              <th>% adecuacion</th>
-            </tr>
-          </thead>
-          <tbody id="tablaNutrientesBody"></tbody>
-        </table>
-      </div>
+      <!-- Panel lateral de resumen de macros -->
+      <div class="right-panel space-y-6">
 
-      <div class="mini-table-container porcentajes">
-        <h4 class="mini-title">Porcentajes (Editable)</h4>
-        <table id="tablaPorcentajes" class="mini-table">
-          <thead>
-            <tr>
-              <th>Nutriente</th>
-              <th>Porcentaje</th>
-            </tr>
-          </thead>
-          <tbody id="tablaPorcentajesBody"></tbody>
-        </table>
-      </div>
+        <div class="mini-table-container distribucion">
+          <h4 class="mini-title">Distribución de Macronutrientes</h4>
+          <table id="tablaDistribucion" class="mini-table">
+            <thead>
+              <tr>
+                <th>Macro</th>
+                <th>%</th>
+                <th>Kcal</th>
+                <th>g</th>
+              </tr>
+            </thead>
+            <tbody id="tablaDistribucionBody"></tbody>
+          </table>
+        </div>
 
+        <div class="mini-table-container nutrientes">
+          <h4 class="mini-title">Nutrientes Calculados</h4>
+          <table id="tablaNutrientes" class="mini-table">
+            <thead>
+              <tr>
+                <th>Nutriente</th>
+                <th>Total Kcal</th>
+                <th>Total gramos</th>
+                <th>% adec.</th>
+              </tr>
+            </thead>
+            <tbody id="tablaNutrientesBody"></tbody>
+          </table>
+        </div>
+
+        <div class="mini-table-container porcentajes">
+          <h4 class="mini-title">Porcentajes (Editable)</h4>
+          <table id="tablaPorcentajes" class="mini-table">
+            <thead>
+              <tr>
+                <th>Nutriente</th>
+                <th>Porcentaje</th>
+              </tr>
+            </thead>
+            <tbody id="tablaPorcentajesBody"></tbody>
+          </table>
+        </div>
+
+      </div>
     </div>
-  </div>
 
-  <div class="bottom-buttons">
-    <button id="reiniciarBtn" class="btn-danger">Reiniciar</button>
-    <button id="exportarBtn" class="btn-success">Exportar</button>
-    <button id="planBtn" class="btn-primary">Plan Alimenticio</button>
-    <button id="r24hBtn" class="btn-primary">R24H</button>
-  </div>
+    <!-- Botones inferiores de navegacion -->
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-cream-200">
+      <div class="flex items-center gap-3 w-full sm:w-auto">
+        <button id="reiniciarBtn" class="px-5 py-2.5 rounded-2xl bg-white border border-red-300 text-red-600 font-bold text-xs hover:bg-red-50 transition-all">
+          Reiniciar
+        </button>
+        <button id="exportarBtn" class="px-5 py-2.5 rounded-2xl bg-white border border-cream-300 text-charcoal font-bold text-xs hover:bg-cream-100 transition-all">
+          Exportar
+        </button>
+      </div>
 
-</div>
+      <div class="flex items-center gap-3 w-full sm:w-auto">
+        <button id="planBtn" class="w-full sm:w-auto px-6 py-3 rounded-2xl bg-sage-600 text-white font-bold text-xs shadow-sm hover:bg-sage-700 active:scale-95 transition-all">
+          Plan Alimenticio (Paso 4) →
+        </button>
+        <button id="r24hBtn" class="w-full sm:w-auto px-6 py-3 rounded-2xl bg-peach-400 text-white font-bold text-xs shadow-sm hover:bg-peach-500 active:scale-95 transition-all">
+          Recordatorio R24H (Paso 5) →
+        </button>
+      </div>
+    </div>
 
-<div id="notification" class="notification"></div>
+  </main>
 
-<script src="js/security-validator.js"></script>
-<script src="js/equivalentes.js?v=2"></script>
+  <div id="notification" class="hidden"></div>
+
+  <script src="js/security-validator.js"></script>
+  <script src="js/estado.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/equivalentes.js?v=4"></script>
 </body>
 </html>

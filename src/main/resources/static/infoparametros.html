@@ -9,24 +9,32 @@
   <meta http-equiv="Expires" content="0">
 
   <title>Informacion de Parametros Corporales</title>
-  <link rel="stylesheet" href="css/infoparametros.css?v=2">
+  <link rel="stylesheet" href="css/tailwind.min.css">
+  <link rel="stylesheet" href="css/infoparametros.css?v=3">
 </head>
-<body>
+<body class="bg-cream-50 font-sans text-charcoal min-h-screen">
 
-<div class="container">
+<main class="main-wrapper p-4 md:p-8 max-w-5xl">
 
-  <header class="header">
-    <div class="header-content">
-      <h1>REFERENCIA DE PARAMETROS CORPORALES</h1>
-      <p>Valores de referencia segun estandares internacionales</p>
+  <!-- Encabezado unificado -->
+  <div class="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+    <div>
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-peach-100 text-peach-600 text-xs font-bold mb-2">
+        <span>Guía de Referencia</span>
+        <span>•</span>
+        <span>OMS</span>
+      </div>
+      <h1 class="text-2xl md:text-3xl font-extrabold text-charcoal tracking-tight">Parámetros Corporales</h1>
+      <p class="text-charcoal-muted text-sm mt-1">Valores de referencia e interpretación según estándares internacionales.</p>
     </div>
-  </header>
-
-  <div class="nav-bar">
-    <button id="btnRegresar" class="btn-regresar">← Regresar</button>
+    <div>
+      <button id="btnRegresar" class="px-4 py-2.5 rounded-2xl bg-white border border-cream-200 text-xs font-bold text-charcoal hover:bg-cream-100 transition-all">
+        ← Regresar
+      </button>
+    </div>
   </div>
 
-  <main class="content">
+  <div class="content">
 
     <section class="tabla-seccion">
       <h2 class="seccion-titulo">Parametros Basicos</h2>
@@ -74,17 +82,19 @@
       </div>
     </section>
 
-  </main>
+  </div>
 
   <footer class="footer">
     <p>Tabla de referencia - Actualizacion 2024</p>
   </footer>
 
-</div>
+</main>
 
 <div id="notification" class="notification"></div>
 
 <script src="js/security-validator.js"></script>
-<script src="js/infoparametros.js?v=2"></script>
+<script src="js/estado.js"></script>
+<script src="js/layout.js"></script>
+<script src="js/infoparametros.js?v=3"></script>
 </body>
 </html>

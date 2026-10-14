@@ -81,26 +81,98 @@ function inicializarDatos() {
     }));
 }
 
+function calcularUrlsSesion() {
+    const gruposSeleccionados = [];
+    const porcionesSeleccionadas = [];
+
+    datosEquivalentes.forEach(item => {
+        if (item.porciones > 0) {
+            const subgrupoLimpio = item.subgrupo ? item.subgrupo.trim() : '';
+            if (subgrupoLimpio !== '' && subgrupoLimpio !== ' ') {
+                gruposSeleccionados.push(`${item.grupo} - ${subgrupoLimpio}`);
+            } else {
+                gruposSeleccionados.push(item.grupo);
+            }
+            porcionesSeleccionadas.push(item.porciones);
+        }
+    });
+
+    if (gruposSeleccionados.length === 0) {
+        return { planUrl: null, r24hUrl: null };
+    }
+
+    const tablaNutrientes = document.getElementById('tablaNutrientesBody');
+    let hcGramos = 0;
+    let lipidosGramos = 0;
+    let proteinasGramos = 0;
+
+    if (tablaNutrientes) {
+        const filas = tablaNutrientes.querySelectorAll('tr');
+        hcGramos = parseFloat(filas[0]?.querySelectorAll('td')[2]?.textContent) || 0;
+        lipidosGramos = parseFloat(filas[1]?.querySelectorAll('td')[2]?.textContent) || 0;
+        proteinasGramos = parseFloat(filas[2]?.querySelectorAll('td')[2]?.textContent) || 0;
+    }
+
+    if (hcGramos === 0 && lipidosGramos === 0 && proteinasGramos === 0) {
+        datosEquivalentes.forEach(item => {
+            proteinasGramos += item.proteinasCalculadas;
+            lipidosGramos += item.lipidosCalculados;
+            hcGramos += item.hcCalculados;
+        });
+    }
+
+    const gruposStr = encodeURIComponent(JSON.stringify(gruposSeleccionados));
+    const porcionesStr = encodeURIComponent(JSON.stringify(porcionesSeleccionadas));
+
+    const planUrl = `plan-alimenticio.html?hc=${hcGramos}&lipidos=${lipidosGramos}&proteinas=${proteinasGramos}&grupos=${gruposStr}&porciones=${porcionesStr}`;
+
+    const kcalEsperadaHC = kcalObjetivo * (porcentajeHC / 100);
+    const gramosEsperadosHC = kcalEsperadaHC / 4;
+    const kcalEsperadaLip = kcalObjetivo * (porcentajeLipidos / 100);
+    const gramosEsperadosLip = kcalEsperadaLip / 9;
+    const kcalEsperadaProt = kcalObjetivo * (porcentajeProteinas / 100);
+    const gramosEsperadosProt = kcalEsperadaProt / 4;
+
+    const r24hUrl = `recordatorio.html?hc=${gramosEsperadosHC.toFixed(1)}&lipidos=${gramosEsperadosLip.toFixed(1)}&proteinas=${gramosEsperadosProt.toFixed(1)}`;
+
+    return { planUrl, r24hUrl };
+}
+
 function guardarEstadoParaRegreso() {
     sessionStorage.setItem('datosEquivalentesGuardados', JSON.stringify(datosEquivalentes));
     sessionStorage.setItem('porcentajeHC', porcentajeHC);
     sessionStorage.setItem('porcentajeProteinas', porcentajeProteinas);
     sessionStorage.setItem('porcentajeLipidos', porcentajeLipidos);
     sessionStorage.setItem('kcalObjetivo', kcalObjetivo);
+
+    const tienePorciones = datosEquivalentes.some(item => item.porciones > 0);
+    if (tienePorciones) {
+        sessionStorage.setItem('nutri_equiv_activo', 'true');
+        const urls = calcularUrlsSesion();
+        if (urls.planUrl) sessionStorage.setItem('nutri_plan_url_sesion', urls.planUrl);
+        if (urls.r24hUrl) sessionStorage.setItem('nutri_r24h_url_sesion', urls.r24hUrl);
+    } else {
+        sessionStorage.removeItem('nutri_equiv_activo');
+        sessionStorage.removeItem('nutri_plan_url_sesion');
+        sessionStorage.removeItem('nutri_r24h_url_sesion');
+        sessionStorage.removeItem('planAlimenticioTemp');
+    }
 }
 
 function restaurarEstadoSiExiste() {
     const datosGuardados = sessionStorage.getItem('datosEquivalentesGuardados');
 
     if (datosGuardados) {
-        datosEquivalentes = JSON.parse(datosGuardados);
+        try {
+            datosEquivalentes = JSON.parse(datosGuardados);
+        } catch (e) {
+            datosEquivalentes = [];
+        }
 
         porcentajeHC = parseFloat(sessionStorage.getItem('porcentajeHC')) || porcentajeHC;
         porcentajeProteinas = parseFloat(sessionStorage.getItem('porcentajeProteinas')) || porcentajeProteinas;
         porcentajeLipidos = parseFloat(sessionStorage.getItem('porcentajeLipidos')) || porcentajeLipidos;
         kcalObjetivo = parseFloat(sessionStorage.getItem('kcalObjetivo')) || kcalObjetivo;
-
-        sessionStorage.removeItem('datosEquivalentesGuardados');
     }
 }
 
@@ -418,6 +490,7 @@ function actualizarPorciones(index, nuevasPorciones) {
 
     renderizarTablaEquivalentes();
     calcularTotales();
+    guardarEstadoParaRegreso();
 
     mostrarNotif(`Actualizado: ${item.grupo} = ${nuevasPorciones} porciones`, 'success');
 }
@@ -432,8 +505,15 @@ function reiniciarTabla() {
             item.hcCalculados = 0;
         });
 
+        sessionStorage.removeItem('datosEquivalentesGuardados');
+        sessionStorage.removeItem('nutri_equiv_activo');
+        sessionStorage.removeItem('nutri_plan_url_sesion');
+        sessionStorage.removeItem('nutri_r24h_url_sesion');
+        sessionStorage.removeItem('planAlimenticioTemp');
+
         renderizarTablaEquivalentes();
         calcularTotales();
+        guardarEstadoParaRegreso();
         mostrarNotif('Tabla reiniciada correctamente', 'success');
     }
 }
@@ -482,70 +562,50 @@ function irAPlanAlimenticio() {
         return false;
     }
 
-    guardarEstadoParaRegreso();
-
-    const gruposSeleccionados = [];
-    const porcionesSeleccionadas = [];
-
-    datosEquivalentes.forEach(item => {
-        if (item.porciones > 0) {
-            const subgrupoLimpio = item.subgrupo ? item.subgrupo.trim() : '';
-            if (subgrupoLimpio !== '' && subgrupoLimpio !== ' ') {
-                gruposSeleccionados.push(`${item.grupo} - ${subgrupoLimpio}`);
-            } else {
-                gruposSeleccionados.push(item.grupo);
-            }
-            porcionesSeleccionadas.push(item.porciones);
-        }
-    });
-
-    if (gruposSeleccionados.length === 0) {
+    const tienePorciones = datosEquivalentes.some(item => item.porciones > 0);
+    if (!tienePorciones) {
         alert('No hay grupos seleccionados. Por favor, asigne porciones a al menos un grupo.');
         return false;
     }
 
-    const tablaNutrientes = document.getElementById('tablaNutrientesBody');
-    const filas = tablaNutrientes.querySelectorAll('tr');
-
-    const hcGramos = parseFloat(filas[0]?.querySelectorAll('td')[2]?.textContent) || 0;
-    const lipidosGramos = parseFloat(filas[1]?.querySelectorAll('td')[2]?.textContent) || 0;
-    const proteinasGramos = parseFloat(filas[2]?.querySelectorAll('td')[2]?.textContent) || 0;
+    guardarEstadoParaRegreso();
 
     sessionStorage.setItem('desdeDonde', 'equivalentes');
     sessionStorage.setItem('destino', 'plan');
 
-    const gruposStr = encodeURIComponent(JSON.stringify(gruposSeleccionados));
-    const porcionesStr = encodeURIComponent(JSON.stringify(porcionesSeleccionadas));
-
-    window.location.href = `plan-alimenticio.html?hc=${hcGramos}&lipidos=${lipidosGramos}&proteinas=${proteinasGramos}&grupos=${gruposStr}&porciones=${porcionesStr}`;
-    return true;
+    const urls = calcularUrlsSesion();
+    if (urls.planUrl) {
+        window.location.href = urls.planUrl;
+        return true;
+    }
+    return false;
 }
 
 function irAR24H() {
     if (!sumaPorcentajesValida()) {
         const suma = porcentajeHC + porcentajeProteinas + porcentajeLipidos;
-        alert(` Los porcentajes de macronutrientes suman ${suma.toFixed(1)}%. Deben sumar 100% exactamente para generar el recordatorio. Ajusta los valores en la tabla "Porcentajes (Editable)".`);
+        alert(`Los porcentajes de macronutrientes suman ${suma.toFixed(1)}%. Deben sumar 100% exactamente para generar el recordatorio. Ajusta los valores en la tabla "Porcentajes (Editable)".`);
         mostrarNotif('Corrige los porcentajes para que sumen 100%', 'error');
+        return false;
+    }
+
+    const tienePorciones = datosEquivalentes.some(item => item.porciones > 0);
+    if (!tienePorciones) {
+        alert('No hay grupos seleccionados. Por favor, asigne porciones a al menos un grupo.');
         return false;
     }
 
     guardarEstadoParaRegreso();
 
-    const tablaDistribucion = document.getElementById('tablaDistribucionBody');
-    if (!tablaDistribucion) {
-        alert('Error: No se encuentra la tabla de distribución de macronutrientes.');
-        return false;
-    }
-    const filas = tablaDistribucion.querySelectorAll('tr');
-    const hcGramosIdeal = parseFloat(filas[0]?.querySelectorAll('td')[3]?.textContent) || 0;
-    const lipidosGramosIdeal = parseFloat(filas[1]?.querySelectorAll('td')[3]?.textContent) || 0;
-    const proteinasGramosIdeal = parseFloat(filas[2]?.querySelectorAll('td')[3]?.textContent) || 0;
-
     sessionStorage.setItem('desdeDonde', 'equivalentes');
     sessionStorage.setItem('destino', 'recordatorio');
 
-    window.location.href = `recordatorio.html?hc=${hcGramosIdeal}&lipidos=${lipidosGramosIdeal}&proteinas=${proteinasGramosIdeal}`;
-    return true;
+    const urls = calcularUrlsSesion();
+    if (urls.r24hUrl) {
+        window.location.href = urls.r24hUrl;
+        return true;
+    }
+    return false;
 }
 
 function inicializarEventos() {
@@ -555,6 +615,7 @@ function inicializarEventos() {
             kcalObjetivo = nuevoValor;
             actualizarTablaDistribucion();
             calcularTotales();
+            guardarEstadoParaRegreso();
             mostrarNotif(`Kcal objetivo actualizado a ${nuevoValor}`, 'success');
         }
     });
@@ -570,7 +631,7 @@ function inicializarEventos() {
     elementos.btnRegresar.addEventListener('click', () => {
         sessionStorage.removeItem('desdeDonde');
         sessionStorage.removeItem('destino');
-        sessionStorage.removeItem('datosEquivalentesGuardados');
+        guardarEstadoParaRegreso();
         window.location.href = 'index.html';
     });
 
@@ -588,6 +649,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderizarTablaPorcentajes();
     actualizarTablaDistribucion();
     calcularTotales();
+    guardarEstadoParaRegreso();
     inicializarEventos();
 
     mostrarNotif('Sistema de Equivalentes cargado correctamente', 'success');

@@ -6,8 +6,49 @@ El proyecto esta construido sobre una arquitectura cliente-servidor con backend 
 
 ---
 
+## Inicio Rapido (Ejecutar en Local)
+
+> Usar cuando el servidor en la nube este caido o para pruebas locales. Requiere Java 17 o superior.
+
+**1. Abrir PowerShell en la carpeta del proyecto:**
+```powershell
+cd C:\Users\hugo\Documents\NetBeansProjects\calculadoraweb
+```
+
+**2. Levantar el servidor Spring Boot:**
+```powershell
+.\mvnw.cmd spring-boot:run
+```
+
+**3. Abrir en el navegador** cuando aparezca `Tomcat started on port 8080`:
+```text
+http://localhost:8080
+```
+
+**4. Detener el servidor:** presionar `Ctrl + C` en la terminal.
+
+**Alternativas utiles:**
+
+```powershell
+# Generar el JAR y ejecutarlo (arranca mas rapido en usos posteriores)
+.\mvnw.cmd clean package -DskipTests
+java -jar target\calculadoraweb-0.0.1-SNAPSHOT.jar
+
+# Si el puerto 8080 esta ocupado, usar otro puerto (ej. 9090) -> http://localhost:9090
+$env:PORT=9090; .\mvnw.cmd spring-boot:run
+
+# Linux / macOS
+chmod +x mvnw
+./mvnw spring-boot:run
+```
+
+> La primera ejecucion puede tardar unos minutos porque Maven descarga las dependencias. Desde NetBeans tambien se puede ejecutar con `F6`.
+
+---
+
 ## Tabla de Contenidos
 
+0. [Inicio Rapido (Ejecutar en Local)](#inicio-rapido-ejecutar-en-local)
 1. [Descripcion General y Funcionalidades](#descripcion-general-y-funcionalidades)
 2. [Arquitectura y Stack Tecnologico](#arquitectura-y-stack-tecnologico)
 3. [Estructura del Proyecto](#estructura-del-proyecto)

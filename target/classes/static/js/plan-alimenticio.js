@@ -979,11 +979,19 @@ function capitalize(str) {
 document.addEventListener('DOMContentLoaded', () => {
     obtenerParametrosURL();
 
-    if (gruposParam.length === 0) {
-        alert('No se recibieron grupos de alimentos. Por favor, seleccione grupos en la calculadora principal.');
+    const tienePorcionesValidas = porcionesParam.some(p => p > 0);
+    if (gruposParam.length === 0 || !tienePorcionesValidas) {
+        sessionStorage.removeItem(STORAGE_KEY);
+        sessionStorage.removeItem('nutri_plan_url_sesion');
+        sessionStorage.removeItem('nutri_equiv_activo');
+        alert('No hay porciones asignadas. Por favor, asigne porciones en el Sistema de Equivalentes primero.');
         window.location.href = 'equivalentes.html';
         return;
     }
+
+    sessionStorage.setItem('nutri_equiv_activo', 'true');
+    const urlActual = (window.location.pathname.split('/').pop() || 'plan-alimenticio.html') + window.location.search;
+    sessionStorage.setItem('nutri_plan_url_sesion', urlActual);
 
     cargarDatos();
 

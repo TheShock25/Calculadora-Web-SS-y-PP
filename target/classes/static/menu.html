@@ -1,112 +1,134 @@
 <!DOCTYPE html>
-<!-- Estructura principal de la pantalla. -->
+<!-- Pantalla del menu de composicion corporal y somatotipo -->
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
-
-  <title>Menú Principal - Sistema Antropométrico</title>
-  <link rel="stylesheet" href="css/menu.css?v=2">
+  <title>Paso 2: Composición Corporal - NutriEnergía</title>
+  <link rel="stylesheet" href="css/tailwind.min.css">
 </head>
-<body>
+<body class="bg-cream-50 font-sans text-charcoal min-h-screen">
 
-<div class="container">
+  <main class="main-wrapper p-4 sm:p-6 lg:p-8 max-w-6xl xl:max-w-7xl relative z-10 w-full">
 
-  <header class="header">
-    <h1>Sistema Antropométrico Completo</h1>
-    <p>Análisis de Composición Corporal y Somatotipo</p>
-  </header>
-
-  <div class="nav-bar">
-    <button id="btnRegresar" class="btn-regresar">← REGRESAR A CALCULADORA</button>
-  </div>
-
-  <section class="datos-card">
-    <h2>Datos Básicos del Usuario</h2>
-
-    <div class="form-grid">
-      <div class="form-group">
-        <label for="sexo">Sexo</label>
-        <select id="sexo">
-          <option value="Hombre">Hombre</option>
-          <option value="Mujer">Mujer</option>
-        </select>
+    <!-- Encabezado -->
+    <div class="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-peach-100 text-peach-600 text-xs font-bold mb-2">
+          <span>Paso 2 de 5</span>
+          <span>•</span>
+          <span>Antropometría</span>
+        </div>
+        <h1 class="text-2xl md:text-3xl font-extrabold text-charcoal tracking-tight">Composición Corporal</h1>
+        <p class="text-charcoal-muted text-sm mt-1">Análisis antropométrico, masa corporal y somatotipo Heath-Carter.</p>
       </div>
-
-      <div class="form-group">
-        <label for="edad">Edad (años)</label>
-        <input
-          type="text"
-          id="edad"
-          placeholder="Ej: 25"
-          maxlength="3"
-          autocomplete="off"
-        >
-        <span class="error-message" id="edad-error">Solo números (18-120)</span>
-      </div>
-
-      <div class="form-group">
-        <label for="peso">Peso (kg)</label>
-        <input
-          type="text"
-          id="peso"
-          placeholder="Ej: 70.5"
-          maxlength="6"
-          autocomplete="off"
-        >
-        <span class="error-message" id="peso-error">Solo números (20-300)</span>
-      </div>
-
-      <div class="form-group">
-        <label for="altura">Altura (cm)</label>
-        <input
-          type="text"
-          id="altura"
-          placeholder="Ej: 175"
-          maxlength="3"
-          autocomplete="off"
-        >
-        <span class="error-message" id="altura-error">Solo números (50-250)</span>
-      </div>
-    </div>
-  </section>
-
-  <section class="cards">
-
-    <div class="card somato">
-      <div class="card-icon">S</div>
-      <h3>Calculadora de Somatotipo</h3>
-      <p>Análisis Heath-Carter completo</p>
-      <ul>
-        <li>Tipo corporal</li>
-        <li>Somatocarta</li>
-        <li>Recomendaciones</li>
-      </ul>
-      <button onclick="abrirSomatotipo()" class="btn-card-somato">Abrir Calculadora</button>
+      <button id="btnRegresar" class="self-start sm:self-auto px-4 py-2 rounded-2xl bg-white border border-cream-200 text-xs font-bold text-charcoal hover:bg-cream-100 transition-all">
+        ← Volver al Tablero
+      </button>
     </div>
 
-    <div class="card imc">
-      <div class="card-icon">I</div>
-      <h3>IMC y Composición Corporal</h3>
-      <p>Análisis antropométrico</p>
-      <ul>
-        <li>IMC</li>
-        <li>Grasa corporal</li>
-        <li>Indices</li>
-      </ul>
-      <button onclick="abrirIMC()" class="btn-card-imc">Abrir Calculadora</button>
+    <!-- Datos basicos sincronizados -->
+    <div class="bg-white rounded-3xl p-6 md:p-8 border border-cream-200 shadow-sm mb-8">
+      <h2 class="text-lg font-bold text-charcoal mb-4">Datos del Usuario</h2>
+      <p class="text-xs text-charcoal-muted mb-6">Estos datos se sincronizan con la calculadora de gasto energético.</p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div>
+          <label for="sexo" class="block text-xs font-bold uppercase tracking-wider text-charcoal-muted mb-2">Sexo</label>
+          <select id="sexo" class="w-full px-4 py-3 rounded-2xl bg-cream-50 border border-cream-300 text-charcoal font-semibold text-sm focus:outline-none focus:ring-2 focus:ring-sage-500 focus:bg-white transition-all">
+            <option value="Hombre">Hombre</option>
+            <option value="Mujer">Mujer</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="edad" class="block text-xs font-bold uppercase tracking-wider text-charcoal-muted mb-2">Edad (años)</label>
+          <input type="text" id="edad" placeholder="Ej: 25" maxlength="3" autocomplete="off" class="w-full px-4 py-3 rounded-2xl bg-cream-50 border border-cream-300 text-charcoal font-semibold text-sm focus:outline-none focus:ring-2 focus:ring-sage-500 focus:bg-white transition-all">
+          <span class="text-xs text-red-500 font-medium mt-1 hidden" id="edad-error">Solo números (18-120)</span>
+        </div>
+
+        <div>
+          <label for="peso" class="block text-xs font-bold uppercase tracking-wider text-charcoal-muted mb-2">Peso (kg)</label>
+          <input type="text" id="peso" placeholder="Ej: 70.5" maxlength="6" autocomplete="off" class="w-full px-4 py-3 rounded-2xl bg-cream-50 border border-cream-300 text-charcoal font-semibold text-sm focus:outline-none focus:ring-2 focus:ring-sage-500 focus:bg-white transition-all">
+          <span class="text-xs text-red-500 font-medium mt-1 hidden" id="peso-error">Solo números (20-300)</span>
+        </div>
+
+        <div>
+          <label for="altura" class="block text-xs font-bold uppercase tracking-wider text-charcoal-muted mb-2">Altura (cm)</label>
+          <input type="text" id="altura" placeholder="Ej: 175" maxlength="3" autocomplete="off" class="w-full px-4 py-3 rounded-2xl bg-cream-50 border border-cream-300 text-charcoal font-semibold text-sm focus:outline-none focus:ring-2 focus:ring-sage-500 focus:bg-white transition-all">
+          <span class="text-xs text-red-500 font-medium mt-1 hidden" id="altura-error">Solo números (50-250)</span>
+        </div>
+      </div>
     </div>
 
-  </section>
+    <!-- Modulos disponibles -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
 
-</div>
+      <!-- Tarjeta IMC -->
+      <div class="bg-white rounded-3xl p-6 md:p-8 border border-cream-200 shadow-sm flex flex-col justify-between hover:shadow-md transition-all">
+        <div>
+          <div class="w-12 h-12 rounded-2xl bg-sage-100 text-sage-700 font-bold flex items-center justify-center text-lg mb-4">
+            IMC
+          </div>
+          <h3 class="text-xl font-bold text-charcoal mb-2">IMC y Composición Corporal</h3>
+          <p class="text-sm text-charcoal-muted mb-4">Evaluación de índice de masa corporal, densidad y porcentaje de grasa según ecuaciones estándar.</p>
+          <ul class="text-xs text-charcoal-muted space-y-2 mb-6">
+            <li class="flex items-center gap-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-sage-500"></span>
+              <span>Diagnóstico de IMC y peso ideal</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-sage-500"></span>
+              <span>Densidad corporal y grasa corporal</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-sage-500"></span>
+              <span>Masa grasa y masa libre de grasa</span>
+            </li>
+          </ul>
+        </div>
+        <button onclick="abrirIMC()" class="w-full py-3.5 rounded-2xl bg-sage-600 text-white font-bold text-sm hover:bg-sage-700 active:scale-95 transition-all shadow-sm">
+          Abrir Calculadora de IMC →
+        </button>
+      </div>
 
-<div id="notification" class="notification"></div>
+      <!-- Tarjeta Somatotipo -->
+      <div class="bg-white rounded-3xl p-6 md:p-8 border border-cream-200 shadow-sm flex flex-col justify-between hover:shadow-md transition-all">
+        <div>
+          <div class="w-12 h-12 rounded-2xl bg-peach-100 text-peach-600 font-bold flex items-center justify-center text-lg mb-4">
+            SHC
+          </div>
+          <h3 class="text-xl font-bold text-charcoal mb-2">Calculadora de Somatotipo</h3>
+          <p class="text-sm text-charcoal-muted mb-4">Análisis bioantropométrico Heath-Carter completo con clasificación y somatocarta.</p>
+          <ul class="text-xs text-charcoal-muted space-y-2 mb-6">
+            <li class="flex items-center gap-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-sage-500"></span>
+              <span>Endomorfia, Mesomorfia y Ectomorfia</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-sage-500"></span>
+              <span>Generación de Somatocarta X, Y</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-sage-500"></span>
+              <span>Clasificación y recomendaciones</span>
+            </li>
+          </ul>
+        </div>
+        <button onclick="abrirSomatotipo()" class="w-full py-3.5 rounded-2xl bg-sage-600 text-white font-bold text-sm hover:bg-sage-700 active:scale-95 transition-all shadow-sm">
+          Abrir Calculadora de Somatotipo →
+        </button>
+      </div>
 
-<script src="js/security-validator.js"></script>
-<script src="js/menu.js?v=2"></script>
+    </div>
+
+  </main>
+
+  <div id="notification" class="hidden"></div>
+
+  <script src="js/security-validator.js"></script>
+  <script src="js/estado.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/menu.js?v=3"></script>
 </body>
 </html>

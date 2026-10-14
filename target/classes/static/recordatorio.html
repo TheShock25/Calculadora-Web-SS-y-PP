@@ -5,20 +5,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recordatorio Alimenticio - Todos los Grupos</title>
-    <link rel="stylesheet" href="css/recordatorio.css">
+    <link rel="stylesheet" href="css/tailwind.min.css">
+    <link rel="stylesheet" href="css/recordatorio.css?v=3">
 </head>
-<body>
-<div class="container">
-    <header class="header">
-        <div class="header-content">
-            <h1>RECORDATORIO ALIMENTICIO - TODOS LOS GRUPOS</h1>
-            <p>Registro completo de todos los grupos alimenticios disponibles</p>
+<body class="bg-cream-50 font-sans text-charcoal min-h-screen">
+<main class="main-wrapper p-4 md:p-8 max-w-7xl">
+    <!-- Encabezado unificado -->
+    <div class="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-peach-100 text-peach-600 text-xs font-bold mb-2">
+          <span>Paso 5 de 5</span>
+          <span>•</span>
+          <span>Registro R24H</span>
         </div>
-        <button id="btnExportar" class="btn-success">Exportar a TXT</button>
-    </header>
-
-    <div class="nav-bar">
-        <button id="btnRegresar" class="btn-regresar">← REGRESAR A EQUIVALENTES</button>
+        <h1 class="text-2xl md:text-3xl font-extrabold text-charcoal tracking-tight">Recordatorio Alimenticio (24h)</h1>
+        <p class="text-charcoal-muted text-sm mt-1">Registro completo de alimentos y platillos consumidos por tiempo de comida.</p>
+      </div>
+      <div class="flex items-center gap-3 flex-wrap">
+        <button id="btnExportar" class="px-5 py-2.5 rounded-2xl bg-sage-600 text-white font-bold text-xs hover:bg-sage-700 shadow-sm transition-all">
+          Exportar a TXT
+        </button>
+        <button id="btnRegresar" class="px-4 py-2.5 rounded-2xl bg-white border border-cream-200 text-xs font-bold text-charcoal hover:bg-cream-100 transition-all">
+          ← Volver a Equivalentes
+        </button>
+      </div>
     </div>
 
     <div id="loadingPanel" class="loading-panel">
@@ -108,7 +118,7 @@
             </div>
         </div>
     </div>
-</div>
+</main>
 
 <div id="modalPlatillos" class="modal">
     <div class="modal-content">
@@ -119,6 +129,8 @@
 </div>
 
 <script src="js/security-validator.js"></script>
+<script src="js/estado.js"></script>
+<script src="js/layout.js"></script>
 <script src="js/recordatorio.js"></script>
 </body>
 </html>

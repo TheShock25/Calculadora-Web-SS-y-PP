@@ -575,6 +575,21 @@ function capitalize(str) {
 
 document.addEventListener('DOMContentLoaded', () => {
     obtenerValoresIdeales();
+
+    const equivActivo = sessionStorage.getItem('nutri_equiv_activo') === 'true';
+    const tieneParams = window.location.search && window.location.search.includes('hc=');
+    if (!equivActivo && !tieneParams) {
+        sessionStorage.removeItem(STORAGE_KEY);
+        sessionStorage.removeItem('nutri_r24h_url_sesion');
+        alert('No se ha generado la distribución de macronutrientes. Por favor, ingrese al Sistema de Equivalentes primero.');
+        window.location.href = 'equivalentes.html';
+        return;
+    }
+
+    sessionStorage.setItem('nutri_equiv_activo', 'true');
+    const urlActual = (window.location.pathname.split('/').pop() || 'recordatorio.html') + window.location.search;
+    sessionStorage.setItem('nutri_r24h_url_sesion', urlActual);
+
     cargarDatos();
 
     document.getElementById('btnExportar')?.addEventListener('click', exportarTXT);

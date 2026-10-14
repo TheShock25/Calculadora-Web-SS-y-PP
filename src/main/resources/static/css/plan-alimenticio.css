@@ -1,141 +1,56 @@
 /* Estilos visuales de la pantalla. */
 :root {
-  --verde-oscuro: #1B5E20;
-  --verde: #2E7D32;
-  --verde-claro: #4CAF50;
-  --verde-fondo: #E8F5E9;
-  --naranja: #FF6F00;
-  --naranja-claro: #FF9800;
-  --rojo: #C62828;
-  --azul: #1976D2;
-  --gris: #616161;
-  --sombra: rgba(27, 94, 32, 0.15);
+  --verde-oscuro: #4F7366;
+  --verde: #6B9080;
+  --verde-claro: #8FB996;
+  --verde-fondo: #FAF7F2;
+  --naranja: #F4A261;
+  --naranja-claro: #FDE8D6;
+  --rojo: #D9654B;
+  --azul: #5B8FB9;
+  --gris: #6C7A82;
+  --sombra: rgba(47, 62, 70, 0.06);
 }
 
 * {
   box-sizing: border-box;
-  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-family: 'Nunito', 'Segoe UI', system-ui, sans-serif;
   margin: 0;
   padding: 0;
 }
 
 body {
-  background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+  background: #FAF7F2;
   min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  padding: 20px;
-  color: #212529;
+  margin: 0;
+  padding: 0;
+  color: #2F3E46;
 }
 
-.container {
-  max-width: 1600px;
+.container, .main-wrapper {
+  max-width: 1400px;
   width: 100%;
-}
-
-.header {
-  background: linear-gradient(135deg, var(--verde-oscuro) 0%, var(--verde-claro) 100%);
-  color: white;
-  padding: 35px 30px;
-  border-radius: 20px 20px 0 0;
-  text-align: center;
-  box-shadow: 0 10px 40px var(--sombra);
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 15px;
-}
-
-.header::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 5px;
-  background: linear-gradient(90deg, var(--verde-claro), var(--naranja));
-}
-
-.header-content h1 {
-  font-size: 1.8rem;
-  font-weight: 800;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-}
-
-.header-content p {
-  font-size: 1rem;
-  opacity: 0.95;
-  font-weight: 500;
-  margin-top: 6px;
-}
-
-.btn-success {
-  background: linear-gradient(135deg, #66BB6A, var(--verde-claro));
-  color: white;
-  border: none;
-  padding: 14px 32px;
-  border-radius: 50px;
-  font-weight: 800;
-  cursor: pointer;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-  border-bottom: 4px solid var(--verde);
-  transition: all 0.3s ease;
-}
-
-.btn-success:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 30px rgba(76, 175, 80, 0.3);
-}
-
-.nav-bar {
-  background: white;
-  padding: 20px 25px;
-  border-bottom: 3px solid #E8F5E9;
-  display: flex;
-  justify-content: flex-start;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-}
-
-.btn-regresar {
-  background: linear-gradient(135deg, var(--gris), #424242);
-  color: white;
-  border: none;
-  padding: 12px 28px;
-  border-radius: 12px;
-  font-size: 1rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-  text-transform: uppercase;
-}
-
-.btn-regresar:hover {
-  background: linear-gradient(135deg, #616161, var(--gris));
-  transform: translateX(-5px);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
 }
 
 .loading-panel {
   background: white;
-  padding: 60px 30px;
+  padding: 40px 20px;
   text-align: center;
-  border-radius: 0 0 20px 20px;
-  box-shadow: 0 8px 30px var(--sombra);
+  border-radius: 20px;
+  border: 1px solid #ECE6DC;
+  box-shadow: 0 4px 15px var(--sombra);
   display: none;
+  margin-bottom: 24px;
 }
 
 .spinner {
-  border: 5px solid #E8F5E9;
-  border-top: 5px solid var(--verde-claro);
+  border: 4px solid #ECE6DC;
+  border-top: 4px solid var(--verde);
   border-radius: 50%;
-  width: 60px;
-  height: 60px;
+  width: 44px;
+  height: 44px;
   animation: spin 1s linear infinite;
-  margin: 0 auto 25px;
+  margin: 0 auto 16px;
 }
 
 @keyframes spin {
@@ -144,97 +59,101 @@ body {
 }
 
 .loading-panel p {
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   color: var(--verde-oscuro);
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .objetivos-panel {
-  background: white;
-  padding: 25px 30px;
-  display: flex;
-  justify-content: center;
-  gap: 25px;
-  flex-wrap: wrap;
-  border-bottom: 3px solid #E8F5E9;
+  background: transparent;
+  padding: 0 0 24px 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  border-bottom: none;
 }
 
 .objetivo-card {
-  color: white;
-  padding: 20px;
-  border-radius: 20px;
-  text-align: center;
-  min-width: 220px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-  transition: all 0.3s ease;
+  background: #FFFFFF;
+  color: #2F3E46;
+  padding: 20px 24px;
+  border-radius: 24px;
+  text-align: left;
+  border: 1px solid #ECE6DC;
+  box-shadow: 0 2px 8px rgba(47, 62, 70, 0.04);
+  transition: all 0.25s ease;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 6px;
 }
 
 .objetivo-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(47, 62, 70, 0.08);
 }
 
 .hc-card {
-  background: linear-gradient(135deg, #1976D2, #1565C0);
-  border-bottom: 4px solid #0D47A1;
+  border-top: 4px solid #F6D88E;
 }
 
 .lipidos-card {
-  background: linear-gradient(135deg, #FF9800, #F57C00);
-  border-bottom: 4px solid #E65100;
+  border-top: 4px solid #C7B5E2;
 }
 
 .proteinas-card {
-  background: linear-gradient(135deg, #4CAF50, #2E7D32);
-  border-bottom: 4px solid #1B5E20;
+  border-top: 4px solid #8FB996;
 }
 
 .card-title {
-  font-size: 1.1rem;
+  font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.05em;
+  color: #6C7A82;
 }
 
 .card-progreso {
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   font-weight: 800;
+  color: #2F3E46;
   line-height: 1.2;
 }
 
 .card-progreso span {
-  font-size: 0.9rem;
-  font-weight: normal;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #9EABB2;
 }
 
 .card-detalle {
-  font-size: 0.85rem;
-  border-top: 1px solid rgba(255,255,255,0.3);
+  font-size: 0.8rem;
+  border-top: 1px solid #F4EFE7;
   padding-top: 10px;
-  margin-top: 5px;
+  margin-top: 6px;
+  color: #6C7A82;
 }
 
 .card-detalle div {
-  margin: 4px 0;
+  margin: 3px 0;
 }
 
 .dias-nav {
-  background: white;
-  padding: 18px 25px;
-  border-bottom: 3px solid #E8F5E9;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  background: #FFFFFF;
+  padding: 20px 24px;
+  border-radius: 24px;
+  border: 1px solid #ECE6DC;
+  box-shadow: 0 2px 8px rgba(47, 62, 70, 0.04);
+  margin-bottom: 24px;
 }
 
 .dias-nav-title {
   text-align: center;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 700;
-  color: var(--gris);
+  color: #9EABB2;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 12px;
+  letter-spacing: 0.05em;
+  margin-bottom: 14px;
 }
 
 .dias-tabs {
@@ -245,36 +164,33 @@ body {
 }
 
 .dia-tab {
-  background: #F5F5F5;
-  color: var(--gris);
-  border: 2px solid #E0E0E0;
-  padding: 10px 20px;
-  border-radius: 50px;
-  font-size: 0.9rem;
+  background: #FAF7F2;
+  color: #6C7A82;
+  border: 1px solid #DDD5C8;
+  padding: 8px 18px;
+  border-radius: 9999px;
+  font-size: 0.85rem;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.25s ease;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  transition: all 0.2s ease;
   min-width: 80px;
   text-align: center;
   position: relative;
 }
 
 .dia-tab:hover {
-  background: var(--verde-fondo);
-  border-color: var(--verde-claro);
-  color: var(--verde-oscuro);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.2);
+  background: #F1F7F2;
+  border-color: #8FB996;
+  color: #4F7366;
+  transform: translateY(-1px);
 }
 
 .dia-tab.activo {
-  background: linear-gradient(135deg, var(--verde-claro), var(--verde));
+  background: #6B9080;
   color: white;
-  border-color: var(--verde-oscuro);
-  box-shadow: 0 6px 18px rgba(46, 125, 50, 0.35);
-  transform: translateY(-2px);
+  border-color: #4F7366;
+  box-shadow: 0 4px 12px rgba(107, 144, 128, 0.25);
+  transform: translateY(-1px);
 }
 
 .dia-tab.tiene-datos::after {
@@ -284,7 +200,7 @@ body {
   right: 6px;
   width: 7px;
   height: 7px;
-  background: var(--naranja-claro);
+  background: var(--naranja);
   border-radius: 50%;
   border: 1px solid white;
 }
@@ -293,43 +209,52 @@ body {
   background: #FFF176;
 }
 
+.dia-indicador {
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #6B9080;
+  margin-top: 12px;
+}
+
 .main-content {
-  background: white;
-  padding: 30px;
-  border-radius: 0 0 20px 20px;
-  box-shadow: 0 8px 30px var(--sombra);
-  border: 3px solid #A5D6A7;
-  border-top: none;
+  background: #FFFFFF;
+  padding: 28px;
+  border-radius: 28px;
+  box-shadow: 0 2px 10px rgba(47, 62, 70, 0.04);
+  border: 1px solid #ECE6DC;
 }
 
 .platillos-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 25px;
-  margin-bottom: 30px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin-bottom: 28px;
 }
 
 .platillo-card {
-  background: white;
-  border: 3px solid;
-  border-radius: 16px;
+  background: #FAF7F2;
+  border: 1px solid #ECE6DC;
+  border-radius: 20px;
   padding: 20px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 6px rgba(47, 62, 70, 0.03);
   display: flex;
   flex-direction: column;
   align-items: center;
+  transition: all 0.2s ease;
 }
 
-.platillo-card.desayuno { border-color: #64B5F6; }
-.platillo-card.comida   { border-color: #FFB74D; }
-.platillo-card.cena     { border-color: #BA68C8; }
+.platillo-card.desayuno { border-top: 4px solid #BFDDF5; }
+.platillo-card.comida   { border-top: 4px solid #FFD6A5; }
+.platillo-card.cena     { border-top: 4px solid #D9C8EC; }
 
 .platillo-card h3 {
   text-align: center;
-  color: var(--verde-oscuro);
+  color: #2F3E46;
   font-weight: 800;
-  margin-bottom: 18px;
-  text-transform: uppercase;
+  font-size: 0.95rem;
+  margin-bottom: 14px;
+  letter-spacing: 0.05em;
   width: 100%;
 }
 
@@ -369,32 +294,33 @@ body {
 
 .btn-ver-todos {
   width: 100%;
-  padding: 12px;
-  background: linear-gradient(135deg, var(--verde-claro), var(--verde));
-  color: white;
-  border: none;
-  border-radius: 10px;
+  padding: 10px;
+  background: #FFFFFF;
+  color: #4F7366;
+  border: 1px solid #C6DFCC;
+  border-radius: 12px;
   cursor: pointer;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  transition: all 0.3s ease;
+  font-size: 0.8rem;
+  transition: all 0.2s ease;
 }
 
 .btn-ver-todos:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(46, 125, 50, 0.3);
+  background: #6B9080;
+  color: white;
+  border-color: #6B9080;
 }
 
 .grupos-info {
-  background: #F1F8E9;
-  border-left: 5px solid var(--verde-claro);
+  background: #FAF7F2;
+  border: 1px solid #ECE6DC;
+  border-left: 4px solid var(--verde);
   padding: 14px 20px;
-  margin-bottom: 25px;
-  border-radius: 12px;
-  font-size: 0.95rem;
-  color: var(--verde-oscuro);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  margin-bottom: 24px;
+  border-radius: 16px;
+  font-size: 0.9rem;
+  color: #2F3E46;
+  box-shadow: 0 2px 6px rgba(47, 62, 70, 0.03);
   text-align: center;
 }
 
@@ -406,63 +332,67 @@ body {
 .comidas-container {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 24px;
 }
 
 .comida-seccion {
-  border: 3px solid;
-  border-radius: 16px;
+  border: 1px solid #ECE6DC;
+  border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 6px 25px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 10px rgba(47, 62, 70, 0.04);
+  background: #FFFFFF;
 }
 
 .comida-header {
-  color: white;
-  padding: 16px 25px;
+  color: #2F3E46;
+  padding: 14px 22px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-weight: 700;
-  font-size: 1.25rem;
+  font-weight: 800;
+  font-size: 1.05rem;
+  background: #F4EFE7;
+  border-bottom: 1px solid #ECE6DC;
 }
 
-.comida-seccion.desayuno .comida-header { background: linear-gradient(135deg, #1976D2, #1565C0); }
-.comida-seccion.comida   .comida-header { background: linear-gradient(135deg, #FF9800, #F57C00); }
-.comida-seccion.cena     .comida-header { background: linear-gradient(135deg, #8E24AA, #6A1B9A); }
+.comida-seccion.desayuno .comida-header { border-left: 6px solid #BFDDF5; }
+.comida-seccion.comida   .comida-header { border-left: 6px solid #FFD6A5; }
+.comida-seccion.cena     .comida-header { border-left: 6px solid #D9C8EC; }
 
-.comida-seccion.desayuno { border-color: #64B5F6; }
-.comida-seccion.comida   { border-color: #FFB74D; }
-.comida-seccion.cena     { border-color: #BA68C8; }
+.comida-seccion.desayuno { border-color: #ECE6DC; }
+.comida-seccion.comida   { border-color: #ECE6DC; }
+.comida-seccion.cena     { border-color: #ECE6DC; }
 
 .comida-grid {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
   padding: 20px;
-  background: #F8F9FA;
+  background: #FAF7F2;
   justify-content: center;
 }
 
 .grupo-columna {
-  flex: 1 1 380px;
+  flex: 1 1 340px;
   background: white;
-  border: 2px solid #E0E0E0;
-  border-radius: 12px;
+  border: 1px solid #ECE6DC;
+  border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-  min-width: 300px;
+  box-shadow: 0 2px 8px rgba(47, 62, 70, 0.04);
+  min-width: 280px;
   max-width: 600px;
   display: flex;
   flex-direction: column;
 }
 
 .grupo-header {
-  background: #263238;
-  color: white;
-  padding: 12px 16px;
+  background: #F4EFE7;
+  color: #2F3E46;
+  padding: 10px 14px;
   font-weight: 700;
-  font-size: 1rem;
+  font-size: 0.9rem;
   text-align: center;
+  border-bottom: 1px solid #ECE6DC;
 }
 
 .grupo-alimentos {
@@ -478,37 +408,39 @@ body {
   display: flex;
   gap: 8px;
   padding: 8px;
-  background: #FAFAFA;
-  border-radius: 8px;
-  border: 1px solid #EEEEEE;
+  background: #FAF7F2;
+  border-radius: 10px;
+  border: 1px solid #ECE6DC;
   align-items: center;
   justify-content: center;
 }
 
 .alimento-row select {
   flex: 1;
-  padding: 10px;
-  border: 2px solid #90CAF9;
+  padding: 8px 10px;
+  border: 1px solid #DDD5C8;
   border-radius: 8px;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+  background: #FFFFFF;
   text-align: center;
   text-align-last: center;
 }
 
 .alimento-row input {
   width: 65px;
-  padding: 10px;
-  border: 2px solid #90CAF9;
+  padding: 8px 10px;
+  border: 1px solid #DDD5C8;
   border-radius: 8px;
   text-align: center;
   font-weight: 600;
+  background: #FFFFFF;
   flex-shrink: 0;
 }
 
 .tabla-container {
   padding: 20px;
   overflow-x: auto;
-  background: #F8F9FA;
+  background: #FFFFFF;
 }
 
 .tabla-grupos {
@@ -518,11 +450,12 @@ body {
 }
 
 .tabla-grupos th {
-  background: #263238;
-  color: white;
-  padding: 14px 10px;
+  background: #F4EFE7;
+  color: #2F3E46;
+  padding: 12px 10px;
   font-weight: 700;
-  text-align: center;
+  font-size: 0.8rem;
+  border-bottom: 2px solid #DDD5C8;
 }
 
 .tabla-grupos td {

@@ -316,11 +316,11 @@ function dibujarSomatocarta() {
   const centerY = height / 2;
   const scale = 25;
 
-  ctx.fillStyle = '#FAFAFA';
+  ctx.fillStyle = '#FFFFFF';
   ctx.fillRect(0, 0, width, height);
 
   ctx.beginPath();
-  ctx.strokeStyle = '#E0E0E0';
+  ctx.strokeStyle = '#ECE6DC';
   ctx.lineWidth = 1;
 
   for (let i = -7; i <= 7; i++) {
@@ -332,16 +332,16 @@ function dibujarSomatocarta() {
   ctx.stroke();
 
   ctx.beginPath();
-  ctx.strokeStyle = '#333';
-  ctx.lineWidth = 2;
+  ctx.strokeStyle = '#2F3E46';
+  ctx.lineWidth = 1.5;
   ctx.moveTo(centerX - 7 * scale, centerY);
   ctx.lineTo(centerX + 7 * scale, centerY);
   ctx.moveTo(centerX, centerY - 7 * scale);
   ctx.lineTo(centerX, centerY + 3 * scale);
   ctx.stroke();
 
-  ctx.font = 'bold 12px Segoe UI';
-  ctx.fillStyle = '#616161';
+  ctx.font = 'bold 11px Nunito, Segoe UI, sans-serif';
+  ctx.fillStyle = '#6C7A82';
 
   for (let i = 1; i <= 7; i++) {
     ctx.beginPath();
@@ -363,14 +363,14 @@ function dibujarSomatocarta() {
     ctx.fillText(i, centerX + 10, centerY - i * scale + 5);
   }
 
-  ctx.font = 'bold 14px Segoe UI';
-  ctx.fillStyle = '#D32F2F';
+  ctx.font = 'bold 13px Nunito, Segoe UI, sans-serif';
+  ctx.fillStyle = '#E07A5F';
   ctx.fillText('Endomorfia', centerX - 7 * scale - 80, centerY - 10);
 
-  ctx.fillStyle = '#388E3C';
+  ctx.fillStyle = '#6B9080';
   ctx.fillText('Mesomorfia', centerX - 40, centerY - 7 * scale - 15);
 
-  ctx.fillStyle = '#1976D2';
+  ctx.fillStyle = '#6C8294';
   ctx.fillText('Ectomorfia', centerX + 6 * scale + 10, centerY - 10);
 
   if (resultadoActual) {
@@ -384,20 +384,20 @@ function dibujarSomatocarta() {
     const puntoY = centerY - yLimitado * scale;
 
     ctx.beginPath();
-    ctx.fillStyle = 'rgba(255, 193, 7, 0.3)';
-    ctx.arc(puntoX, puntoY, 15, 0, 2 * Math.PI);
+    ctx.fillStyle = 'rgba(244, 162, 97, 0.3)';
+    ctx.arc(puntoX, puntoY, 14, 0, 2 * Math.PI);
     ctx.fill();
 
     ctx.beginPath();
-    ctx.fillStyle = '#FFC107';
-    ctx.arc(puntoX, puntoY, 8, 0, 2 * Math.PI);
+    ctx.fillStyle = '#F4A261';
+    ctx.arc(puntoX, puntoY, 7, 0, 2 * Math.PI);
     ctx.fill();
-    ctx.strokeStyle = '#000';
+    ctx.strokeStyle = '#2F3E46';
     ctx.lineWidth = 2;
     ctx.stroke();
 
-    ctx.font = 'bold 11px Segoe UI';
-    ctx.fillStyle = '#212529';
+    ctx.font = 'bold 11px Nunito, Segoe UI, sans-serif';
+    ctx.fillStyle = '#2F3E46';
     ctx.fillText(`E:${endo.toFixed(1)} M:${meso.toFixed(1)} X:${ecto.toFixed(1)}`,
                  puntoX + 15, puntoY - 10);
   }
@@ -412,8 +412,8 @@ function dibujarRepresentacionCorporal() {
   ctx.clearRect(0, 0, width, height);
 
   if (!resultadoActual) {
-    ctx.font = '14px Segoe UI';
-    ctx.fillStyle = '#9E9E9E';
+    ctx.font = '14px Nunito, Segoe UI, sans-serif';
+    ctx.fillStyle = '#9EAAB0';
     ctx.textAlign = 'center';
     ctx.fillText('Ingresa datos y calcula', width/2, height/2);
     return;
@@ -436,13 +436,13 @@ function dibujarRepresentacionCorporal() {
 
   ctx.lineJoin = 'round';
   ctx.lineCap = 'round';
-  ctx.strokeStyle = '#333';
-  ctx.lineWidth = 2.5;
+  ctx.strokeStyle = '#2F3E46';
+  ctx.lineWidth = 2;
 
   const maxVal = Math.max(endo, meso, ecto);
-  if (maxVal === endo) ctx.fillStyle = 'rgba(211, 47, 47, 0.1)';
-  else if (maxVal === meso) ctx.fillStyle = 'rgba(56, 142, 60, 0.1)';
-  else ctx.fillStyle = 'rgba(25, 118, 210, 0.1)';
+  if (maxVal === endo) ctx.fillStyle = 'rgba(224, 122, 95, 0.12)';
+  else if (maxVal === meso) ctx.fillStyle = 'rgba(107, 144, 128, 0.12)';
+  else ctx.fillStyle = 'rgba(108, 130, 148, 0.12)';
 
   ctx.beginPath();
 

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<!-- Pantalla de calculo de gasto energetico basal y total -->
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paso 1: Gasto Energético - NutriEnergía</title>
+  <link rel="stylesheet" href="css/tailwind.min.css">
+</head>
+<body class="bg-cream-50 font-sans text-charcoal min-h-screen">
+
+  <main class="main-wrapper p-4 sm:p-6 lg:p-8 max-w-6xl xl:max-w-7xl relative z-10 w-full">
+
+    <!-- Encabezado -->
+    <div class="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-peach-100 text-peach-600 text-xs font-bold mb-2">
+          <span>Paso 1 de 5</span>
+          <span>•</span>
+          <span>Requerimiento Diario</span>
+        </div>
+        <h1 class="text-2xl md:text-3xl font-extrabold text-charcoal tracking-tight">Gasto Energético</h1>
+        <p class="text-charcoal-muted text-sm mt-1">Calcula tu tasa metabólica basal y gasto energético total.</p>
+      </div>
+      <div id="modelo" class="self-start sm:self-auto px-4 py-2 rounded-2xl bg-white border border-cream-200 shadow-sm text-xs font-bold text-charcoal-muted">
+        Ecuación: Harris-Benedict
+      </div>
+    </div>
+
+    <!-- Formulario en tarjeta bento -->
+    <div class="bg-white rounded-3xl p-6 md:p-8 border border-cream-200 shadow-sm mb-8">
+      <h2 class="text-lg font-bold text-charcoal mb-6">Parámetros del Usuario</h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+        <!-- Ecuacion -->
+        <div>
+          <label for="ecuacion" class="block text-xs font-bold uppercase tracking-wider text-charcoal-muted mb-2">Ecuación Predictiva</label>
+          <select id="ecuacion" class="w-full px-4 py-3 rounded-2xl bg-cream-50 border border-cream-300 text-charcoal font-semibold text-sm focus:outline-none focus:ring-2 focus:ring-sage-500 focus:bg-white transition-all">
+            <option value="Harris-Benedict">Harris-Benedict</option>
+            <option value="Mifflin-St Jeor">Mifflin-St Jeor</option>
+            <option value="Valencia">Valencia</option>
+          </select>
+        </div>
+
+        <!-- Sexo -->
+        <div>
+          <label for="sexo" class="block text-xs font-bold uppercase tracking-wider text-charcoal-muted mb-2">Sexo Biológico</label>
+          <select id="sexo" class="w-full px-4 py-3 rounded-2xl bg-cream-50 border border-cream-300 text-charcoal font-semibold text-sm focus:outline-none focus:ring-2 focus:ring-sage-500 focus:bg-white transition-all">
+            <option value="Hombre">Hombre</option>
+            <option value="Mujer">Mujer</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+        <!-- Peso -->
+        <div>
+          <label for="peso" class="block text-xs font-bold uppercase tracking-wider text-charcoal-muted mb-2">Peso (kg)</label>
+          <div class="relative">
+            <input type="text" inputmode="decimal" id="peso" placeholder="Ej: 70.5" maxlength="6" autocomplete="off" onkeypress="return soloNumerosYPunto(event)" class="w-full px-4 py-3 rounded-2xl bg-cream-50 border border-cream-300 text-charcoal font-semibold text-sm focus:outline-none focus:ring-2 focus:ring-sage-500 focus:bg-white transition-all">
+            <span class="absolute right-4 top-3 text-xs font-bold text-charcoal-light">kg</span>
+          </div>
+          <span class="text-xs text-red-500 font-medium mt-1 hidden" id="peso-error">Solo números y punto (20-300)</span>
+        </div>
+
+        <!-- Altura -->
+        <div>
+          <label for="altura" class="block text-xs font-bold uppercase tracking-wider text-charcoal-muted mb-2">Altura (cm)</label>
+          <div class="relative">
+            <input type="text" inputmode="numeric" id="altura" placeholder="Ej: 175" maxlength="3" autocomplete="off" onkeypress="return soloNumeros(event)" class="w-full px-4 py-3 rounded-2xl bg-cream-50 border border-cream-300 text-charcoal font-semibold text-sm focus:outline-none focus:ring-2 focus:ring-sage-500 focus:bg-white transition-all">
+            <span class="absolute right-4 top-3 text-xs font-bold text-charcoal-light">cm</span>
+          </div>
+          <span class="text-xs text-red-500 font-medium mt-1 hidden" id="altura-error">Solo enteros (50-250)</span>
+        </div>
+
+        <!-- Edad -->
+        <div>
+          <label for="edad" class="block text-xs font-bold uppercase tracking-wider text-charcoal-muted mb-2">Edad (años)</label>
+          <div class="relative">
+            <input type="text" inputmode="numeric" id="edad" placeholder="Ej: 25" maxlength="3" autocomplete="off" onkeypress="return soloNumeros(event)" class="w-full px-4 py-3 rounded-2xl bg-cream-50 border border-cream-300 text-charcoal font-semibold text-sm focus:outline-none focus:ring-2 focus:ring-sage-500 focus:bg-white transition-all">
+            <span class="absolute right-4 top-3 text-xs font-bold text-charcoal-light">años</span>
+          </div>
+          <span class="text-xs text-red-500 font-medium mt-1 hidden" id="edad-error">Solo enteros (18-120)</span>
+        </div>
+      </div>
+
+      <!-- Actividad fisica -->
+      <div class="mb-6">
+        <label for="actividad" class="block text-xs font-bold uppercase tracking-wider text-charcoal-muted mb-2">Nivel de Actividad Física</label>
+        <select id="actividad" class="w-full px-4 py-3 rounded-2xl bg-cream-50 border border-cream-300 text-charcoal font-semibold text-sm focus:outline-none focus:ring-2 focus:ring-sage-500 focus:bg-white transition-all"></select>
+      </div>
+
+      <!-- Boton calcular -->
+      <div class="flex justify-end">
+        <button id="calcular" class="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-sage-600 text-white font-bold text-sm shadow-sm hover:bg-sage-700 active:scale-95 transition-all">
+          Calcular Gasto Energético
+        </button>
+      </div>
+    </div>
+
+    <!-- Resultados -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
+      <div class="bg-white rounded-3xl p-6 border border-cream-200 shadow-sm text-center">
+        <span class="block text-xs font-bold uppercase tracking-wider text-charcoal-muted mb-2">Gasto Basal (GEB)</span>
+        <div id="geb" class="text-2xl font-extrabold text-charcoal">-- kcal/día</div>
+      </div>
+      <div class="bg-white rounded-3xl p-6 border border-cream-200 shadow-sm text-center">
+        <span class="block text-xs font-bold uppercase tracking-wider text-charcoal-muted mb-2">Efecto Térmico (ETA)</span>
+        <div id="eta" class="text-2xl font-extrabold text-charcoal">-- kcal/día</div>
+      </div>
+      <div class="bg-white rounded-3xl p-6 border border-peach-200 bg-peach-50/40 shadow-sm text-center">
+        <span class="block text-xs font-bold uppercase tracking-wider text-peach-600 mb-2">Gasto Total (GET)</span>
+        <div id="get" class="text-2xl font-extrabold text-peach-600">-- kcal/día</div>
+      </div>
+    </div>
+
+    <!-- Barra de progreso calorica -->
+    <div class="bg-white rounded-3xl p-6 border border-cream-200 shadow-sm mb-8">
+      <div class="flex justify-between text-xs font-bold text-charcoal-muted mb-2">
+        <span>Bajo (1000)</span>
+        <span>Moderado (2500)</span>
+        <span>Alto (4000+)</span>
+      </div>
+      <div class="w-full h-3.5 bg-cream-100 rounded-full overflow-hidden p-0.5 border border-cream-200">
+        <div id="barFill" class="h-full bg-gradient-to-r from-sage-500 via-peach-400 to-red-400 rounded-full transition-all duration-700" style="width: 0%"></div>
+      </div>
+    </div>
+
+    <!-- Navegacion inferior -->
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-cream-200">
+      <a href="index.html" class="w-full sm:w-auto px-6 py-3 rounded-2xl bg-white border border-cream-300 text-charcoal font-bold text-sm text-center hover:bg-cream-100 transition-all">
+        ← Volver al Tablero
+      </a>
+      <div class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+        <button id="menu" class="w-full sm:w-auto px-6 py-3 rounded-2xl bg-white border border-sage-300 text-sage-700 font-bold text-sm hover:bg-sage-50 transition-all">
+          Composición Corporal →
+        </button>
+        <button id="equivalentes" class="w-full sm:w-auto px-6 py-3 rounded-2xl bg-peach-400 text-white font-bold text-sm hover:bg-peach-500 shadow-sm transition-all">
+          Sistema de Equivalentes →
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <div id="notification" class="hidden"></div>
+
+  <script>
+    function soloNumeros(e) {
+      const char = String.fromCharCode(e.which || e.keyCode);
+      return /[0-9]/.test(char);
+    }
+    function soloNumerosYPunto(e) {
+      const char = String.fromCharCode(e.which || e.keyCode);
+      const input = e.target;
+      if (!/[0-9.]/.test(char)) return false;
+      if (char === '.' && input.value.includes('.')) return false;
+      return true;
+    }
+  </script>
+  <script src="js/security-validator.js"></script>
+  <script src="js/estado.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

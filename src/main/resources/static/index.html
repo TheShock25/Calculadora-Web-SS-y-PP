@@ -1,160 +1,231 @@
 <!DOCTYPE html>
-<!-- Estructura principal de la pantalla. -->
+<!-- Tablero principal de NutriEnergia -->
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NutriEnergía Pro - Calculadora de Gasto Energético</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>Mi Tablero - NutriEnergía</title>
+  <link rel="stylesheet" href="css/tailwind.min.css">
 </head>
-<body>
+<body class="bg-cream-50 font-sans text-charcoal min-h-screen relative overflow-x-hidden">
 
-<div class="container">
-
-  <header>
-    <h1>CALCULADORA DE GASTO ENERGÉTICO</h1>
-    <p id="modelo">Ecuación: Harris-Benedict</p>
-  </header>
-
-  <div class="card">
-    <div class="row">
-      <div class="form-group">
-        <label for="ecuacion">Ecuación</label>
-        <select id="ecuacion">
-          <option value="Harris-Benedict">Harris-Benedict</option>
-          <option value="Mifflin-St Jeor">Mifflin-St Jeor</option>
-          <option value="Valencia">Valencia</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label for="sexo">Sexo</label>
-        <select id="sexo">
-          <option value="Hombre">Hombre</option>
-          <option value="Mujer">Mujer</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="form-group">
-        <label for="peso">Peso (kg)</label>
-        <input
-          type="text"
-          inputmode="decimal"
-          pattern="[0-9]*[.]?[0-9]*"
-          id="peso"
-          placeholder="Ej: 70.5"
-          maxlength="6"
-          autocomplete="off"
-          onkeypress="return soloNumerosYPunto(event)"
-        >
-        <span class="error-message" id="peso-error">Solo números y punto decimal</span>
-      </div>
-
-      <div class="form-group">
-        <label for="altura">Altura (cm)</label>
-        <input
-          type="text"
-          inputmode="numeric"
-          pattern="[0-9]*"
-          id="altura"
-          placeholder="Ej: 175"
-          maxlength="3"
-          autocomplete="off"
-          onkeypress="return soloNumeros(event)"
-        >
-        <span class="error-message" id="altura-error">Solo números enteros (50-250)</span>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="form-group">
-        <label for="edad">Edad (años)</label>
-        <input
-          type="text"
-          inputmode="numeric"
-          pattern="[0-9]*"
-          id="edad"
-          placeholder="Ej: 25"
-          maxlength="3"
-          autocomplete="off"
-          onkeypress="return soloNumeros(event)"
-        >
-        <span class="error-message" id="edad-error">Solo números enteros (18-120)</span>
-      </div>
-
-      <div class="form-group">
-        <label for="actividad">Nivel de Actividad</label>
-        <select id="actividad"></select>
-      </div>
-    </div>
+  <!-- Vectores de frutas de fondo -->
+  <div class="fixed top-8 right-8 pointer-events-none opacity-20 hidden md:block">
+    <svg class="w-48 h-48 text-sage-600" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2">
+      <!-- Silueta de aguacate -->
+      <path d="M50 10 C35 10 25 30 25 55 C25 75 35 90 50 90 C65 90 75 75 75 55 C75 30 65 10 50 10 Z" />
+      <circle cx="50" cy="60" r="16" />
+    </svg>
+  </div>
+  <div class="fixed bottom-6 right-16 pointer-events-none opacity-20 hidden md:block">
+    <svg class="w-44 h-44 text-peach-500" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2">
+      <!-- Silueta de manzana -->
+      <path d="M50 30 C45 20 30 20 25 35 C18 55 25 85 50 85 C75 85 82 55 75 35 C70 20 55 20 50 30 Z" />
+      <path d="M50 30 C50 18 55 12 60 10" />
+      <path d="M55 18 C65 15 70 20 65 25 C60 25 55 22 55 18 Z" />
+    </svg>
   </div>
 
-  <div class="results">
-    <div class="result-card">
-      <div class="result-label">Gasto Energético Basal</div>
-      <div class="result-value" id="geb">-- kcal/día</div>
+  <main class="main-wrapper p-4 sm:p-6 lg:p-8 max-w-6xl xl:max-w-7xl relative z-10 w-full">
+
+    <!-- Encabezado del tablero -->
+    <div class="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div>
+        <h1 class="text-2xl md:text-3xl font-extrabold text-charcoal tracking-tight">
+          Hola, <span id="dash-saludo">Bienvenido</span>
+        </h1>
+        <p class="text-charcoal-muted text-sm mt-1">Resumen general de tu estado nutricional y avances.</p>
+      </div>
+
+      <a id="btn-continuar" href="energia.html" class="self-start sm:self-auto inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-cream-200 text-charcoal font-bold text-xs shadow-sm hover:border-peach-300 hover:shadow-md transition-all">
+        <span id="btn-continuar-label">Continuar donde te quedaste →</span>
+      </a>
     </div>
-    <div class="result-card">
-      <div class="result-label">Efecto Térmico Alimentos</div>
-      <div class="result-value" id="eta">-- kcal/día</div>
+
+    <!-- Cuadricula Bento 2x2 -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+
+      <!-- Tarjeta 1: Gasto energetico total -->
+      <div class="bg-white rounded-3xl p-6 md:p-7 border border-cream-200 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between mb-4">
+          <span class="text-xs font-bold uppercase tracking-wider text-charcoal-muted">Gasto Energético Total</span>
+          <a href="energia.html" class="text-xs font-bold text-peach-600 hover:underline">Ver detalles →</a>
+        </div>
+        <div class="flex items-center justify-between gap-4">
+          <div>
+            <div id="dash-get-valor" class="text-3xl font-extrabold text-charcoal leading-none">-- kcal/día</div>
+            <span class="text-xs text-charcoal-light mt-1 block">Meta diaria estimada</span>
+          </div>
+          <!-- Medidor semicircular SVG -->
+          <div class="w-24 h-14 relative flex items-end justify-center">
+            <svg class="w-24 h-24 overflow-visible" viewBox="0 0 120 70">
+              <path d="M 15 65 A 45 45 0 0 1 105 65" fill="none" stroke="#F4EFE7" stroke-width="10" stroke-linecap="round" />
+              <path id="dash-gauge-fill" d="M 15 65 A 45 45 0 0 1 105 65" fill="none" stroke="#8FB996" stroke-width="10" stroke-linecap="round" stroke-dasharray="142" stroke-dashoffset="60" class="transition-all duration-700" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tarjeta 2: IMC y Composicion -->
+      <div class="bg-white rounded-3xl p-6 md:p-7 border border-cream-200 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-2">
+            <span id="dash-imc-valor" class="text-lg font-extrabold text-charcoal">IMC --</span>
+            <span id="dash-imc-categoria" class="text-sm font-bold text-sage-600">· Sin registrar</span>
+          </div>
+          <a href="menu.html" class="text-xs font-bold text-sage-600 hover:underline">Ver detalles →</a>
+        </div>
+
+        <div>
+          <div class="text-[11px] font-bold text-charcoal-light uppercase tracking-wider mb-2">Escala de Masa Corporal</div>
+          <!-- Barra horizontal segmentada de IMC con colores suaves -->
+          <div class="relative w-full pt-2">
+            <div class="h-3 rounded-full flex overflow-hidden w-full">
+              <div class="w-1/4 bg-[#D1DFD7]" title="Bajo peso (< 18.5)"></div>
+              <div class="w-1/3 bg-[#8FB996]" title="Normal (18.5 - 24.9)"></div>
+              <div class="w-1/5 bg-[#F9D2B1]" title="Sobrepeso (25 - 29.9)"></div>
+              <div class="w-1/4 bg-[#F2B5A7]" title="Obesidad (30+)"></div>
+            </div>
+            <!-- Puntero dinamico -->
+            <div id="dash-imc-pointer" class="absolute top-0 -ml-1.5 transition-all duration-700" style="left: 35%;">
+              <div class="w-3 h-3 bg-charcoal rounded-full border-2 border-white shadow-sm"></div>
+            </div>
+          </div>
+          <div class="flex justify-between text-[10px] text-charcoal-light mt-1.5 font-bold">
+            <span>15</span>
+            <span>18.5</span>
+            <span>25</span>
+            <span>30</span>
+            <span>40+</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tarjeta 3: Macronutrientes -->
+      <div class="bg-white rounded-3xl p-6 md:p-7 border border-cream-200 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between mb-4">
+          <span class="text-xs font-bold uppercase tracking-wider text-charcoal-muted">Distribución de Macros</span>
+          <a href="equivalentes.html" class="text-xs font-bold text-peach-600 hover:underline">Equivalentes →</a>
+        </div>
+
+        <div class="flex items-center justify-between gap-4">
+          <!-- Donut SVG -->
+          <div class="w-24 h-24 relative flex-shrink-0">
+            <svg class="w-24 h-24 transform -rotate-90" viewBox="0 0 36 36">
+              <!-- HC: 55% -->
+              <circle cx="18" cy="18" r="14" fill="none" stroke="#F6D88E" stroke-width="4.5" stroke-dasharray="55 45" stroke-dashoffset="0" />
+              <!-- Prot: 20% -->
+              <circle cx="18" cy="18" r="14" fill="none" stroke="#F4A28C" stroke-width="4.5" stroke-dasharray="20 80" stroke-dashoffset="-55" />
+              <!-- Lip: 25% -->
+              <circle cx="18" cy="18" r="14" fill="none" stroke="#C7B5E2" stroke-width="4.5" stroke-dasharray="25 75" stroke-dashoffset="-75" />
+            </svg>
+          </div>
+
+          <!-- Leyenda de colores -->
+          <div class="space-y-1.5 text-xs flex-1">
+            <div class="flex items-center justify-between">
+              <span class="flex items-center gap-1.5 text-charcoal-muted font-medium">
+                <span class="w-2.5 h-2.5 rounded-full bg-macro-hc"></span>
+                <span>Carbohidratos</span>
+              </span>
+              <strong id="dash-pct-hc" class="text-charcoal">55%</strong>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="flex items-center gap-1.5 text-charcoal-muted font-medium">
+                <span class="w-2.5 h-2.5 rounded-full bg-macro-prot"></span>
+                <span>Proteínas</span>
+              </span>
+              <strong id="dash-pct-prot" class="text-charcoal">20%</strong>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="flex items-center gap-1.5 text-charcoal-muted font-medium">
+                <span class="w-2.5 h-2.5 rounded-full bg-macro-lip"></span>
+                <span>Lípidos</span>
+              </span>
+              <strong id="dash-pct-lip" class="text-charcoal">25%</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tarjeta 4: Datos basicos con cuadricula 2x2 equilibrada -->
+      <div class="bg-white rounded-3xl p-6 md:p-7 border border-cream-200 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between mb-4">
+          <span class="text-xs font-bold uppercase tracking-wider text-charcoal-muted">Datos Básicos</span>
+          <a href="energia.html" class="p-1.5 rounded-xl hover:bg-cream-100 text-charcoal-muted hover:text-charcoal transition-colors" title="Editar datos">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"/></svg>
+          </a>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 py-1">
+          <div class="bg-cream-50 p-3 rounded-2xl border border-cream-100 flex flex-col justify-between">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-charcoal-muted">Sexo</span>
+            <span id="dash-dato-sexo" class="text-sm font-bold text-charcoal mt-1">--</span>
+          </div>
+          <div class="bg-cream-50 p-3 rounded-2xl border border-cream-100 flex flex-col justify-between">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-charcoal-muted">Edad</span>
+            <span id="dash-dato-edad" class="text-sm font-bold text-charcoal mt-1">--</span>
+          </div>
+          <div class="bg-cream-50 p-3 rounded-2xl border border-cream-100 flex flex-col justify-between">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-charcoal-muted">Peso</span>
+            <span id="dash-dato-peso" class="text-sm font-bold text-charcoal mt-1">--</span>
+          </div>
+          <div class="bg-cream-50 p-3 rounded-2xl border border-cream-100 flex flex-col justify-between">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-charcoal-muted">Altura</span>
+            <span id="dash-dato-altura" class="text-sm font-bold text-charcoal mt-1">--</span>
+          </div>
+        </div>
+      </div>
+
     </div>
-    <div class="result-card">
-      <div class="result-label">Gasto Energético Total</div>
-      <div class="result-value" id="get">-- kcal/día</div>
+
+    <!-- Accesos rapidos a los modulos clave -->
+    <div class="bg-white rounded-3xl p-6 md:p-7 border border-cream-200 shadow-sm mb-8">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h2 class="text-base font-bold text-charcoal">Ruta de Cálculo</h2>
+          <p class="text-xs text-charcoal-muted mt-0.5">Accede directamente a los módulos del sistema según tus datos.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <a href="energia.html" class="group p-4 rounded-2xl bg-cream-50 hover:bg-cream-100 border border-cream-200/80 transition-all flex items-center justify-between">
+          <div>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-charcoal-muted block">Paso 1</span>
+            <span class="text-sm font-bold text-charcoal block mt-0.5 group-hover:text-peach-600 transition-colors">Gasto Energético</span>
+          </div>
+          <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-charcoal-muted group-hover:text-peach-600 shadow-sm">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
+          </div>
+        </a>
+
+        <a href="menu.html" class="group p-4 rounded-2xl bg-cream-50 hover:bg-cream-100 border border-cream-200/80 transition-all flex items-center justify-between">
+          <div>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-charcoal-muted block">Paso 2</span>
+            <span class="text-sm font-bold text-charcoal block mt-0.5 group-hover:text-sage-600 transition-colors">Composición Corporal</span>
+          </div>
+          <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-charcoal-muted group-hover:text-sage-600 shadow-sm">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
+          </div>
+        </a>
+
+        <a href="equivalentes.html" class="group p-4 rounded-2xl bg-cream-50 hover:bg-cream-100 border border-cream-200/80 transition-all flex items-center justify-between">
+          <div>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-charcoal-muted block">Paso 3</span>
+            <span class="text-sm font-bold text-charcoal block mt-0.5 group-hover:text-peach-600 transition-colors">Sistema Equivalentes</span>
+          </div>
+          <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-charcoal-muted group-hover:text-peach-600 shadow-sm">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
+          </div>
+        </a>
+      </div>
     </div>
-  </div>
 
-  <div class="bar-container">
-    <div class="bar-labels">
-      <span>Bajo (1000)</span>
-      <span>Moderado (2500)</span>
-      <span>Alto (4000+)</span>
-    </div>
-    <div class="bar">
-      <div id="barFill"></div>
-    </div>
-  </div>
+  </main>
 
-  <div class="buttons">
-    <button id="calcular" class="btn-primary"> Calcular Gasto Energético</button>
-    <button id="equivalentes" class="btn-secondary"> Sistema de Equivalentes</button>
-    <button id="menu" class="btn-success"> Menú Principal</button>
-  </div>
-
-</div>
-
-<div id="notification" class="notification"></div>
-
-<script>
-function soloNumeros(e) {
-  const char = String.fromCharCode(e.which || e.keyCode);
-  if (!/[0-9]/.test(char)) {
-    e.preventDefault();
-    return false;
-  }
-  return true;
-}
-
-function soloNumerosYPunto(e) {
-  const char = String.fromCharCode(e.which || e.keyCode);
-  const input = e.target;
-
-  if (!/[0-9.]/.test(char)) {
-    e.preventDefault();
-    return false;
-  }
-
-  if (char === '.' && input.value.includes('.')) {
-    e.preventDefault();
-    return false;
-  }
-
-  return true;
-}
-</script>
-<script src="js/security-validator.js"></script>
-<script src="app.js"></script>
+  <script src="js/security-validator.js"></script>
+  <script src="js/estado.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/dashboard.js"></script>
 </body>
 </html>

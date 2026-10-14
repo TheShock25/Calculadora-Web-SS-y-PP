@@ -1,0 +1,16 @@
+{
+  "name": "calculadoraweb",
+  "version": "1.0.0",
+  "description": "Sistema web integral para el calculo del gasto energetico basal y total, gestion del Sistema Mexicano de Alimentos Equivalentes (SMAE), elaboracion de planes alimenticios semanales, registro de recordatorio de 24 horas (R24H), evaluacion de somatotipo segun el metodo Heath-Carter y evaluacion antropometrica y de composicion corporal.",
+  "main": "index.js",
+  "scripts": {
+    "build:css": "tailwindcss -i ./src/main/resources/static/css/input.css -o ./src/main/resources/static/css/tailwind.min.css --minify",
+    "watch:css": "tailwindcss -i ./src/main/resources/static/css/input.css -o ./src/main/resources/static/css/tailwind.min.css --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "tailwindcss": "^3.4.17"
+  }
+}

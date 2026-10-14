@@ -9,21 +9,29 @@
   <meta http-equiv="Expires" content="0">
 
   <title>Calculadora de Somatotipo Heath-Carter</title>
-  <link rel="stylesheet" href="css/somatotipo.css?v=2">
+  <link rel="stylesheet" href="css/tailwind.min.css">
+  <link rel="stylesheet" href="css/somatotipo.css?v=4">
 </head>
-<body>
+<body class="bg-cream-50 font-sans text-charcoal min-h-screen">
 
-<div class="container">
+<main class="main-wrapper p-4 md:p-8 max-w-6xl xl:max-w-7xl">
 
-  <header class="header">
-    <div class="header-content">
-      <h1>Calculadora de Somatotipo Heath-Carter</h1>
-      <p>Analisis Antropometrico Completo</p>
+  <!-- Encabezado unificado -->
+  <div class="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+    <div>
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-peach-100 text-peach-600 text-xs font-bold mb-2">
+        <span>Paso 2 • Composición</span>
+        <span>•</span>
+        <span>Somatocarta</span>
+      </div>
+      <h1 class="text-2xl md:text-3xl font-extrabold text-charcoal tracking-tight">Calculadora de Somatotipo</h1>
+      <p class="text-charcoal-muted text-sm mt-1">Análisis antropométrico completo según el método Heath-Carter.</p>
     </div>
-  </header>
-
-  <div class="nav-bar">
-    <button id="btnRegresar" class="btn-regresar">← Regresar a Menu</button>
+    <div>
+      <button id="btnRegresar" class="px-4 py-2.5 rounded-2xl bg-white border border-cream-200 text-xs font-bold text-charcoal hover:bg-cream-100 transition-all">
+        ← Volver al Menú
+      </button>
+    </div>
   </div>
 
   <div class="tab-container">
@@ -191,11 +199,13 @@
 
   </div>
 
-</div>
+</main>
 
 <div id="notification" class="notification"></div>
 
 <script src="js/security-validator.js"></script>
-<script src="js/somatotipo.js?v=2"></script>
+<script src="js/estado.js"></script>
+<script src="js/layout.js"></script>
+<script src="js/somatotipo.js?v=3"></script>
 </body>
 </html>
